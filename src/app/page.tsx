@@ -1,9 +1,12 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import type { MealAnalysis, FoodItem } from "@/types";
 import { formatCalories, formatMacro, cn } from "@/lib/utils";
-import { Camera, Upload, Loader2, AlertTriangle, Check, X } from "lucide-react";
+import { Camera, Upload, Loader2, AlertTriangle, Check, X, LayoutDashboard } from "lucide-react";
+import { createClient } from "@/lib/supabase/client";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function HomePage() {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -11,9 +14,20 @@ export default function HomePage() {
   const [mimeType, setMimeType] = useState("image/jpeg");
   const [analysis, setAnalysis] = useState<MealAnalysis | null>(null);
   const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
   const [cuisineHint, setCuisineHint] = useState("");
+  const [user, setUser] = useState<any>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const supabase = createClient();
+  const router = useRouter();
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setUser(user);
+    });
+  }, []);
 
   const handleFile = (file: File) => {
     if (!file.type.startsWith("image/")) {
@@ -21,6 +35,7 @@ export default function HomePage() {
       return;
     }
     setError(null);
+    setSuccess(null);
     setAnalysis(null);
 
     const reader = new FileReader();
@@ -43,6 +58,7 @@ export default function HomePage() {
     if (!imageBase64) return;
     setLoading(true);
     setError(null);
+    setSuccess(null);
     try {
       const res = await fetch("/api/analyze", {
         method: "POST",
@@ -63,11 +79,48 @@ export default function HomePage() {
     }
   };
 
+  const saveToDiary = async () => {
+    if (!analysis) return;
+
+    if (!user) {
+      // Redirect to login, then come back
+      router.push("/login");
+      return;
+    }
+
+    setSaving(true);
+    setError(null);
+    try {
+      const { error: insertError } = await supabase.from("meals").insert({
+        user_id: user.id,
+        items: analysis.items,
+        total_calories: analysis.total_calories,
+        total_protein: analysis.total_protein,
+        total_carbs: analysis.total_carbs,
+        total_fat: analysis.total_fat,
+        cuisine_detected: analysis.cuisine_detected,
+        logged_at: new Date().toISOString(),
+      });
+
+      if (insertError) throw insertError;
+
+      setSuccess("Meal saved to your diary!");
+      setTimeout(() => {
+        router.push("/dashboard");
+      }, 1200);
+    } catch (err: any) {
+      setError(err.message || "Failed to save meal");
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const reset = () => {
     setImagePreview(null);
     setImageBase64(null);
     setAnalysis(null);
     setError(null);
+    setSuccess(null);
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
@@ -81,7 +134,17 @@ export default function HomePage() {
             </div>
             <span className="font-semibold text-lg tracking-tight">RiceTrack</span>
           </div>
-          <span className="text-xs text-muted-foreground font-medium">Asia-first</span>
+          <div className="flex items-center gap-3">
+            {user ? (
+              <Link href="/dashboard" className="text-muted-foreground hover:text-foreground">
+                <LayoutDashboard className="w-5 h-5" />
+              </Link>
+            ) : (
+              <Link href="/login" className="text-sm text-primary font-medium">
+                Sign in
+              </Link>
+            )}
+          </div>
         </div>
       </header>
 
@@ -244,12 +307,35 @@ export default function HomePage() {
               ))}
             </div>
 
+            {success && (
+              <div className="rounded-xl bg-green-500/10 text-green-700 dark:text-green-400 px-4 py-3 text-sm text-center">
+                {success}
+              </div>
+            )}
+
+            {error && (
+              <div className="rounded-xl bg-red-500/10 text-red-600 dark:text-red-400 px-4 py-3 text-sm flex items-start gap-2">
+                <AlertTriangle className="w-4 h-4 mt-0.5 shrink-0" />
+                {error}
+              </div>
+            )}
+
             <button
-              onClick={() => alert("Save to diary coming next (auth + Supabase)")}
-              className="w-full h-12 rounded-xl bg-primary text-primary-foreground font-medium flex items-center justify-center gap-2"
+              onClick={saveToDiary}
+              disabled={saving}
+              className="w-full h-12 rounded-xl bg-primary text-primary-foreground font-medium flex items-center justify-center gap-2 disabled:opacity-70"
             >
-              <Check className="w-5 h-5" />
-              Save to Diary
+              {saving ? (
+                <>
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  Saving…
+                </>
+              ) : (
+                <>
+                  <Check className="w-5 h-5" />
+                  {user ? "Save to Diary" : "Sign in to Save"}
+                </>
+              )}
             </button>
           </div>
         )}
