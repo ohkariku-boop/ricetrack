@@ -104,7 +104,7 @@ export default function LibraryPage() {
         </div>
       </header>
 
-      <main className="flex-1 mx-auto w-full max-w-lg px-5 py-4 space-y-4">
+      <main className="flex-1 mx-auto w-full max-w-lg px-5 py-3 space-y-3">
         <div className="relative">
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <input
@@ -147,7 +147,7 @@ export default function LibraryPage() {
               {items.map((f) => (
                 <div
                   key={f.id}
-                  className="card-soft p-4 flex items-start justify-between gap-3"
+                  className="card-soft p-3 flex items-start justify-between gap-3"
                 >
                   <div className="min-w-0">
                     <div className="font-medium leading-snug">{f.name}</div>
@@ -171,7 +171,7 @@ export default function LibraryPage() {
             </div>
 
             {/* Pagination — no endless scroll */}
-            <div className="flex items-center justify-between pt-2 pb-6">
+            <div className="flex items-center justify-between pt-2 pb-4">
               <button
                 type="button"
                 disabled={page <= 1}

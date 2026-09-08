@@ -307,7 +307,7 @@ export default function TrackerPage() {
         </div>
       </header>
 
-      <main className="flex-1 mx-auto w-full max-w-lg px-5 py-6 space-y-5">
+      <main className="flex-1 mx-auto w-full max-w-lg px-5 py-4 space-y-4">
         {/* Empty state */}
         {!imagePreview && !analysis && (
           <div className="space-y-5">
@@ -347,7 +347,7 @@ export default function TrackerPage() {
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="w-full card-elevated p-12 flex flex-col items-center gap-4 hover:border-primary/40 transition-all active:scale-[0.99]"
+                  className="w-full card-elevated p-8 flex flex-col items-center gap-4 hover:border-primary/40 transition-all active:scale-[0.99]"
                 >
                   <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center">
                     <Camera className="w-8 h-8 text-primary" />
@@ -654,7 +654,7 @@ export default function TrackerPage() {
               <div className="rounded-2xl bg-red-500/10 text-red-600 px-4 py-3 text-sm">{error}</div>
             )}
 
-            <div className="flex gap-2 sticky bottom-4 pt-2">
+            <div className="flex gap-2 sticky bottom-4 pt-1">
               <button type="button" onClick={reset} className="btn-secondary flex-1 h-12">
                 Cancel
               </button>
