@@ -1,28 +1,45 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fafafa;
-  --foreground: #0a0a0a;
+  --background: #f7f8f5;
+  --foreground: #0f1a12;
   --card: #ffffff;
-  --primary: #16a34a;
+  --card-elevated: #ffffff;
+  --primary: #1a9f5c;
+  --primary-soft: #e8f7ef;
   --primary-foreground: #ffffff;
-  --muted: #f4f4f5;
-  --muted-foreground: #71717a;
-  --border: #e4e4e7;
-  --ring: #16a34a;
+  --muted: #eef1ec;
+  --muted-foreground: #5c6b60;
+  --border: #e2e8e0;
+  --ring: #1a9f5c;
+  --accent: #f0f7f2;
+  --success: #16a34a;
+  --warning: #d97706;
+  --danger: #dc2626;
+  --radius: 1.25rem;
+  --shadow-soft: 0 4px 24px -4px rgba(15, 26, 18, 0.06);
+  --shadow-card: 0 2px 12px -2px rgba(15, 26, 18, 0.05);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #09090b;
-    --foreground: #fafafa;
-    --card: #18181b;
-    --primary: #22c55e;
+    --background: #0b0f0c;
+    --foreground: #f0f5f1;
+    --card: #141a15;
+    --card-elevated: #1a221c;
+    --primary: #34d399;
+    --primary-soft: #0f2a1a;
     --primary-foreground: #052e16;
-    --muted: #27272a;
-    --muted-foreground: #a1a1aa;
-    --border: #27272a;
-    --ring: #22c55e;
+    --muted: #1c241e;
+    --muted-foreground: #8fa396;
+    --border: #243028;
+    --ring: #34d399;
+    --accent: #152019;
+    --success: #22c55e;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --shadow-soft: 0 4px 24px -4px rgba(0, 0, 0, 0.4);
+    --shadow-card: 0 2px 12px -2px rgba(0, 0, 0, 0.3);
   }
 }
 
@@ -31,22 +48,132 @@
   --color-foreground: var(--foreground);
   --color-card: var(--card);
   --color-primary: var(--primary);
+  --color-primary-soft: var(--primary-soft);
   --color-primary-foreground: var(--primary-foreground);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-border: var(--border);
   --color-ring: var(--ring);
+  --color-accent: var(--accent);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --radius-xl: var(--radius);
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans), system-ui, sans-serif;
+  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+  font-feature-settings: "ss01" on, "cv01" on;
 }
 
-/* PWA / mobile feel */
-html {
-  -webkit-tap-highlight-color: transparent;
+/* Smooth page transitions feel */
+.page-enter {
+  animation: fadeSlideUp 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulseSoft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.animate-fade-up {
+  animation: fadeSlideUp 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Progress ring helper */
+.progress-ring {
+  transition: stroke-dashoffset 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Soft card */
+.card-soft {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+}
+
+.card-elevated {
+  background: var(--card-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+}
+
+/* Primary button glow */
+.btn-primary {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border-radius: 9999px;
+  font-weight: 600;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.btn-primary:active {
+  transform: scale(0.97);
+}
+
+.btn-primary:hover {
+  box-shadow: 0 8px 24px -6px color-mix(in srgb, var(--primary) 45%, transparent);
+}
+
+/* Input focus */
+.input-modern {
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input-modern:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 18%, transparent);
+}
+
+/* Skeleton */
+.skeleton {
+  background: linear-gradient(90deg, var(--muted) 25%, color-mix(in srgb, var(--muted) 60%, white) 50%, var(--muted) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+  border-radius: 0.75rem;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
