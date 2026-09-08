@@ -4,7 +4,7 @@ const FOOD = [
   { src: "/food/ramen.jpg", alt: "Ramen" },
   { src: "/food/pho.jpg", alt: "Pho" },
   { src: "/food/noodles2.jpg", alt: "Noodles" },
-  { src: "/food/chinese.jpg", alt: "Chinese dish" },
+  { src: "/food/indian-curry.jpg", alt: "Indian curry" },
   { src: "/food/rice.jpg", alt: "Rice meal" },
   { src: "/food/friedrice.jpg", alt: "Fried rice" },
 ];
