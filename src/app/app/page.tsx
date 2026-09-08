@@ -13,6 +13,7 @@ import {
   Pencil,
   Plus,
   Minus,
+  MessageSquare,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
@@ -28,6 +29,8 @@ export default function HomePage() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [cuisineHint, setCuisineHint] = useState("");
+  const [mode, setMode] = useState<"photo" | "text">("photo");
+  const [textDescription, setTextDescription] = useState("");
   const [user, setUser] = useState<any>(null);
   const [editingIdx, setEditingIdx] = useState<number | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -63,18 +66,23 @@ export default function HomePage() {
   };
 
   const analyze = async () => {
-    if (!imageBase64) return;
+    if (mode === "photo" && !imageBase64) return;
+    if (mode === "text" && !textDescription.trim()) return;
     setLoading(true);
     setError(null);
     try {
+      const body =
+        mode === "text"
+          ? { text: textDescription.trim(), cuisineHint: cuisineHint || undefined }
+          : {
+              imageBase64,
+              mimeType,
+              cuisineHint: cuisineHint || undefined,
+            };
       const res = await fetch("/api/analyze", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          imageBase64,
-          mimeType,
-          cuisineHint: cuisineHint || undefined,
-        }),
+        body: JSON.stringify(body),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Analysis failed");
@@ -182,6 +190,7 @@ export default function HomePage() {
     setError(null);
     setSuccess(null);
     setEditingIdx(null);
+    setTextDescription("");
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
@@ -205,37 +214,110 @@ export default function HomePage() {
       </header>
 
       <main className="flex-1 mx-auto w-full max-w-lg px-5 py-6 space-y-6 page-enter">
-        {/* Empty state */}
-        {!imagePreview && (
-          <div className="space-y-6 pt-4">
+        {/* Log mode — empty */}
+        {!imagePreview && !analysis && (
+          <div className="space-y-5 pt-2">
             <div className="text-center space-y-2">
-              <h1 className="text-2xl font-bold tracking-tight">Snap your meal</h1>
+              <h1 className="text-2xl font-bold tracking-tight">Log a meal</h1>
               <p className="text-muted-foreground text-[15px] leading-relaxed max-w-xs mx-auto">
-                Built for Asian food — rice bowls, stir-fries, noodles, shared plates & more.
+                Snap a photo or type what you ate — Asian dishes welcome in any language.
               </p>
             </div>
 
-            <button
-              onClick={() => fileInputRef.current?.click()}
-              className="w-full card-elevated p-12 flex flex-col items-center gap-4 hover:border-primary/40 transition-all active:scale-[0.98]"
-            >
-              <div className="w-16 h-16 rounded-2xl bg-primary-soft flex items-center justify-center">
-                <Camera className="w-8 h-8 text-primary" />
-              </div>
-              <div className="text-center">
-                <p className="font-semibold">Take or upload photo</p>
-                <p className="text-sm text-muted-foreground mt-1">Good lighting works best</p>
-              </div>
-            </button>
+            {/* Mode tabs */}
+            <div className="flex p-1 rounded-2xl bg-muted gap-1">
+              <button
+                onClick={() => setMode("photo")}
+                className={`flex-1 h-11 rounded-xl text-sm font-semibold transition-all ${
+                  mode === "photo" ? "bg-card shadow-sm text-foreground" : "text-muted-foreground"
+                }`}
+              >
+                Photo
+              </button>
+              <button
+                onClick={() => setMode("text")}
+                className={`flex-1 h-11 rounded-xl text-sm font-semibold transition-all ${
+                  mode === "text" ? "bg-card shadow-sm text-foreground" : "text-muted-foreground"
+                }`}
+              >
+                Type it
+              </button>
+            </div>
 
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              capture="environment"
-              className="hidden"
-              onChange={onFileChange}
-            />
+            {mode === "photo" ? (
+              <>
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  className="w-full card-elevated p-12 flex flex-col items-center gap-4 hover:border-primary/40 transition-all active:scale-[0.98]"
+                >
+                  <div className="w-16 h-16 rounded-2xl bg-primary-soft flex items-center justify-center">
+                    <Camera className="w-8 h-8 text-primary" />
+                  </div>
+                  <div className="text-center">
+                    <p className="font-semibold">Take or upload photo</p>
+                    <p className="text-sm text-muted-foreground mt-1">Good lighting works best</p>
+                  </div>
+                </button>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  capture="environment"
+                  className="hidden"
+                  onChange={onFileChange}
+                />
+              </>
+            ) : (
+              <div className="space-y-4">
+                <textarea
+                  value={textDescription}
+                  onChange={(e) => setTextDescription(e.target.value)}
+                  placeholder="e.g. 半碗米饭 + 麻婆豆腐, or chicken rice with extra dark soy, or 1 plate char kway teow"
+                  rows={4}
+                  className="input-modern w-full px-4 py-3 text-[15px] resize-none"
+                />
+                <div>
+                  <label className="text-sm font-medium text-muted-foreground">Cuisine hint</label>
+                  <select
+                    value={cuisineHint}
+                    onChange={(e) => setCuisineHint(e.target.value)}
+                    className="input-modern mt-1.5 w-full px-4 py-3 text-sm font-medium"
+                  >
+                    <option value="">Auto-detect</option>
+                    <option value="chinese">Chinese</option>
+                    <option value="japanese">Japanese</option>
+                    <option value="korean">Korean</option>
+                    <option value="thai">Thai</option>
+                    <option value="vietnamese">Vietnamese</option>
+                    <option value="indian">Indian</option>
+                    <option value="malay">Malay</option>
+                    <option value="singaporean">Singaporean</option>
+                    <option value="indonesian">Indonesian</option>
+                    <option value="filipino">Filipino</option>
+                    <option value="other_asian">Other Asian</option>
+                  </select>
+                </div>
+                <button
+                  onClick={analyze}
+                  disabled={loading || !textDescription.trim()}
+                  className="btn-primary w-full h-14 flex items-center justify-center gap-2 text-[16px] disabled:opacity-50"
+                >
+                  {loading ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      Analyzing…
+                    </>
+                  ) : (
+                    "Estimate calories"
+                  )}
+                </button>
+                {error && (
+                  <div className="rounded-2xl bg-red-500/10 text-red-600 dark:text-red-400 px-4 py-3 text-sm">
+                    {error}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         )}
 

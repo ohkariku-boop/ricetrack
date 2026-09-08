@@ -1,5 +1,6 @@
 /** Seed library of common Asian dishes with reference nutrition (per typical serving).
- * Values are approximate averages for home/restaurant portions — always editable in-app.
+ * Expanded toward SG hawker-style + Indian home cooking coverage.
+ * Values are approximate — always editable in-app. Prefer official tables when linked.
  */
 export type LibraryFood = {
   id: string;
@@ -16,7 +17,6 @@ export type LibraryFood = {
 };
 
 export const ASIAN_FOODS: LibraryFood[] = [
-  // Chinese
   { id: "cn-mapo-tofu", name: "Mapo Tofu", name_original: "麻婆豆腐", cuisine: "chinese", category: "main", calories: 320, protein: 18, carbs: 12, fat: 22, portion: "1 bowl (250g)", tags: ["spicy", "tofu"] },
   { id: "cn-kung-pao-chicken", name: "Kung Pao Chicken", name_original: "宫保鸡丁", cuisine: "chinese", category: "main", calories: 380, protein: 28, carbs: 18, fat: 22, portion: "1 plate (220g)", tags: ["spicy", "chicken"] },
   { id: "cn-sweet-sour-pork", name: "Sweet and Sour Pork", name_original: "糖醋里脊", cuisine: "chinese", category: "main", calories: 420, protein: 22, carbs: 35, fat: 20, portion: "1 plate (200g)" },
@@ -32,8 +32,6 @@ export const ASIAN_FOODS: LibraryFood[] = [
   { id: "cn-egg-fried-rice", name: "Egg Fried Rice", name_original: "蛋炒饭", cuisine: "chinese", category: "rice", calories: 450, protein: 12, carbs: 60, fat: 16, portion: "1 plate (300g)" },
   { id: "cn-chow-mein", name: "Chicken Chow Mein", name_original: "炒面", cuisine: "chinese", category: "noodles", calories: 480, protein: 22, carbs: 55, fat: 18, portion: "1 plate (350g)" },
   { id: "cn-spring-rolls", name: "Spring Rolls (fried)", name_original: "春卷", cuisine: "chinese", category: "snack", calories: 280, protein: 6, carbs: 28, fat: 16, portion: "3 pieces" },
-
-  // Japanese
   { id: "jp-salmon-nigiri", name: "Salmon Nigiri", name_original: "サーモン握り", cuisine: "japanese", category: "sushi", calories: 60, protein: 5, carbs: 8, fat: 1.5, portion: "1 piece" },
   { id: "jp-tuna-nigiri", name: "Tuna Nigiri", name_original: "まぐろ握り", cuisine: "japanese", category: "sushi", calories: 50, protein: 6, carbs: 8, fat: 0.5, portion: "1 piece" },
   { id: "jp-california-roll", name: "California Roll", name_original: "カリフォルニアロール", cuisine: "japanese", category: "sushi", calories: 250, protein: 9, carbs: 28, fat: 10, portion: "6 pieces" },
@@ -49,8 +47,6 @@ export const ASIAN_FOODS: LibraryFood[] = [
   { id: "jp-gyudon", name: "Gyudon (Beef Bowl)", name_original: "牛丼", cuisine: "japanese", category: "rice", calories: 700, protein: 28, carbs: 90, fat: 22, portion: "1 regular bowl" },
   { id: "jp-okonomiyaki", name: "Okonomiyaki", name_original: "お好み焼き", cuisine: "japanese", category: "main", calories: 480, protein: 18, carbs: 45, fat: 24, portion: "1 pancake" },
   { id: "jp-takoyaki", name: "Takoyaki", name_original: "たこ焼き", cuisine: "japanese", category: "snack", calories: 320, protein: 12, carbs: 35, fat: 14, portion: "6 pieces" },
-
-  // Korean
   { id: "kr-bibimbap", name: "Bibimbap", name_original: "비빔밥", cuisine: "korean", category: "rice", calories: 550, protein: 22, carbs: 70, fat: 18, portion: "1 bowl" },
   { id: "kr-kimchi-jjigae", name: "Kimchi Jjigae", name_original: "김치찌개", cuisine: "korean", category: "soup", calories: 320, protein: 18, carbs: 14, fat: 20, portion: "1 serving" },
   { id: "kr-bulgogi", name: "Bulgogi", name_original: "불고기", cuisine: "korean", category: "main", calories: 380, protein: 32, carbs: 12, fat: 22, portion: "150g meat" },
@@ -61,8 +57,6 @@ export const ASIAN_FOODS: LibraryFood[] = [
   { id: "kr-fried-chicken", name: "Korean Fried Chicken", name_original: "치킨", cuisine: "korean", category: "main", calories: 520, protein: 28, carbs: 25, fat: 32, portion: "4–5 pieces" },
   { id: "kr-doenjang-jjigae", name: "Doenjang Jjigae", name_original: "된장찌개", cuisine: "korean", category: "soup", calories: 180, protein: 12, carbs: 10, fat: 10, portion: "1 serving" },
   { id: "kr-kimchi", name: "Kimchi", name_original: "김치", cuisine: "korean", category: "side", calories: 30, protein: 1, carbs: 5, fat: 0, portion: "50g" },
-
-  // Thai
   { id: "th-pad-thai", name: "Pad Thai", name_original: "ผัดไทย", cuisine: "thai", category: "noodles", calories: 550, protein: 20, carbs: 65, fat: 22, portion: "1 plate" },
   { id: "th-green-curry", name: "Green Curry with Chicken", name_original: "แกงเขียวหวานไก่", cuisine: "thai", category: "main", calories: 420, protein: 24, carbs: 12, fat: 30, portion: "1 bowl (with coconut milk)" },
   { id: "th-tom-yum", name: "Tom Yum Goong", name_original: "ต้มยำกุ้ง", cuisine: "thai", category: "soup", calories: 180, protein: 16, carbs: 8, fat: 8, portion: "1 bowl" },
@@ -71,15 +65,11 @@ export const ASIAN_FOODS: LibraryFood[] = [
   { id: "th-basil-chicken", name: "Pad Krapow Gai", name_original: "ผัดกระเพราไก่", cuisine: "thai", category: "main", calories: 450, protein: 28, carbs: 8, fat: 32, portion: "1 plate (with egg often +150)" },
   { id: "th-massaman", name: "Massaman Curry", name_original: "มัสมั่น", cuisine: "thai", category: "main", calories: 480, protein: 22, carbs: 25, fat: 32, portion: "1 bowl" },
   { id: "th-jasmine-rice", name: "Jasmine Rice", name_original: "ข้าวหอมมะลิ", cuisine: "thai", category: "rice", calories: 200, protein: 4, carbs: 45, fat: 0, portion: "1 cup cooked (150g)" },
-
-  // Vietnamese
   { id: "vn-pho-bo", name: "Pho Bo (Beef)", name_original: "Phở bò", cuisine: "vietnamese", category: "noodles", calories: 450, protein: 28, carbs: 55, fat: 12, portion: "1 bowl" },
   { id: "vn-banh-mi", name: "Banh Mi", name_original: "Bánh mì", cuisine: "vietnamese", category: "sandwich", calories: 420, protein: 18, carbs: 48, fat: 16, portion: "1 sandwich" },
   { id: "vn-goi-cuon", name: "Goi Cuon (Fresh Spring Rolls)", name_original: "Gỏi cuốn", cuisine: "vietnamese", category: "snack", calories: 150, protein: 8, carbs: 20, fat: 4, portion: "2 rolls + sauce" },
   { id: "vn-bun-cha", name: "Bun Cha", name_original: "Bún chả", cuisine: "vietnamese", category: "noodles", calories: 520, protein: 26, carbs: 55, fat: 20, portion: "1 serving" },
   { id: "vn-com-tam", name: "Com Tam (Broken Rice)", name_original: "Cơm tấm", cuisine: "vietnamese", category: "rice", calories: 650, protein: 30, carbs: 70, fat: 24, portion: "1 plate with pork" },
-
-  // Indian
   { id: "in-butter-chicken", name: "Butter Chicken", name_original: "मक्खन मुर्ग़", cuisine: "indian", category: "main", calories: 490, protein: 32, carbs: 12, fat: 34, portion: "1 serving (200g)" },
   { id: "in-chicken-biryani", name: "Chicken Biryani", name_original: "बिरयानी", cuisine: "indian", category: "rice", calories: 550, protein: 28, carbs: 60, fat: 20, portion: "1 plate" },
   { id: "in-dal-tadka", name: "Dal Tadka", name_original: "दाल तड़का", cuisine: "indian", category: "main", calories: 220, protein: 12, carbs: 28, fat: 8, portion: "1 bowl" },
@@ -88,8 +78,6 @@ export const ASIAN_FOODS: LibraryFood[] = [
   { id: "in-paneer-tikka", name: "Paneer Tikka", name_original: "पनीर टिक्का", cuisine: "indian", category: "main", calories: 340, protein: 18, carbs: 10, fat: 24, portion: "1 serving" },
   { id: "in-masala-dosa", name: "Masala Dosa", name_original: "मसाला डोसा", cuisine: "indian", category: "main", calories: 350, protein: 8, carbs: 50, fat: 12, portion: "1 dosa + filling" },
   { id: "in-chole", name: "Chole (Chickpea Curry)", name_original: "छोले", cuisine: "indian", category: "main", calories: 280, protein: 12, carbs: 35, fat: 10, portion: "1 bowl" },
-
-  // Malay / Indonesian / Singapore
   { id: "my-nasi-lemak", name: "Nasi Lemak", name_original: "Nasi Lemak", cuisine: "malay", category: "rice", calories: 600, protein: 18, carbs: 70, fat: 26, portion: "1 plate with sambal + egg + anchovies" },
   { id: "my-laksa", name: "Laksa", name_original: "Laksa", cuisine: "malay", category: "noodles", calories: 550, protein: 22, carbs: 50, fat: 28, portion: "1 bowl" },
   { id: "my-roti-canai", name: "Roti Canai", name_original: "Roti Canai", cuisine: "malay", category: "bread", calories: 300, protein: 6, carbs: 40, fat: 12, portion: "1 piece + dhal" },
@@ -100,19 +88,61 @@ export const ASIAN_FOODS: LibraryFood[] = [
   { id: "id-soto-ayam", name: "Soto Ayam", name_original: "Soto Ayam", cuisine: "indonesian", category: "soup", calories: 320, protein: 22, carbs: 25, fat: 12, portion: "1 bowl" },
   { id: "sg-chicken-rice", name: "Hainanese Chicken Rice", name_original: "海南鸡饭", cuisine: "singaporean", category: "rice", calories: 550, protein: 32, carbs: 55, fat: 18, portion: "1 plate" },
   { id: "sg-chili-crab", name: "Chili Crab (portion)", name_original: "辣椒螃蟹", cuisine: "singaporean", category: "main", calories: 400, protein: 28, carbs: 15, fat: 24, portion: "1 serving with sauce" },
-
-  // Filipino
   { id: "ph-adobo", name: "Chicken Adobo", name_original: "Adobo", cuisine: "filipino", category: "main", calories: 380, protein: 32, carbs: 8, fat: 22, portion: "1 serving" },
   { id: "ph-sinigang", name: "Sinigang na Baboy", name_original: "Sinigang", cuisine: "filipino", category: "soup", calories: 280, protein: 22, carbs: 12, fat: 14, portion: "1 bowl" },
   { id: "ph-lechon-kawali", name: "Lechon Kawali", name_original: "Lechon Kawali", cuisine: "filipino", category: "main", calories: 480, protein: 24, carbs: 5, fat: 40, portion: "150g" },
   { id: "ph-pancit", name: "Pancit Canton", name_original: "Pancit", cuisine: "filipino", category: "noodles", calories: 420, protein: 14, carbs: 55, fat: 14, portion: "1 plate" },
   { id: "ph-halo-halo", name: "Halo-Halo", name_original: "Halo-halo", cuisine: "filipino", category: "dessert", calories: 350, protein: 6, carbs: 60, fat: 10, portion: "1 serving" },
-
-  // Staples
   { id: "st-white-rice", name: "Steamed White Rice", cuisine: "other_asian", category: "rice", calories: 200, protein: 4, carbs: 45, fat: 0, portion: "1 bowl (150g cooked)" },
   { id: "st-brown-rice", name: "Brown Rice", cuisine: "other_asian", category: "rice", calories: 215, protein: 5, carbs: 45, fat: 1.5, portion: "1 bowl (150g)" },
   { id: "st-tofu-firm", name: "Firm Tofu (steamed)", cuisine: "other_asian", category: "protein", calories: 140, protein: 16, carbs: 3, fat: 8, portion: "150g" },
   { id: "st-edamame", name: "Edamame", cuisine: "japanese", category: "side", calories: 120, protein: 11, carbs: 9, fat: 5, portion: "100g" },
+  { id: "sg-ban-mian", name: "Ban Mian", cuisine: "singaporean", category: "noodles", calories: 480, protein: 22, carbs: 55, fat: 18, portion: "1 bowl" },
+  { id: "sg-fish-ball-noodles", name: "Fish Ball Noodles", cuisine: "singaporean", category: "noodles", calories: 380, protein: 18, carbs: 52, fat: 10, portion: "1 bowl" },
+  { id: "sg-char-kway-teow", name: "Char Kway Teow", cuisine: "singaporean", category: "noodles", calories: 740, protein: 20, carbs: 70, fat: 40, portion: "1 plate", tags: ["high-oil"] },
+  { id: "sg-carrot-cake", name: "Fried Carrot Cake (white)", cuisine: "singaporean", category: "snack", calories: 420, protein: 10, carbs: 45, fat: 22, portion: "1 plate" },
+  { id: "sg-chilli-crab-rice", name: "Chilli Crab with Mantou", cuisine: "singaporean", category: "main", calories: 680, protein: 32, carbs: 55, fat: 32, portion: "1 sharing portion" },
+  { id: "sg-bak-kut-teh", name: "Bak Kut Teh", cuisine: "singaporean", category: "soup", calories: 350, protein: 28, carbs: 8, fat: 22, portion: "1 bowl with ribs" },
+  { id: "sg-wanton-mee", name: "Wanton Mee", cuisine: "singaporean", category: "noodles", calories: 450, protein: 20, carbs: 55, fat: 14, portion: "1 plate" },
+  { id: "sg-economic-rice", name: "Economic Rice (3 dishes)", cuisine: "singaporean", category: "rice", calories: 650, protein: 25, carbs: 75, fat: 24, portion: "1 plate" },
+  { id: "sg-roti-prata", name: "Roti Prata (plain)", cuisine: "singaporean", category: "bread", calories: 300, protein: 6, carbs: 40, fat: 12, portion: "1 piece + curry" },
+  { id: "sg-mee-goreng", name: "Mee Goreng", cuisine: "singaporean", category: "noodles", calories: 520, protein: 16, carbs: 60, fat: 22, portion: "1 plate" },
+  { id: "sg-ayam-penyet", name: "Ayam Penyet", cuisine: "indonesian", category: "main", calories: 620, protein: 35, carbs: 45, fat: 32, portion: "1 set with rice" },
+  { id: "sg-popiah", name: "Popiah", cuisine: "singaporean", category: "snack", calories: 180, protein: 6, carbs: 28, fat: 5, portion: "2 rolls" },
+  { id: "sg-ice-kacang", name: "Ice Kacang", cuisine: "singaporean", category: "dessert", calories: 320, protein: 4, carbs: 70, fat: 4, portion: "1 bowl" },
+  { id: "sg-tau-huay", name: "Tau Huay (soy bean curd)", cuisine: "singaporean", category: "dessert", calories: 150, protein: 8, carbs: 22, fat: 3, portion: "1 bowl" },
+  { id: "sg-kopi", name: "Kopi (with condensed milk)", cuisine: "singaporean", category: "drink", calories: 140, protein: 2, carbs: 20, fat: 5, portion: "1 cup" },
+  { id: "in-idli", name: "Idli", cuisine: "indian", category: "main", calories: 120, protein: 4, carbs: 22, fat: 1, portion: "2 pieces" },
+  { id: "in-vada", name: "Medu Vada", cuisine: "indian", category: "snack", calories: 200, protein: 5, carbs: 22, fat: 10, portion: "1 piece" },
+  { id: "in-poha", name: "Poha", cuisine: "indian", category: "breakfast", calories: 250, protein: 5, carbs: 40, fat: 8, portion: "1 plate" },
+  { id: "in-upma", name: "Upma", cuisine: "indian", category: "breakfast", calories: 220, protein: 6, carbs: 32, fat: 8, portion: "1 bowl" },
+  { id: "in-rajma", name: "Rajma", cuisine: "indian", category: "main", calories: 280, protein: 14, carbs: 35, fat: 8, portion: "1 bowl" },
+  { id: "in-palak-paneer", name: "Palak Paneer", cuisine: "indian", category: "main", calories: 320, protein: 14, carbs: 12, fat: 24, portion: "1 serving" },
+  { id: "in-aloo-gobi", name: "Aloo Gobi", cuisine: "indian", category: "main", calories: 200, protein: 5, carbs: 22, fat: 10, portion: "1 serving" },
+  { id: "in-chicken-tikka-masala", name: "Chicken Tikka Masala", cuisine: "indian", category: "main", calories: 450, protein: 30, carbs: 14, fat: 28, portion: "1 serving" },
+  { id: "in-roti", name: "Whole Wheat Roti", cuisine: "indian", category: "bread", calories: 120, protein: 4, carbs: 22, fat: 2, portion: "1 piece" },
+  { id: "in-paratha", name: "Aloo Paratha", cuisine: "indian", category: "bread", calories: 320, protein: 7, carbs: 40, fat: 14, portion: "1 piece" },
+  { id: "in-khichdi", name: "Khichdi", cuisine: "indian", category: "rice", calories: 280, protein: 10, carbs: 45, fat: 6, portion: "1 bowl" },
+  { id: "in-sambar", name: "Sambar", cuisine: "indian", category: "soup", calories: 120, protein: 5, carbs: 18, fat: 3, portion: "1 bowl" },
+  { id: "in-rasam", name: "Rasam", cuisine: "indian", category: "soup", calories: 50, protein: 2, carbs: 8, fat: 1, portion: "1 bowl" },
+  { id: "in-gulab-jamun", name: "Gulab Jamun", cuisine: "indian", category: "dessert", calories: 180, protein: 3, carbs: 28, fat: 7, portion: "1 piece" },
+  { id: "in-lassi-sweet", name: "Sweet Lassi", cuisine: "indian", category: "drink", calories: 220, protein: 8, carbs: 35, fat: 5, portion: "1 glass" },
+  { id: "cn-tomato-egg", name: "Tomato Egg Stir-fry", name_original: "番茄炒蛋", cuisine: "chinese", category: "main", calories: 280, protein: 14, carbs: 10, fat: 20, portion: "1 plate" },
+  { id: "cn-yu-xiang-qiezi", name: "Fish-Fragrant Eggplant", name_original: "鱼香茄子", cuisine: "chinese", category: "main", calories: 320, protein: 6, carbs: 22, fat: 24, portion: "1 plate" },
+  { id: "cn-hong-shao-rou", name: "Hong Shao Rou", name_original: "红烧肉", cuisine: "chinese", category: "main", calories: 480, protein: 22, carbs: 12, fat: 38, portion: "150g" },
+  { id: "cn-liang-pi", name: "Liangpi", name_original: "凉皮", cuisine: "chinese", category: "noodles", calories: 350, protein: 10, carbs: 55, fat: 10, portion: "1 serving" },
+  { id: "cn-jian-bing", name: "Jianbing", name_original: "煎饼", cuisine: "chinese", category: "breakfast", calories: 400, protein: 12, carbs: 48, fat: 16, portion: "1 piece" },
+  { id: "cn-baozi", name: "Pork Baozi", name_original: "包子", cuisine: "chinese", category: "dimsum", calories: 220, protein: 9, carbs: 30, fat: 7, portion: "2 pieces" },
+  { id: "cn-congee-pork", name: "Pork Congee", name_original: "瘦肉粥", cuisine: "chinese", category: "rice", calories: 220, protein: 12, carbs: 32, fat: 5, portion: "1 bowl" },
+  { id: "cn-tea-egg", name: "Tea Egg", name_original: "茶叶蛋", cuisine: "chinese", category: "snack", calories: 80, protein: 6, carbs: 1, fat: 5, portion: "1 egg" },
+  { id: "kr-ramyeon", name: "Instant Ramyeon (cooked)", cuisine: "korean", category: "noodles", calories: 500, protein: 10, carbs: 65, fat: 20, portion: "1 pack cooked" },
+  { id: "kr-sundubu", name: "Sundubu Jjigae", name_original: "순두부찌개", cuisine: "korean", category: "soup", calories: 320, protein: 20, carbs: 12, fat: 20, portion: "1 serving" },
+  { id: "kr-banchan-set", name: "Banchan set (small sides)", cuisine: "korean", category: "side", calories: 120, protein: 4, carbs: 12, fat: 6, portion: "3–4 small dishes" },
+  { id: "th-boat-noodles", name: "Boat Noodles", cuisine: "thai", category: "noodles", calories: 350, protein: 18, carbs: 40, fat: 12, portion: "1 small bowl" },
+  { id: "th-pad-see-ew", name: "Pad See Ew", cuisine: "thai", category: "noodles", calories: 550, protein: 22, carbs: 65, fat: 20, portion: "1 plate" },
+  { id: "th-mango-salad", name: "Green Mango Salad", cuisine: "thai", category: "salad", calories: 140, protein: 3, carbs: 20, fat: 5, portion: "1 plate" },
+  { id: "vn-bun-bo-hue", name: "Bun Bo Hue", cuisine: "vietnamese", category: "noodles", calories: 520, protein: 28, carbs: 55, fat: 18, portion: "1 bowl" },
+  { id: "vn-cao-lau", name: "Cao Lau", cuisine: "vietnamese", category: "noodles", calories: 480, protein: 22, carbs: 58, fat: 14, portion: "1 bowl" },
 ];
 
 export const CUISINE_LABELS: Record<string, string> = {
