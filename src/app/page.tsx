@@ -1,37 +1,25 @@
 import Link from "next/link";
+import Image from "next/image";
 
-/** Unsplash License — free commercial use */
+/**
+ * Local food assets in /public/food for reliability + LCP.
+ * Sources originally Unsplash (license: free commercial use).
+ */
 const FOOD = [
-  {
-    src: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=900&q=80",
-    alt: "Ramen",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=900&q=80",
-    alt: "Pho",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1559314809-0d155014e69e?auto=format&fit=crop&w=900&q=80",
-    alt: "Pad Thai",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1496116218417-1a781b1c416f?auto=format&fit=crop&w=900&q=80",
-    alt: "Dumplings",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=900&q=80",
-    alt: "Rice meal",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=900&q=80",
-    alt: "Fried rice",
-  },
+  { src: "/food/ramen.jpg", alt: "Ramen bowl" },
+  { src: "/food/pho.jpg", alt: "Pho" },
+  { src: "/food/noodles2.jpg", alt: "Noodles" },
+  { src: "/food/chinese.jpg", alt: "Chinese dish" },
+  { src: "/food/rice.jpg", alt: "Rice meal" },
+  { src: "/food/friedrice.jpg", alt: "Fried rice" },
+  { src: "/food/ramen2.jpg", alt: "Ramen close-up" },
+  { src: "/food/noodles.jpg", alt: "Asian noodles" },
 ];
 
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-[#f6f3ee] text-[#1a1814]">
-      <header className="fixed top-0 inset-x-0 z-50 border-b border-[#1a1814]/8 bg-[#f6f3ee]/90 backdrop-blur-xl">
+      <header className="fixed top-0 inset-x-0 z-50 border-b border-[#1a1814]/8 bg-[#f6f3ee]/95 backdrop-blur-xl">
         <div className="mx-auto max-w-[1400px] px-6 sm:px-10 h-16 flex items-center justify-between">
           <Link href="/" className="text-[13px] tracking-[0.2em] uppercase font-medium">
             RiceTrack
@@ -53,10 +41,10 @@ export default function LandingPage() {
         </div>
       </header>
 
-      {/* HERO — text + visible food mosaic */}
+      {/* HERO */}
       <section className="pt-24 sm:pt-28 pb-16 px-6 sm:px-10">
         <div className="mx-auto max-w-[1400px] grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          <div className="space-y-8">
+          <div className="space-y-8 order-2 lg:order-1">
             <p className="text-[11px] tracking-[0.25em] uppercase text-[#1a1814]/45">
               Asia-first nutrition · Photo AI · 1000+ dishes
             </p>
@@ -74,7 +62,7 @@ export default function LandingPage() {
             <div className="flex flex-wrap gap-3">
               <Link
                 href="/app"
-                className="inline-flex items-center justify-center h-13 px-8 rounded-full bg-[#1a1814] text-[#f6f3ee] text-sm font-medium hover:bg-[#2d5a3d] transition-colors h-12"
+                className="inline-flex items-center justify-center h-12 px-8 rounded-full bg-[#1a1814] text-[#f6f3ee] text-sm font-medium hover:bg-[#2d5a3d] transition-colors"
               >
                 Try free
               </Link>
@@ -87,50 +75,74 @@ export default function LandingPage() {
             </div>
           </div>
 
-          {/* Collage — clearly visible mosaic */}
-          <div className="relative">
+          {/* Visible mosaic — local images via next/image */}
+          <div className="relative order-1 lg:order-2 min-h-[320px] sm:min-h-[420px]">
             <div className="grid grid-cols-3 gap-2 sm:gap-3">
-              {/* Tall left */}
-              <div className="col-span-1 row-span-2 relative rounded-2xl overflow-hidden aspect-[3/5] sm:aspect-[3/4] shadow-lg">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={FOOD[0].src} alt={FOOD[0].alt} className="absolute inset-0 w-full h-full object-cover" />
+              <div className="relative col-span-1 row-span-2 rounded-2xl overflow-hidden shadow-lg aspect-[3/5] sm:min-h-[360px]">
+                <Image
+                  src={FOOD[0].src}
+                  alt={FOOD[0].alt}
+                  fill
+                  sizes="(max-width: 768px) 33vw, 20vw"
+                  className="object-cover"
+                  priority
+                />
               </div>
-              {/* Top middle */}
-              <div className="col-span-1 relative rounded-2xl overflow-hidden aspect-square shadow-lg">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={FOOD[1].src} alt={FOOD[1].alt} className="absolute inset-0 w-full h-full object-cover" />
+              <div className="relative rounded-2xl overflow-hidden shadow-lg aspect-square">
+                <Image
+                  src={FOOD[1].src}
+                  alt={FOOD[1].alt}
+                  fill
+                  sizes="(max-width: 768px) 33vw, 15vw"
+                  className="object-cover"
+                  priority
+                />
               </div>
-              {/* Top right */}
-              <div className="col-span-1 relative rounded-2xl overflow-hidden aspect-square shadow-lg">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={FOOD[2].src} alt={FOOD[2].alt} className="absolute inset-0 w-full h-full object-cover" />
+              <div className="relative rounded-2xl overflow-hidden shadow-lg aspect-square">
+                <Image
+                  src={FOOD[2].src}
+                  alt={FOOD[2].alt}
+                  fill
+                  sizes="(max-width: 768px) 33vw, 15vw"
+                  className="object-cover"
+                  priority
+                />
               </div>
-              {/* Bottom middle-wide */}
-              <div className="col-span-2 relative rounded-2xl overflow-hidden aspect-[2/1] shadow-lg">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={FOOD[3].src} alt={FOOD[3].alt} className="absolute inset-0 w-full h-full object-cover" />
+              <div className="relative col-span-2 rounded-2xl overflow-hidden shadow-lg aspect-[2/1]">
+                <Image
+                  src={FOOD[3].src}
+                  alt={FOOD[3].alt}
+                  fill
+                  sizes="(max-width: 768px) 66vw, 30vw"
+                  className="object-cover"
+                  priority
+                />
               </div>
             </div>
-            {/* Overlapping accent card */}
-            <div className="absolute -bottom-4 -left-2 sm:-left-6 w-[42%] rounded-2xl overflow-hidden shadow-2xl border-4 border-[#f6f3ee] rotate-[-4deg] aspect-[4/3]">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={FOOD[4].src} alt={FOOD[4].alt} className="w-full h-full object-cover" />
+            {/* Overlap cards */}
+            <div className="absolute -bottom-3 left-0 w-[45%] sm:w-[40%] rounded-2xl overflow-hidden shadow-2xl border-4 border-[#f6f3ee] rotate-[-5deg] aspect-[4/3] z-10">
+              <Image src={FOOD[4].src} alt={FOOD[4].alt} fill sizes="40vw" className="object-cover" />
             </div>
-            <div className="absolute -top-3 -right-2 sm:-right-4 w-[28%] rounded-xl overflow-hidden shadow-xl border-4 border-[#f6f3ee] rotate-[6deg] aspect-square">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={FOOD[5].src} alt={FOOD[5].alt} className="w-full h-full object-cover" />
+            <div className="absolute -top-2 right-0 w-[30%] rounded-xl overflow-hidden shadow-xl border-4 border-[#f6f3ee] rotate-[7deg] aspect-square z-10">
+              <Image src={FOOD[5].src} alt={FOOD[5].alt} fill sizes="25vw" className="object-cover" />
             </div>
           </div>
         </div>
       </section>
 
-      {/* Full-width food band */}
-      <section className="mt-8 sm:mt-12">
-        <div className="grid grid-cols-2 sm:grid-cols-4 h-40 sm:h-56">
-          {FOOD.slice(0, 4).map((f) => (
-            <div key={f.alt} className="relative overflow-hidden">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={f.src} alt={f.alt} className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
+      {/* Band */}
+      <section className="mt-10 sm:mt-16">
+        <div className="grid grid-cols-4 h-36 sm:h-52">
+          {FOOD.slice(0, 4).map((f, i) => (
+            <div key={f.src} className="relative overflow-hidden">
+              <Image
+                src={f.src}
+                alt={f.alt}
+                fill
+                sizes="25vw"
+                className="object-cover"
+                loading={i < 2 ? "eager" : "lazy"}
+              />
             </div>
           ))}
         </div>
@@ -172,7 +184,10 @@ export default function LandingPage() {
               "Manual calorie targets",
               "Soft balance + undo",
             ].map((t) => (
-              <div key={t} className="rounded-2xl border border-[#1a1814]/8 bg-[#f6f3ee] px-5 py-4 font-medium text-sm">
+              <div
+                key={t}
+                className="rounded-2xl border border-[#1a1814]/8 bg-[#f6f3ee] px-5 py-4 font-medium text-sm"
+              >
                 {t}
               </div>
             ))}
@@ -192,8 +207,8 @@ export default function LandingPage() {
         </Link>
       </section>
 
-      <footer className="px-6 sm:px-10 py-8 border-t border-[#1a1814]/8 text-[12px] text-[#1a1814]/40 flex flex-col sm:flex-row justify-between gap-4 max-w-[1400px] mx-auto">
-        <span>© {new Date().getFullYear()} RiceTrack · Food photos via Unsplash</span>
+      <footer className="px-6 sm:px-10 py-8 border-t border-[#1a1814]/8 text-[12px] text-[#1a1814]/40 flex flex-col sm:flex-row justify-between gap-4 max-w-[1400px] mx-auto w-full">
+        <span>© {new Date().getFullYear()} RiceTrack</span>
         <div className="flex gap-6">
           <Link href="/app">App</Link>
           <Link href="/library">Library</Link>
