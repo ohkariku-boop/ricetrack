@@ -132,7 +132,7 @@ export default function DashboardPage() {
 
         {/* CTA */}
         <Link
-          href="/"
+          href="/app"
           className="btn-primary w-full h-[3.75rem] flex items-center justify-center gap-2.5 text-[17px]"
         >
           <Camera className="w-5 h-5" />

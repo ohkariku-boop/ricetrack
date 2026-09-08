@@ -98,3 +98,18 @@ drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created
   after insert on auth.users
   for each row execute procedure public.handle_new_user();
+
+-- Optional: public reference library (app currently ships static seed in src/data/asian-foods.ts)
+-- create table if not exists public.food_library (
+--   id text primary key,
+--   name text not null,
+--   name_original text,
+--   cuisine text,
+--   category text,
+--   calories numeric,
+--   protein numeric,
+--   carbs numeric,
+--   fat numeric,
+--   portion text,
+--   tags text[]
+-- );
