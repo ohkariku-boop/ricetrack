@@ -8,6 +8,7 @@ export type Cuisine =
   | "malay"
   | "indonesian"
   | "filipino"
+  | "singaporean"
   | "other_asian"
   | "western"
   | "unknown";
@@ -37,6 +38,7 @@ export interface MealAnalysis {
   cuisine_detected: Cuisine;
   cooking_methods?: string[];
   confidence_overall: number;
+  notes?: string;
   warnings?: string[];
   raw_response?: string;
 }
