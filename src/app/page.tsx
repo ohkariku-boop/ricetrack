@@ -1,250 +1,203 @@
 import Link from "next/link";
 
-/**
- * Art direction: editorial paper + ink, with a floating Asian food photo collage.
- * Photos: Unsplash License (free commercial use).
- */
-
-const PHOTOS = [
+/** Unsplash License — free commercial use */
+const FOOD = [
   {
-    src: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=800&q=80&auto=format&fit=crop",
-    alt: "Japanese ramen bowl",
-    className: "top-[8%] left-[4%] w-[38%] sm:w-[28%] rotate-[-6deg] z-[1]",
+    src: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=900&q=80",
+    alt: "Ramen",
   },
   {
-    src: "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?w=800&q=80&auto=format&fit=crop",
-    alt: "Vietnamese pho",
-    className: "top-[12%] right-[2%] w-[42%] sm:w-[30%] rotate-[5deg] z-[2]",
+    src: "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=900&q=80",
+    alt: "Pho",
   },
   {
-    src: "https://images.unsplash.com/photo-1559314809-0d155014e69e?w=800&q=80&auto=format&fit=crop",
+    src: "https://images.unsplash.com/photo-1559314809-0d155014e69e?auto=format&fit=crop&w=900&q=80",
     alt: "Pad Thai",
-    className: "top-[42%] left-[8%] w-[36%] sm:w-[26%] rotate-[3deg] z-[3]",
   },
   {
-    src: "https://images.unsplash.com/photo-1496116218417-1a781b1c416f?w=800&q=80&auto=format&fit=crop",
+    src: "https://images.unsplash.com/photo-1496116218417-1a781b1c416f?auto=format&fit=crop&w=900&q=80",
     alt: "Dumplings",
-    className: "top-[48%] right-[8%] w-[34%] sm:w-[24%] rotate-[-4deg] z-[2]",
   },
   {
-    src: "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=800&q=80&auto=format&fit=crop",
-    alt: "Asian rice meal",
-    className: "bottom-[6%] left-[28%] w-[40%] sm:w-[28%] rotate-[2deg] z-[4]",
+    src: "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=900&q=80",
+    alt: "Rice meal",
   },
   {
-    src: "https://images.unsplash.com/photo-1526318896980-cf78c088247c?w=600&q=80&auto=format&fit=crop",
-    alt: "Sushi",
-    className: "bottom-[18%] left-[2%] w-[28%] sm:w-[18%] rotate-[-8deg] z-[1] hidden sm:block",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=600&q=80&auto=format&fit=crop",
+    src: "https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=900&q=80",
     alt: "Fried rice",
-    className: "bottom-[22%] right-[2%] w-[30%] sm:w-[20%] rotate-[7deg] z-[1] hidden sm:block",
   },
 ];
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-[#f6f3ee] text-[#1a1814] selection:bg-[#2d5a3d]/20">
-      {/* Nav — solid on light */}
-      <header className="fixed top-0 inset-x-0 z-50 border-b border-[#1a1814]/5 bg-[#f6f3ee]/85 backdrop-blur-xl">
+    <div className="min-h-screen bg-[#f6f3ee] text-[#1a1814]">
+      <header className="fixed top-0 inset-x-0 z-50 border-b border-[#1a1814]/8 bg-[#f6f3ee]/90 backdrop-blur-xl">
         <div className="mx-auto max-w-[1400px] px-6 sm:px-10 h-16 flex items-center justify-between">
           <Link href="/" className="text-[13px] tracking-[0.2em] uppercase font-medium">
             RiceTrack
           </Link>
-          <nav className="hidden sm:flex items-center gap-10 text-[13px] tracking-wide text-[#1a1814]/55">
-            <a href="#easy" className="hover:text-[#1a1814] transition-colors">
+          <nav className="hidden sm:flex items-center gap-8 text-[13px] text-[#1a1814]/55">
+            <a href="#easy" className="hover:text-[#1a1814]">
               Easy
             </a>
-            <a href="#accuracy" className="hover:text-[#1a1814] transition-colors">
+            <a href="#accuracy" className="hover:text-[#1a1814]">
               Accuracy
             </a>
-            <Link href="/library" className="hover:text-[#1a1814] transition-colors">
+            <Link href="/library" className="hover:text-[#1a1814]">
               Library
             </Link>
           </nav>
-          <Link
-            href="/app"
-            className="text-[13px] tracking-wide text-[#2d5a3d] font-medium hover:opacity-70 transition-opacity"
-          >
+          <Link href="/app" className="text-[13px] font-medium text-[#2d5a3d]">
             Open →
           </Link>
         </div>
       </header>
 
-      {/* Hero with photo collage */}
-      <section className="relative min-h-[100svh] pt-16 overflow-hidden">
-        {/* Collage layer */}
-        <div className="absolute inset-0 pointer-events-none select-none" aria-hidden>
-          {/* Soft wash so type stays readable */}
-          <div className="absolute inset-0 bg-[#f6f3ee]/40 z-[5]" />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#f6f3ee] via-transparent to-[#f6f3ee] z-[5]" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#f6f3ee]/90 via-transparent to-[#f6f3ee]/80 z-[5]" />
-
-          {PHOTOS.map((p) => (
-            <div
-              key={p.src}
-              className={`absolute overflow-hidden rounded-sm shadow-[0_20px_50px_-12px_rgba(26,24,20,0.35)] border border-[#1a1814]/10 ${p.className}`}
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={p.src}
-                alt=""
-                className="w-full h-full object-cover aspect-[4/5] opacity-90"
-                loading="eager"
-              />
-            </div>
-          ))}
-        </div>
-
-        {/* Hero copy */}
-        <div className="relative z-10 min-h-[calc(100svh-4rem)] flex flex-col justify-end px-6 sm:px-10 pb-16 sm:pb-20">
-          <div className="mx-auto max-w-[1400px] w-full">
-            <p className="text-[11px] sm:text-xs tracking-[0.25em] uppercase text-[#1a1814]/50 mb-6 sm:mb-8">
-              Asia-first nutrition · Photo AI · Open library
+      {/* HERO — text + visible food mosaic */}
+      <section className="pt-24 sm:pt-28 pb-16 px-6 sm:px-10">
+        <div className="mx-auto max-w-[1400px] grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          <div className="space-y-8">
+            <p className="text-[11px] tracking-[0.25em] uppercase text-[#1a1814]/45">
+              Asia-first nutrition · Photo AI · 1000+ dishes
             </p>
-
-            <h1 className="font-medium tracking-[-0.04em] leading-[0.92] text-[clamp(2.6rem,10vw,7.5rem)] max-w-[14ch]">
+            <h1 className="font-medium tracking-[-0.04em] leading-[0.95] text-[clamp(2.5rem,7vw,4.75rem)]">
               Easy to use.
               <br />
               Hard to fool
               <br />
-              <em className="not-italic text-[#2d5a3d]">on Asian food.</em>
+              <span className="text-[#2d5a3d]">on Asian food.</span>
             </h1>
-
-            <div className="mt-10 sm:mt-14 flex flex-col sm:flex-row sm:items-end justify-between gap-8 max-w-3xl">
-              <p className="text-[15px] sm:text-base leading-relaxed text-[#1a1814]/60 max-w-md backdrop-blur-[2px]">
-                Snap a plate or type what you ate. Cuisine-aware AI plus a 1,000+ dish library —
-                rice bowls, noodles, curry, hawker sets, and home cooking across Asia.
-              </p>
-              <Link href="/app" className="group inline-flex items-center gap-3 self-start sm:self-auto">
-                <span className="h-14 w-14 rounded-full border border-[#1a1814]/20 bg-[#f6f3ee]/80 flex items-center justify-center group-hover:bg-[#1a1814] group-hover:text-[#f6f3ee] transition-colors duration-300 shadow-sm">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                    <path d="M5 12h14M13 6l6 6-6 6" />
-                  </svg>
-                </span>
-                <span className="text-sm tracking-wide">Try free</span>
+            <p className="text-[16px] leading-relaxed text-[#1a1814]/55 max-w-md">
+              Snap a plate or type what you ate. Built for rice bowls, noodles, curry,
+              hawker sets, and home cooking — not Western defaults.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <Link
+                href="/app"
+                className="inline-flex items-center justify-center h-13 px-8 rounded-full bg-[#1a1814] text-[#f6f3ee] text-sm font-medium hover:bg-[#2d5a3d] transition-colors h-12"
+              >
+                Try free
+              </Link>
+              <Link
+                href="/library"
+                className="inline-flex items-center justify-center h-12 px-8 rounded-full border border-[#1a1814]/20 text-sm hover:border-[#1a1814]/40 transition-colors"
+              >
+                Browse library
               </Link>
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* Easy */}
-      <section id="easy" className="relative z-10 px-6 sm:px-10 py-24 sm:py-28 border-t border-[#1a1814]/8 bg-[#f6f3ee]">
-        <div className="mx-auto max-w-[1400px]">
-          <p className="text-[11px] tracking-[0.2em] uppercase text-[#1a1814]/40 mb-6">Easy & fun</p>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-medium tracking-[-0.03em] max-w-2xl leading-[1.1] mb-16">
-            Logging should feel like a game, not homework.
-          </h2>
-          <div className="grid md:grid-cols-3 gap-10 md:gap-8">
-            {[
-              { t: "Snap", d: "One photo of the plate. Cuisine hint optional. Built for wok oil and shared dishes." },
-              { t: "Type", d: "半碗米饭 + 麻婆豆腐. Any language. Same accurate macros." },
-              { t: "Re-log", d: "Recent meals and templates — chicken rice, pho, nasi lemak in one tap." },
-            ].map((s) => (
-              <div key={s.t} className="space-y-3">
-                <h3 className="text-2xl font-medium tracking-tight text-[#2d5a3d]">{s.t}</h3>
-                <p className="text-[15px] leading-[1.7] text-[#1a1814]/50 max-w-xs">{s.d}</p>
+          {/* Collage — clearly visible mosaic */}
+          <div className="relative">
+            <div className="grid grid-cols-3 gap-2 sm:gap-3">
+              {/* Tall left */}
+              <div className="col-span-1 row-span-2 relative rounded-2xl overflow-hidden aspect-[3/5] sm:aspect-[3/4] shadow-lg">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={FOOD[0].src} alt={FOOD[0].alt} className="absolute inset-0 w-full h-full object-cover" />
               </div>
-            ))}
+              {/* Top middle */}
+              <div className="col-span-1 relative rounded-2xl overflow-hidden aspect-square shadow-lg">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={FOOD[1].src} alt={FOOD[1].alt} className="absolute inset-0 w-full h-full object-cover" />
+              </div>
+              {/* Top right */}
+              <div className="col-span-1 relative rounded-2xl overflow-hidden aspect-square shadow-lg">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={FOOD[2].src} alt={FOOD[2].alt} className="absolute inset-0 w-full h-full object-cover" />
+              </div>
+              {/* Bottom middle-wide */}
+              <div className="col-span-2 relative rounded-2xl overflow-hidden aspect-[2/1] shadow-lg">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={FOOD[3].src} alt={FOOD[3].alt} className="absolute inset-0 w-full h-full object-cover" />
+              </div>
+            </div>
+            {/* Overlapping accent card */}
+            <div className="absolute -bottom-4 -left-2 sm:-left-6 w-[42%] rounded-2xl overflow-hidden shadow-2xl border-4 border-[#f6f3ee] rotate-[-4deg] aspect-[4/3]">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={FOOD[4].src} alt={FOOD[4].alt} className="w-full h-full object-cover" />
+            </div>
+            <div className="absolute -top-3 -right-2 sm:-right-4 w-[28%] rounded-xl overflow-hidden shadow-xl border-4 border-[#f6f3ee] rotate-[6deg] aspect-square">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={FOOD[5].src} alt={FOOD[5].alt} className="w-full h-full object-cover" />
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Photo strip — full bleed secondary collage */}
-      <section className="relative h-[42vw] min-h-[220px] max-h-[420px] overflow-hidden border-y border-[#1a1814]/8">
-        <div className="absolute inset-0 flex">
-          {[
-            "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=600&q=75&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?w=600&q=75&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1559314809-0d155014e69e?w=600&q=75&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1496116218417-1a781b1c416f?w=600&q=75&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=600&q=75&auto=format&fit=crop",
-          ].map((src) => (
-            <div key={src} className="flex-1 relative min-w-0">
+      {/* Full-width food band */}
+      <section className="mt-8 sm:mt-12">
+        <div className="grid grid-cols-2 sm:grid-cols-4 h-40 sm:h-56">
+          {FOOD.slice(0, 4).map((f) => (
+            <div key={f.alt} className="relative overflow-hidden">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={src} alt="" className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
+              <img src={f.src} alt={f.alt} className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
             </div>
           ))}
         </div>
-        <div className="absolute inset-0 bg-[#1a1814]/25" />
-        <div className="absolute inset-0 flex items-center justify-center px-6">
-          <p className="text-[#f6f3ee] text-center text-xl sm:text-3xl md:text-4xl font-medium tracking-[-0.03em] max-w-2xl drop-shadow-lg">
-            From ramen to rendang — counted the way Asia cooks.
-          </p>
-        </div>
       </section>
 
-      {/* Accuracy */}
-      <section id="accuracy" className="px-6 sm:px-10 py-24 sm:py-32 bg-[#ebe6dc]/50">
+      <section id="easy" className="px-6 sm:px-10 py-24 border-t border-[#1a1814]/8">
         <div className="mx-auto max-w-[1400px]">
-          <p className="text-[11px] tracking-[0.2em] uppercase text-[#1a1814]/40 mb-6">Accuracy stack</p>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-medium tracking-[-0.03em] max-w-3xl leading-[1.1] mb-6">
-            Highest signal for Asian plates — by design
+          <p className="text-[11px] tracking-[0.2em] uppercase text-[#1a1814]/40 mb-6">Easy & fun</p>
+          <h2 className="text-3xl sm:text-4xl font-medium tracking-[-0.03em] max-w-xl mb-14">
+            Snap, type, or re-log — built for how Asia eats.
           </h2>
-          <p className="text-[15px] text-[#1a1814]/50 max-w-2xl leading-relaxed mb-14">
-            Cuisine-aware vision, portion language (半碗, 1 碟), oil and sauce flags, plus a growing
-            regional library grounded toward official tables.
-          </p>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid md:grid-cols-3 gap-10">
             {[
-              ["Cuisine-aware AI", "Wok oil, coconut milk, shared plates — not salad-bowl defaults."],
-              ["1,000+ dish library", "China to Sri Lanka, hawker sets to home thalis."],
-              ["You correct", "Edit every macro. Confidence shown. Never locked numbers."],
-              ["Photo + type", "Snap or describe in any language."],
-              ["Recents & templates", "Re-log chicken rice in one tap."],
-              ["Soft balance", "Went over? Spread gently — always undoable."],
+              ["Snap", "Photo AI tuned for wok oil, sauces, and shared plates."],
+              ["Type", "半碗米饭 + 麻婆豆腐 — any language."],
+              ["Library", "1,000+ regional dishes ready to log."],
             ].map(([t, d]) => (
-              <div key={t} className="rounded-2xl border border-[#1a1814]/8 bg-[#f6f3ee] p-6 space-y-2">
-                <h3 className="font-medium tracking-tight">{t}</h3>
-                <p className="text-sm leading-relaxed text-[#1a1814]/50">{d}</p>
+              <div key={t}>
+                <h3 className="text-xl font-medium text-[#2d5a3d] mb-2">{t}</h3>
+                <p className="text-[15px] text-[#1a1814]/50 leading-relaxed">{d}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="px-6 sm:px-10 py-28 sm:py-36">
-        <div className="mx-auto max-w-[1400px] text-center">
-          <h2 className="text-3xl sm:text-5xl font-medium tracking-[-0.04em] leading-[1.05] max-w-2xl mx-auto">
-            Playful to open. Precise when it counts.
+      <section id="accuracy" className="px-6 sm:px-10 py-24 bg-[#ebe6dc]/40 border-t border-[#1a1814]/8">
+        <div className="mx-auto max-w-[1400px]">
+          <p className="text-[11px] tracking-[0.2em] uppercase text-[#1a1814]/40 mb-6">Why RiceTrack</p>
+          <h2 className="text-3xl sm:text-4xl font-medium tracking-[-0.03em] max-w-2xl mb-12">
+            Accuracy for Asian plates — free core loop.
           </h2>
-          <p className="mt-6 text-[15px] text-[#1a1814]/45 max-w-md mx-auto">
-            Free on the web. No city lock. Core photo & text loop unlocked.
-          </p>
-          <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link
-              href="/app"
-              className="inline-flex items-center justify-center h-14 px-10 rounded-full bg-[#1a1814] text-[#f6f3ee] text-sm tracking-wide hover:bg-[#2d5a3d] transition-colors"
-            >
-              Open RiceTrack
-            </Link>
-            <Link
-              href="/library"
-              className="inline-flex items-center justify-center h-14 px-10 rounded-full border border-[#1a1814]/15 text-sm tracking-wide hover:border-[#1a1814]/40 transition-colors"
-            >
-              Food library
-            </Link>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[
+              "Cuisine-aware AI",
+              "Editable macros",
+              "Hidden oil / sauce flags",
+              "Recents & templates",
+              "Manual calorie targets",
+              "Soft balance + undo",
+            ].map((t) => (
+              <div key={t} className="rounded-2xl border border-[#1a1814]/8 bg-[#f6f3ee] px-5 py-4 font-medium text-sm">
+                {t}
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      <footer className="px-6 sm:px-10 py-10 border-t border-[#1a1814]/8">
-        <div className="mx-auto max-w-[1400px] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 text-[12px] tracking-wide text-[#1a1814]/40">
-          <span>© {new Date().getFullYear()} RiceTrack · Photos via Unsplash</span>
-          <div className="flex gap-8">
-            <Link href="/app" className="hover:text-[#1a1814] transition-colors">
-              App
-            </Link>
-            <Link href="/library" className="hover:text-[#1a1814] transition-colors">
-              Library
-            </Link>
-            <Link href="/login" className="hover:text-[#1a1814] transition-colors">
-              Sign in
-            </Link>
-          </div>
+      <section className="px-6 sm:px-10 py-28 text-center">
+        <h2 className="text-3xl sm:text-5xl font-medium tracking-[-0.04em] max-w-xl mx-auto">
+          Start with the meal in front of you.
+        </h2>
+        <Link
+          href="/app"
+          className="mt-10 inline-flex h-12 px-10 items-center rounded-full bg-[#1a1814] text-[#f6f3ee] text-sm hover:bg-[#2d5a3d] transition-colors"
+        >
+          Open RiceTrack
+        </Link>
+      </section>
+
+      <footer className="px-6 sm:px-10 py-8 border-t border-[#1a1814]/8 text-[12px] text-[#1a1814]/40 flex flex-col sm:flex-row justify-between gap-4 max-w-[1400px] mx-auto">
+        <span>© {new Date().getFullYear()} RiceTrack · Food photos via Unsplash</span>
+        <div className="flex gap-6">
+          <Link href="/app">App</Link>
+          <Link href="/library">Library</Link>
+          <Link href="/login">Sign in</Link>
         </div>
       </footer>
     </div>
