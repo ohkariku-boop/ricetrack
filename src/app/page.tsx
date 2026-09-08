@@ -1,95 +1,147 @@
 import Link from "next/link";
 
 /**
- * RiceTrack — positioning:
- * Easy & fun (match Welling’s frictionless feel)
- * Highest Asian accuracy (cuisine AI + official databases)
- * Most comprehensive regional coverage (not one city, not Western defaults)
+ * Art direction: editorial paper + ink, with a floating Asian food photo collage.
+ * Photos: Unsplash License (free commercial use).
  */
+
+const PHOTOS = [
+  {
+    src: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=800&q=80&auto=format&fit=crop",
+    alt: "Japanese ramen bowl",
+    className: "top-[8%] left-[4%] w-[38%] sm:w-[28%] rotate-[-6deg] z-[1]",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?w=800&q=80&auto=format&fit=crop",
+    alt: "Vietnamese pho",
+    className: "top-[12%] right-[2%] w-[42%] sm:w-[30%] rotate-[5deg] z-[2]",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1559314809-0d155014e69e?w=800&q=80&auto=format&fit=crop",
+    alt: "Pad Thai",
+    className: "top-[42%] left-[8%] w-[36%] sm:w-[26%] rotate-[3deg] z-[3]",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1496116218417-1a781b1c416f?w=800&q=80&auto=format&fit=crop",
+    alt: "Dumplings",
+    className: "top-[48%] right-[8%] w-[34%] sm:w-[24%] rotate-[-4deg] z-[2]",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=800&q=80&auto=format&fit=crop",
+    alt: "Asian rice meal",
+    className: "bottom-[6%] left-[28%] w-[40%] sm:w-[28%] rotate-[2deg] z-[4]",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1526318896980-cf78c088247c?w=600&q=80&auto=format&fit=crop",
+    alt: "Sushi",
+    className: "bottom-[18%] left-[2%] w-[28%] sm:w-[18%] rotate-[-8deg] z-[1] hidden sm:block",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=600&q=80&auto=format&fit=crop",
+    alt: "Fried rice",
+    className: "bottom-[22%] right-[2%] w-[30%] sm:w-[20%] rotate-[7deg] z-[1] hidden sm:block",
+  },
+];
 
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-[#f6f3ee] text-[#1a1814] selection:bg-[#2d5a3d]/20">
-      <header className="fixed top-0 inset-x-0 z-50 mix-blend-difference">
-        <div className="mx-auto max-w-[1400px] px-6 sm:px-10 h-16 flex items-center justify-between text-[#f6f3ee]">
+      {/* Nav — solid on light */}
+      <header className="fixed top-0 inset-x-0 z-50 border-b border-[#1a1814]/5 bg-[#f6f3ee]/85 backdrop-blur-xl">
+        <div className="mx-auto max-w-[1400px] px-6 sm:px-10 h-16 flex items-center justify-between">
           <Link href="/" className="text-[13px] tracking-[0.2em] uppercase font-medium">
             RiceTrack
           </Link>
-          <nav className="hidden sm:flex items-center gap-10 text-[13px] tracking-wide">
-            <a href="#easy" className="opacity-70 hover:opacity-100 transition-opacity">
+          <nav className="hidden sm:flex items-center gap-10 text-[13px] tracking-wide text-[#1a1814]/55">
+            <a href="#easy" className="hover:text-[#1a1814] transition-colors">
               Easy
             </a>
-            <a href="#accuracy" className="opacity-70 hover:opacity-100 transition-opacity">
+            <a href="#accuracy" className="hover:text-[#1a1814] transition-colors">
               Accuracy
             </a>
-            <Link href="/library" className="opacity-70 hover:opacity-100 transition-opacity">
+            <Link href="/library" className="hover:text-[#1a1814] transition-colors">
               Library
             </Link>
           </nav>
-          <Link href="/app" className="text-[13px] tracking-wide opacity-90 hover:opacity-100 transition-opacity">
+          <Link
+            href="/app"
+            className="text-[13px] tracking-wide text-[#2d5a3d] font-medium hover:opacity-70 transition-opacity"
+          >
             Open →
           </Link>
         </div>
       </header>
 
-      {/* Hero */}
-      <section className="relative min-h-[100svh] flex flex-col justify-end px-6 sm:px-10 pb-16 sm:pb-20 pt-28">
-        <div className="mx-auto max-w-[1400px] w-full">
-          <p className="text-[11px] sm:text-xs tracking-[0.25em] uppercase text-[#1a1814]/45 mb-8 sm:mb-12">
-            Snap · adjust · done — Asia’s most careful calorie app
-          </p>
+      {/* Hero with photo collage */}
+      <section className="relative min-h-[100svh] pt-16 overflow-hidden">
+        {/* Collage layer */}
+        <div className="absolute inset-0 pointer-events-none select-none" aria-hidden>
+          {/* Soft wash so type stays readable */}
+          <div className="absolute inset-0 bg-[#f6f3ee]/40 z-[5]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#f6f3ee] via-transparent to-[#f6f3ee] z-[5]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#f6f3ee]/90 via-transparent to-[#f6f3ee]/80 z-[5]" />
 
-          <h1 className="font-medium tracking-[-0.04em] leading-[0.92] text-[clamp(2.6rem,10.5vw,8rem)] max-w-[15ch]">
-            Easy to use.
-            <br />
-            Hard to fool
-            <br />
-            <em className="not-italic text-[#2d5a3d]">on Asian food.</em>
-          </h1>
+          {PHOTOS.map((p) => (
+            <div
+              key={p.src}
+              className={`absolute overflow-hidden rounded-sm shadow-[0_20px_50px_-12px_rgba(26,24,20,0.35)] border border-[#1a1814]/10 ${p.className}`}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={p.src}
+                alt=""
+                className="w-full h-full object-cover aspect-[4/5] opacity-90"
+                loading="eager"
+              />
+            </div>
+          ))}
+        </div>
 
-          <div className="mt-12 sm:mt-16 flex flex-col sm:flex-row sm:items-end justify-between gap-8 max-w-4xl">
-            <p className="text-[15px] sm:text-base leading-relaxed text-[#1a1814]/55 max-w-md">
-              Chat-style speed without the generic database. Photo AI trained on how
-              Asia actually cooks — backed by official nutrient tables for Singapore,
-              India, and open regional data. Fun in three taps. Serious about accuracy.
+        {/* Hero copy */}
+        <div className="relative z-10 min-h-[calc(100svh-4rem)] flex flex-col justify-end px-6 sm:px-10 pb-16 sm:pb-20">
+          <div className="mx-auto max-w-[1400px] w-full">
+            <p className="text-[11px] sm:text-xs tracking-[0.25em] uppercase text-[#1a1814]/50 mb-6 sm:mb-8">
+              Asia-first nutrition · Photo AI · Open library
             </p>
-            <Link href="/app" className="group inline-flex items-center gap-3 self-start sm:self-auto">
-              <span className="h-14 w-14 rounded-full border border-[#1a1814]/20 flex items-center justify-center group-hover:bg-[#1a1814] group-hover:text-[#f6f3ee] transition-colors duration-300">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <path d="M5 12h14M13 6l6 6-6 6" />
-                </svg>
-              </span>
-              <span className="text-sm tracking-wide">Try free</span>
-            </Link>
+
+            <h1 className="font-medium tracking-[-0.04em] leading-[0.92] text-[clamp(2.6rem,10vw,7.5rem)] max-w-[14ch]">
+              Easy to use.
+              <br />
+              Hard to fool
+              <br />
+              <em className="not-italic text-[#2d5a3d]">on Asian food.</em>
+            </h1>
+
+            <div className="mt-10 sm:mt-14 flex flex-col sm:flex-row sm:items-end justify-between gap-8 max-w-3xl">
+              <p className="text-[15px] sm:text-base leading-relaxed text-[#1a1814]/60 max-w-md backdrop-blur-[2px]">
+                Snap a plate or type what you ate. Cuisine-aware AI plus a 1,000+ dish library —
+                rice bowls, noodles, curry, hawker sets, and home cooking across Asia.
+              </p>
+              <Link href="/app" className="group inline-flex items-center gap-3 self-start sm:self-auto">
+                <span className="h-14 w-14 rounded-full border border-[#1a1814]/20 bg-[#f6f3ee]/80 flex items-center justify-center group-hover:bg-[#1a1814] group-hover:text-[#f6f3ee] transition-colors duration-300 shadow-sm">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                    <path d="M5 12h14M13 6l6 6-6 6" />
+                  </svg>
+                </span>
+                <span className="text-sm tracking-wide">Try free</span>
+              </Link>
+            </div>
           </div>
         </div>
-        <div className="absolute bottom-0 left-0 right-0 h-px bg-[#1a1814]/10" />
       </section>
 
-      {/* Easy & fun */}
-      <section id="easy" className="px-6 sm:px-10 py-24 sm:py-28 border-b border-[#1a1814]/8">
+      {/* Easy */}
+      <section id="easy" className="relative z-10 px-6 sm:px-10 py-24 sm:py-28 border-t border-[#1a1814]/8 bg-[#f6f3ee]">
         <div className="mx-auto max-w-[1400px]">
-          <p className="text-[11px] tracking-[0.2em] uppercase text-[#1a1814]/40 mb-6">
-            Easy & fun
-          </p>
+          <p className="text-[11px] tracking-[0.2em] uppercase text-[#1a1814]/40 mb-6">Easy & fun</p>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-medium tracking-[-0.03em] max-w-2xl leading-[1.1] mb-16">
             Logging should feel like a game, not homework.
           </h2>
-
           <div className="grid md:grid-cols-3 gap-10 md:gap-8">
             {[
-              {
-                t: "Snap",
-                d: "One photo of the plate. Cuisine hint if you want. No barcode hunt for home cooking.",
-              },
-              {
-                t: "Nudge",
-                d: "±20 kcal taps, edit portion in place. Fix rice amount in two seconds — then save.",
-              },
-              {
-                t: "See",
-                d: "Rings fill up. Day makes sense. Progress feels visual, not like a spreadsheet.",
-              },
+              { t: "Snap", d: "One photo of the plate. Cuisine hint optional. Built for wok oil and shared dishes." },
+              { t: "Type", d: "半碗米饭 + 麻婆豆腐. Any language. Same accurate macros." },
+              { t: "Re-log", d: "Recent meals and templates — chicken rice, pho, nasi lemak in one tap." },
             ].map((s) => (
               <div key={s.t} className="space-y-3">
                 <h3 className="text-2xl font-medium tracking-tight text-[#2d5a3d]">{s.t}</h3>
@@ -100,196 +152,56 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Competitive honesty */}
-      <section className="px-6 sm:px-10 py-24 sm:py-28 border-b border-[#1a1814]/8">
-        <div className="mx-auto max-w-[1400px]">
-          <p className="text-[11px] tracking-[0.2em] uppercase text-[#1a1814]/40 mb-16">
-            Where others stop
+      {/* Photo strip — full bleed secondary collage */}
+      <section className="relative h-[42vw] min-h-[220px] max-h-[420px] overflow-hidden border-y border-[#1a1814]/8">
+        <div className="absolute inset-0 flex">
+          {[
+            "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=600&q=75&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?w=600&q=75&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1559314809-0d155014e69e?w=600&q=75&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1496116218417-1a781b1c416f?w=600&q=75&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=600&q=75&auto=format&fit=crop",
+          ].map((src) => (
+            <div key={src} className="flex-1 relative min-w-0">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={src} alt="" className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
+            </div>
+          ))}
+        </div>
+        <div className="absolute inset-0 bg-[#1a1814]/25" />
+        <div className="absolute inset-0 flex items-center justify-center px-6">
+          <p className="text-[#f6f3ee] text-center text-xl sm:text-3xl md:text-4xl font-medium tracking-[-0.03em] max-w-2xl drop-shadow-lg">
+            From ramen to rendang — counted the way Asia cooks.
           </p>
-          <div className="grid lg:grid-cols-3 gap-12">
-            <div className="space-y-4">
-              <h3 className="text-lg font-medium">Fast photo apps</h3>
-              <p className="text-[15px] leading-[1.75] text-[#1a1814]/50">
-                Delightful snaps. Accuracy drops on saucy, shared, or oil-heavy Asian
-                plates. Little regional nutrient grounding.
-              </p>
-            </div>
-            <div className="space-y-4">
-              <h3 className="text-lg font-medium">Chat coaches</h3>
-              <p className="text-[15px] leading-[1.75] text-[#1a1814]/50">
-                Fun and flexible. “Global database” claims rarely mean official
-                hawker or Indian recipe tables under the hood.
-              </p>
-            </div>
-            <div className="space-y-4">
-              <h3 className="text-lg font-medium">City restaurant apps</h3>
-              <p className="text-[15px] leading-[1.75] text-[#1a1814]/50">
-                Strong on partner menus in one market. Weak the moment you cook at
-                home or travel.
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-16 pt-12 border-t border-[#1a1814]/8">
-            <p className="text-2xl sm:text-3xl font-medium tracking-[-0.02em] max-w-3xl leading-snug">
-              RiceTrack aims for both:{" "}
-              <span className="text-[#2d5a3d]">frictionless logging</span>
-              {" "}and{" "}
-              <span className="text-[#2d5a3d]">the densest Asian nutrient backbone</span>
-              {" "}we can legally and openly build.
-            </p>
-          </div>
         </div>
       </section>
 
       {/* Accuracy */}
-      <section id="accuracy" className="px-6 sm:px-10 py-24 sm:py-32 border-b border-[#1a1814]/8 bg-[#ebe6dc]/40">
+      <section id="accuracy" className="px-6 sm:px-10 py-24 sm:py-32 bg-[#ebe6dc]/50">
         <div className="mx-auto max-w-[1400px]">
-          <p className="text-[11px] tracking-[0.2em] uppercase text-[#1a1814]/40 mb-6">
-            Accuracy stack
-          </p>
+          <p className="text-[11px] tracking-[0.2em] uppercase text-[#1a1814]/40 mb-6">Accuracy stack</p>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-medium tracking-[-0.03em] max-w-3xl leading-[1.1] mb-6">
             Highest signal for Asian plates — by design
           </h2>
-          <p className="text-[15px] text-[#1a1814]/50 max-w-2xl leading-relaxed mb-16">
-            Vision alone is not enough. We combine cuisine-aware AI with reference
-            data from public and official sources so estimates start closer to truth —
-            then stay editable when the plate is unique.
+          <p className="text-[15px] text-[#1a1814]/50 max-w-2xl leading-relaxed mb-14">
+            Cuisine-aware vision, portion language (半碗, 1 碟), oil and sauce flags, plus a growing
+            regional library grounded toward official tables.
           </p>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {[
-              {
-                t: "Cuisine-aware vision",
-                d: "Prompts and post-processing biased for wok oil, coconut milk, shared dishes, rice bowls, noodles.",
-              },
-              {
-                t: "SG FoodID (HPB)",
-                d: "Singapore Health Promotion Board nutrient profiles for local and hawker-style dishes — macros and more.",
-              },
-              {
-                t: "Anuvaad INDB",
-                d: "1,000+ Indian recipes with full nutrient profiles — open data for the subcontinent’s home cooking.",
-              },
-              {
-                t: "Open regional sets",
-                d: "Open-Food-Calories and cleaned public tables for cross-referenced Asian and global items.",
-              },
-              {
-                t: "Pan-Asian library",
-                d: "Named dishes from Chinese, Japanese, Korean, Thai, Vietnamese, Malay, Indonesian, Filipino, and more.",
-              },
-              {
-                t: "You correct → we learn",
-                d: "Every edit is a signal. Confidence scores and hidden-calorie flags keep honesty above marketing.",
-              },
-            ].map((card) => (
-              <div
-                key={card.t}
-                className="rounded-2xl border border-[#1a1814]/8 bg-[#f6f3ee] p-6 sm:p-7 space-y-3"
-              >
-                <h3 className="font-medium tracking-tight">{card.t}</h3>
-                <p className="text-sm leading-relaxed text-[#1a1814]/50">{card.d}</p>
-              </div>
-            ))}
-          </div>
-
-          <p className="mt-12 text-xs text-[#1a1814]/40 max-w-2xl leading-relaxed">
-            Reference sources are public catalogs (e.g. Singapore Food Insights Database,
-            Anuvaad Indian Nutrient Database, open JSON food tables). We do not claim
-            lab certification of every photo estimate — we claim a stronger starting
-            point and full user control.
-          </p>
-        </div>
-      </section>
-
-      {/* Method */}
-      <section className="px-6 sm:px-10 py-24 sm:py-28 border-b border-[#1a1814]/8">
-        <div className="mx-auto max-w-[1400px]">
-          <p className="text-[11px] tracking-[0.2em] uppercase text-[#1a1814]/40 mb-16">
-            Flow
-          </p>
-          <div className="grid md:grid-cols-4 gap-10">
-            {[
-              ["1", "Photo or library", "Snap the meal or pick a named dish."],
-              ["2", "AI + tables", "Vision meets regional nutrient references."],
-              ["3", "You tweak", "Portion, oil, rice — fixed in seconds."],
-              ["4", "Diary rings", "Day totals that feel rewarding, not clinical."],
-            ].map(([n, t, d]) => (
-              <div key={n} className="space-y-3">
-                <span className="text-[11px] tracking-[0.15em] text-[#2d5a3d]">{n}</span>
-                <h3 className="text-xl font-medium tracking-tight">{t}</h3>
+              ["Cuisine-aware AI", "Wok oil, coconut milk, shared plates — not salad-bowl defaults."],
+              ["1,000+ dish library", "China to Sri Lanka, hawker sets to home thalis."],
+              ["You correct", "Edit every macro. Confidence shown. Never locked numbers."],
+              ["Photo + type", "Snap or describe in any language."],
+              ["Recents & templates", "Re-log chicken rice in one tap."],
+              ["Soft balance", "Went over? Spread gently — always undoable."],
+            ].map(([t, d]) => (
+              <div key={t} className="rounded-2xl border border-[#1a1814]/8 bg-[#f6f3ee] p-6 space-y-2">
+                <h3 className="font-medium tracking-tight">{t}</h3>
                 <p className="text-sm leading-relaxed text-[#1a1814]/50">{d}</p>
               </div>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* Quote */}
-      <section className="px-6 sm:px-10 py-28 bg-[#1a1814] text-[#f6f3ee]">
-        <div className="mx-auto max-w-[1400px]">
-          <blockquote className="text-[clamp(1.5rem,4vw,3rem)] font-medium tracking-[-0.03em] leading-[1.2] max-w-4xl">
-            Fun is how you open the app every day.
-            <span className="text-[#f6f3ee]/35">
-              {" "}
-              Accuracy is why you trust what it says about the laksa.
-            </span>
-          </blockquote>
-        </div>
-      </section>
-
-      {/* Library teaser */}
-      <section className="px-6 sm:px-10 py-24 sm:py-28 border-b border-[#1a1814]/8">
-        <div className="mx-auto max-w-[1400px]">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-14">
-            <div>
-              <p className="text-[11px] tracking-[0.2em] uppercase text-[#1a1814]/40 mb-4">
-                Library
-              </p>
-              <h2 className="text-3xl sm:text-4xl font-medium tracking-[-0.03em] max-w-lg">
-                Comprehensive by region — growing toward official tables
-              </h2>
-            </div>
-            <Link
-              href="/library"
-              className="text-sm tracking-wide text-[#2d5a3d] hover:underline underline-offset-4 shrink-0"
-            >
-              Browse now →
-            </Link>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-[#1a1814]/8 border border-[#1a1814]/8">
-            {[
-              ["Mapo Tofu", "Chinese", "320"],
-              ["Nasi Lemak", "Malay / SG", "600"],
-              ["Masala Dosa", "Indian", "350"],
-              ["Bibimbap", "Korean", "550"],
-              ["Pad Thai", "Thai", "550"],
-              ["Pho Bo", "Vietnamese", "450"],
-              ["Chicken Rice", "Singaporean", "550"],
-              ["Tonkotsu Ramen", "Japanese", "650"],
-            ].map(([name, region, cal]) => (
-              <div key={name} className="bg-[#f6f3ee] p-6 sm:p-8 hover:bg-[#ebe6dc] transition-colors">
-                <div className="text-sm font-medium">{name}</div>
-                <div className="text-xs text-[#1a1814]/35 mt-1">{region}</div>
-                <div className="mt-6 text-[13px] tabular-nums text-[#1a1814]/45">
-                  {cal} <span className="text-[11px]">kcal</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Marquee */}
-      <section className="py-16 overflow-hidden border-b border-[#1a1814]/8">
-        <div className="flex whitespace-nowrap animate-[marquee_42s_linear_infinite] text-[clamp(1.5rem,5vw,3rem)] font-medium tracking-[-0.03em] text-[#1a1814]/12">
-          <span className="mx-8">
-            SG FoodID · Anuvaad INDB · Open food tables · Chinese · Japanese · Korean · Thai · Vietnamese · Indian · Malay · Indonesian · Filipino ·
-          </span>
-          <span className="mx-8">
-            SG FoodID · Anuvaad INDB · Open food tables · Chinese · Japanese · Korean · Thai · Vietnamese · Indian · Malay · Indonesian · Filipino ·
-          </span>
         </div>
       </section>
 
@@ -300,12 +212,12 @@ export default function LandingPage() {
             Playful to open. Precise when it counts.
           </h2>
           <p className="mt-6 text-[15px] text-[#1a1814]/45 max-w-md mx-auto">
-            Free on the web. No city lock. Core photo loop unlocked.
+            Free on the web. No city lock. Core photo & text loop unlocked.
           </p>
           <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/app"
-              className="inline-flex items-center justify-center h-14 px-10 rounded-full bg-[#1a1814] text-[#f6f3ee] text-sm tracking-wide hover:bg-[#2d5a3d] transition-colors duration-300"
+              className="inline-flex items-center justify-center h-14 px-10 rounded-full bg-[#1a1814] text-[#f6f3ee] text-sm tracking-wide hover:bg-[#2d5a3d] transition-colors"
             >
               Open RiceTrack
             </Link>
@@ -321,7 +233,7 @@ export default function LandingPage() {
 
       <footer className="px-6 sm:px-10 py-10 border-t border-[#1a1814]/8">
         <div className="mx-auto max-w-[1400px] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 text-[12px] tracking-wide text-[#1a1814]/40">
-          <span>© {new Date().getFullYear()} RiceTrack</span>
+          <span>© {new Date().getFullYear()} RiceTrack · Photos via Unsplash</span>
           <div className="flex gap-8">
             <Link href="/app" className="hover:text-[#1a1814] transition-colors">
               App
@@ -335,13 +247,6 @@ export default function LandingPage() {
           </div>
         </div>
       </footer>
-
-      <style>{`
-        @keyframes marquee {
-          from { transform: translateX(0); }
-          to { transform: translateX(-50%); }
-        }
-      `}</style>
     </div>
   );
 }
