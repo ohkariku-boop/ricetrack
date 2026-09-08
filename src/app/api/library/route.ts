@@ -19,12 +19,7 @@ type FoodRow = {
   tags?: string[] | null;
 };
 
-function filterSeed(
-  q: string,
-  cuisine: string,
-  country: string,
-  limit: number
-): FoodRow[] {
+function filterSeed(q: string, cuisine: string, country: string): FoodRow[] {
   const query = q.toLowerCase();
   let rows = seed as FoodRow[];
   if (cuisine && cuisine !== "all") {
@@ -42,7 +37,7 @@ function filterSeed(
         (r.country || "").toLowerCase().includes(query)
     );
   }
-  return rows.slice(0, limit);
+  return rows;
 }
 
 export async function GET(req: NextRequest) {
@@ -50,16 +45,16 @@ export async function GET(req: NextRequest) {
   const q = searchParams.get("q") || "";
   const cuisine = searchParams.get("cuisine") || "all";
   const country = searchParams.get("country") || "all";
-  const limit = Math.min(Number(searchParams.get("limit") || 50), 100);
+  const limit = Math.min(Number(searchParams.get("limit") || 10), 50);
+  const offset = Math.max(0, Number(searchParams.get("offset") || 0));
 
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-  // Prefer Supabase when table is populated
   if (url && key) {
     try {
       const supabase = createClient(url, key);
-      let query = supabase.from("food_library").select("*");
+      let query = supabase.from("food_library").select("*", { count: "exact" });
       if (cuisine !== "all") query = query.eq("cuisine", cuisine);
       if (country !== "all") query = query.eq("country", country);
       if (q) {
@@ -67,21 +62,27 @@ export async function GET(req: NextRequest) {
           `name.ilike.%${q}%,name_original.ilike.%${q}%,category.ilike.%${q}%`
         );
       }
-      query = query.order("name").limit(limit);
-      const { data, error } = await query;
+      query = query.order("name").range(offset, offset + limit - 1);
+      const { data, error, count } = await query;
       if (!error && data && data.length > 0) {
-        return NextResponse.json({ source: "supabase", count: data.length, items: data });
+        return NextResponse.json({
+          source: "supabase",
+          count: data.length,
+          total_seed: count ?? data.length,
+          items: data,
+        });
       }
     } catch {
-      // fall through to seed
+      // fall through
     }
   }
 
-  const items = filterSeed(q, cuisine, country, limit);
+  const filtered = filterSeed(q, cuisine, country);
+  const items = filtered.slice(offset, offset + limit);
   return NextResponse.json({
     source: "seed",
     count: items.length,
-    total_seed: (seed as FoodRow[]).length,
+    total_seed: filtered.length,
     items,
   });
 }
