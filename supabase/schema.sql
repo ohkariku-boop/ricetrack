@@ -113,3 +113,43 @@ create trigger on_auth_user_created
 --   portion text,
 --   tags text[]
 -- );
+
+-- ========== Food Library (comprehensive Asian dishes) ==========
+create table if not exists public.food_library (
+  id text primary key,
+  name text not null,
+  name_original text,
+  cuisine text not null,
+  country text,
+  category text,
+  calories numeric not null default 0,
+  protein numeric not null default 0,
+  carbs numeric not null default 0,
+  fat numeric not null default 0,
+  fiber numeric,
+  portion text,
+  tags text[] default '{}',
+  source text default 'seed',
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+
+-- Performance indexes
+create index if not exists food_library_cuisine_idx on public.food_library (cuisine);
+create index if not exists food_library_country_idx on public.food_library (country);
+create index if not exists food_library_category_idx on public.food_library (category);
+create index if not exists food_library_name_trgm_idx on public.food_library using gin (name gin_trgm_ops);
+-- fallback btree for name prefix search if trgm extension missing:
+create index if not exists food_library_name_lower_idx on public.food_library (lower(name));
+
+-- Optional: enable trigram for fuzzy search (run once if permitted)
+-- create extension if not exists pg_trgm;
+
+alter table public.food_library enable row level security;
+
+drop policy if exists "Public read food library" on public.food_library;
+create policy "Public read food library"
+  on public.food_library for select
+  using (true);
+
+-- Only service role should write; no public insert policy
