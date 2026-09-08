@@ -13,13 +13,26 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "RiceTrack — AI Calorie Tracker for Asian Food",
+  title: "RiceTrack — Calorie tracking built for Asian food",
   description:
-    "The most accurate calorie & macro tracker built for Asian food. Snap a photo of your meal and get instant nutrition insights.",
+    "Snap a photo of rice bowls, stir-fries, noodles, and shared plates. Cuisine-aware AI with an Asian food library — more honest than Western-first trackers.",
   applicationName: "RiceTrack",
+  keywords: [
+    "calorie tracker",
+    "Asian food",
+    "AI nutrition",
+    "macro tracker",
+    "Chinese Japanese Korean Thai food calories",
+  ],
+  openGraph: {
+    title: "RiceTrack — Calorie tracking built for Asian food",
+    description:
+      "Photo AI that understands wok oil, coconut milk, and shared plates. Plus an Asian dish library.",
+    type: "website",
+  },
   appleWebApp: {
     capable: true,
-    statusBarStyle: "default",
+    statusBarStyle: "black-translucent",
     title: "RiceTrack",
   },
   formatDetection: {
@@ -29,8 +42,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#fafafa" },
-    { media: "(prefers-color-scheme: dark)", color: "#09090b" },
+    { media: "(prefers-color-scheme: light)", color: "#f7f8f5" },
+    { media: "(prefers-color-scheme: dark)", color: "#070a08" },
   ],
   width: "device-width",
   initialScale: 1,
@@ -49,9 +62,7 @@ export default function RootLayout({
         <link rel="manifest" href="/manifest.json" />
         <meta name="mobile-web-app-capable" content="yes" />
       </head>
-      <body className="min-h-full flex flex-col antialiased bg-background text-foreground">
-        {children}
-      </body>
+      <body className="min-h-full flex flex-col antialiased">{children}</body>
     </html>
   );
 }
