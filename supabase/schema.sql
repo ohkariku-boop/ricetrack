@@ -153,3 +153,59 @@ create policy "Public read food library"
   using (true);
 
 -- Only service role should write; no public insert policy
+
+-- ========== User custom dishes (corrections & favorites) ==========
+create table if not exists public.user_foods (
+  id uuid primary key default uuid_generate_v4(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  name text not null,
+  name_original text,
+  calories numeric not null default 0,
+  protein numeric not null default 0,
+  carbs numeric not null default 0,
+  fat numeric not null default 0,
+  portion text,
+  cuisine text,
+  times_logged integer default 1,
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+create index if not exists user_foods_user_idx on public.user_foods(user_id);
+create index if not exists user_foods_user_name_idx on public.user_foods(user_id, lower(name));
+
+alter table public.user_foods enable row level security;
+create policy "Users manage own foods" on public.user_foods
+  for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
+-- ========== Weight log ==========
+create table if not exists public.weight_logs (
+  id uuid primary key default uuid_generate_v4(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  weight_kg numeric not null,
+  logged_at date not null default current_date,
+  created_at timestamptz default now(),
+  unique(user_id, logged_at)
+);
+create index if not exists weight_logs_user_idx on public.weight_logs(user_id, logged_at desc);
+alter table public.weight_logs enable row level security;
+create policy "Users manage own weight" on public.weight_logs
+  for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
+-- ========== Soft recovery (Balance) with undo ==========
+create table if not exists public.balance_events (
+  id uuid primary key default uuid_generate_v4(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  excess_calories numeric not null,
+  days integer not null default 7,
+  per_day numeric not null,
+  applied_from date not null,
+  undone boolean default false,
+  created_at timestamptz default now()
+);
+create index if not exists balance_user_idx on public.balance_events(user_id, created_at desc);
+alter table public.balance_events enable row level security;
+create policy "Users manage own balance" on public.balance_events
+  for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
+-- Profile: allow manual target flag
+alter table public.profiles add column if not exists targets_manual boolean default false;

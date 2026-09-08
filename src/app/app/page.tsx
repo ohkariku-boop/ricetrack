@@ -18,6 +18,7 @@ import {
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { MEAL_TEMPLATES, PORTION_PRESETS } from "@/data/meal-templates";
 
 export default function HomePage() {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -33,12 +34,22 @@ export default function HomePage() {
   const [textDescription, setTextDescription] = useState("");
   const [user, setUser] = useState<any>(null);
   const [editingIdx, setEditingIdx] = useState<number | null>(null);
+  const [recents, setRecents] = useState<{ id: string; items: FoodItem[]; total_calories: number; total_protein: number; total_carbs: number; total_fat: number }[]>([]);
+  const [showTemplates, setShowTemplates] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const supabase = createClient();
   const router = useRouter();
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data: { user } }) => setUser(user));
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setUser(user);
+      if (user) {
+        fetch("/api/recents")
+          .then((r) => r.json())
+          .then((d) => setRecents(d.meals || []))
+          .catch(() => {});
+      }
+    });
   }, []);
 
   const handleFile = (file: File) => {
@@ -183,6 +194,64 @@ export default function HomePage() {
     }
   };
 
+  const relogMeal = (meal: { items: FoodItem[]; total_calories: number; total_protein: number; total_carbs: number; total_fat: number }) => {
+    setAnalysis({
+      items: meal.items.map((i) => ({ ...i, confidence: i.confidence ?? 0.9 })),
+      total_calories: meal.total_calories,
+      total_protein: meal.total_protein,
+      total_carbs: meal.total_carbs,
+      total_fat: meal.total_fat,
+      cuisine_detected: "unknown",
+      confidence_overall: 0.9,
+    });
+    setImagePreview(null);
+    setImageBase64(null);
+    setError(null);
+    setSuccess(null);
+  };
+
+  const applyTemplate = (id: string) => {
+    const t = MEAL_TEMPLATES.find((x) => x.id === id);
+    if (!t) return;
+    const items = t.items.map((i) => ({
+      ...i,
+      confidence: 0.95,
+      is_hidden_calorie_risk: false,
+    }));
+    setAnalysis({
+      items,
+      total_calories: items.reduce((s, i) => s + i.calories, 0),
+      total_protein: items.reduce((s, i) => s + i.protein, 0),
+      total_carbs: items.reduce((s, i) => s + i.carbs, 0),
+      total_fat: items.reduce((s, i) => s + i.fat, 0),
+      cuisine_detected: t.cuisine as any,
+      confidence_overall: 0.95,
+    });
+    setShowTemplates(false);
+  };
+
+  const applyPortionFactor = (idx: number, factor: number) => {
+    if (!analysis) return;
+    const items = analysis.items.map((item, i) => {
+      if (i !== idx) return item;
+      return {
+        ...item,
+        calories: Math.round(item.calories * factor),
+        protein: Math.round(item.protein * factor * 10) / 10,
+        carbs: Math.round(item.carbs * factor * 10) / 10,
+        fat: Math.round(item.fat * factor * 10) / 10,
+      };
+    });
+    setAnalysis({
+      ...analysis,
+      items,
+      total_calories: items.reduce((s, x) => s + x.calories, 0),
+      total_protein: items.reduce((s, x) => s + x.protein, 0),
+      total_carbs: items.reduce((s, x) => s + x.carbs, 0),
+      total_fat: items.reduce((s, x) => s + x.fat, 0),
+    });
+  };
+
   const reset = () => {
     setImagePreview(null);
     setImageBase64(null);
@@ -316,6 +385,55 @@ export default function HomePage() {
                     {error}
                   </div>
                 )}
+              </div>
+            )}
+          </div>
+
+            {/* Quick templates */}
+            <div className="space-y-2">
+              <button
+                type="button"
+                onClick={() => setShowTemplates((v) => !v)}
+                className="text-xs font-semibold text-primary"
+              >
+                {showTemplates ? "Hide templates" : "Quick meal templates"}
+              </button>
+              {showTemplates && (
+                <div className="grid grid-cols-2 gap-2">
+                  {MEAL_TEMPLATES.map((tpl) => (
+                    <button
+                      key={tpl.id}
+                      type="button"
+                      onClick={() => applyTemplate(tpl.id)}
+                      className="card-soft p-3 text-left hover:border-primary/40 transition-colors"
+                    >
+                      <div className="text-sm font-medium leading-tight">{tpl.name}</div>
+                      <div className="text-[10px] text-muted-foreground mt-1">{tpl.description}</div>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Recents */}
+            {recents.length > 0 && (
+              <div className="space-y-2 pt-2">
+                <div className="text-xs font-semibold text-muted-foreground">Re-log recent</div>
+                <div className="space-y-2">
+                  {recents.slice(0, 5).map((m) => (
+                    <button
+                      key={m.id}
+                      type="button"
+                      onClick={() => relogMeal(m)}
+                      className="w-full card-soft p-3 flex justify-between items-center text-left hover:border-primary/40"
+                    >
+                      <span className="text-sm font-medium truncate pr-2">
+                        {(m.items || []).map((i: any) => i.name).join(", ") || "Meal"}
+                      </span>
+                      <span className="text-sm font-bold shrink-0">{Math.round(m.total_calories)}</span>
+                    </button>
+                  ))}
+                </div>
               </div>
             )}
           </div>
@@ -539,7 +657,19 @@ export default function HomePage() {
                     </div>
                   )}
 
-                  {item.is_hidden_calorie_risk && (
+                  <div className="flex flex-wrap gap-1.5 mt-2">
+                          {PORTION_PRESETS.map((p) => (
+                            <button
+                              key={p.label}
+                              type="button"
+                              onClick={() => applyPortionFactor(idx, p.factor)}
+                              className="text-[10px] px-2 py-1 rounded-full bg-muted font-medium hover:bg-primary/15 hover:text-primary"
+                            >
+                              {p.label}
+                            </button>
+                          ))}
+                        </div>
+                        {item.is_hidden_calorie_risk && (
                     <div className="flex items-center gap-1.5 text-xs text-amber-600 dark:text-amber-400">
                       <AlertTriangle className="w-3.5 h-3.5" />
                       Possible hidden oil / sauce

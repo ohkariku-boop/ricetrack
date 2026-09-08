@@ -1,11 +1,11 @@
 {
   "name": "RiceTrack",
   "short_name": "RiceTrack",
-  "description": "AI calorie tracker optimized for Asian food",
-  "start_url": "/",
+  "description": "Asia-first calorie tracker — photo or type, honest macros",
+  "start_url": "/app",
   "display": "standalone",
-  "background_color": "#09090b",
-  "theme_color": "#16a34a",
+  "background_color": "#f6f3ee",
+  "theme_color": "#2d5a3d",
   "orientation": "portrait-primary",
   "icons": [
     {
