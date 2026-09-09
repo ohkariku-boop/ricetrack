@@ -458,9 +458,7 @@ export default function TrackerPage() {
       <header className="sticky top-0 z-20 bg-background/90 backdrop-blur-xl border-b border-border/60">
         <div className="mx-auto max-w-lg px-5 h-14 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-primary flex items-center justify-center text-primary-foreground font-bold text-sm shadow-sm">
-              RT
-            </div>
+            <RiceLogo size={32} />
             <span className="font-semibold tracking-tight">RiceTrack</span>
           </div>
           <Link
