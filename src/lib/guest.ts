@@ -90,3 +90,28 @@ export function setGuestProfile(p: Partial<GuestProfile>): void {
   const next = { ...getGuestProfile(), ...p };
   localStorage.setItem(GUEST_PROFILE_KEY, JSON.stringify(next));
 }
+
+export function updateGuestMeal(
+  id: string,
+  patch: Partial<Omit<GuestMeal, "id">>
+): GuestMeal | null {
+  const meals = getGuestMeals();
+  const i = meals.findIndex((m) => m.id === id);
+  if (i < 0) return null;
+  meals[i] = { ...meals[i], ...patch };
+  // Recalc totals from items if items provided
+  if (patch.items && Array.isArray(patch.items)) {
+    const items = patch.items as { calories?: number; protein?: number; carbs?: number; fat?: number }[];
+    meals[i].total_calories = items.reduce((s, x) => s + (Number(x.calories) || 0), 0);
+    meals[i].total_protein = items.reduce((s, x) => s + (Number(x.protein) || 0), 0);
+    meals[i].total_carbs = items.reduce((s, x) => s + (Number(x.carbs) || 0), 0);
+    meals[i].total_fat = items.reduce((s, x) => s + (Number(x.fat) || 0), 0);
+  }
+  localStorage.setItem(GUEST_MEALS_KEY, JSON.stringify(meals));
+  return meals[i];
+}
+
+export function deleteGuestMeal(id: string): void {
+  const meals = getGuestMeals().filter((m) => m.id !== id);
+  localStorage.setItem(GUEST_MEALS_KEY, JSON.stringify(meals));
+}

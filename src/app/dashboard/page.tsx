@@ -11,30 +11,61 @@ import {
   Settings2,
   Scale,
   RotateCcw,
-  Sparkles,
+  X,
+  ChevronRight,
+  Minus,
+  Plus,
+  Trash2,
 } from "lucide-react";
 import { formatCalories, formatMacro } from "@/lib/utils";
 import { ProgressRing } from "@/components/ProgressRing";
-import { isGuest, getGuestMeals, getGuestProfile, disableGuest } from "@/lib/guest";
+import {
+  isGuest,
+  getGuestMeals,
+  getGuestProfile,
+  disableGuest,
+  updateGuestMeal,
+  deleteGuestMeal,
+} from "@/lib/guest";
+import type { FoodItem } from "@/types";
+
+type MealRow = {
+  id: string;
+  items: FoodItem[];
+  total_calories: number;
+  total_protein: number;
+  total_carbs: number;
+  total_fat: number;
+  logged_at: string;
+  notes?: string | null;
+};
+
+function normalizeItems(raw: unknown): FoodItem[] {
+  if (!Array.isArray(raw)) return [];
+  return raw.map((x: any) => ({
+    name: String(x?.name || "Item"),
+    name_original: x?.name_original,
+    calories: Number(x?.calories) || 0,
+    protein: Number(x?.protein) || 0,
+    carbs: Number(x?.carbs) || 0,
+    fat: Number(x?.fat) || 0,
+    portion: String(x?.portion || "1 serving"),
+    confidence: Number(x?.confidence) || 0.8,
+    notes: x?.notes,
+  }));
+}
 
 export default function DashboardPage() {
   const [user, setUser] = useState<{ id: string } | null>(null);
   const [profile, setProfile] = useState<Record<string, number | string | boolean> | null>(null);
-  const [meals, setMeals] = useState<
-    {
-      id: string;
-      items: { name: string }[];
-      total_calories: number;
-      total_protein: number;
-      total_carbs: number;
-      total_fat: number;
-      logged_at: string;
-    }[]
-  >([]);
+  const [meals, setMeals] = useState<MealRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [streak, setStreak] = useState(0);
   const [balanceMsg, setBalanceMsg] = useState<string | null>(null);
   const [lastBalanceId, setLastBalanceId] = useState<string | null>(null);
+  const [selected, setSelected] = useState<MealRow | null>(null);
+  const [draftItems, setDraftItems] = useState<FoodItem[]>([]);
+  const [savingMeal, setSavingMeal] = useState(false);
   const router = useRouter();
   const supabase = createClient();
 
@@ -43,7 +74,6 @@ export default function DashboardPage() {
       data: { user },
     } = await supabase.auth.getUser();
 
-    // Guest mode — local meals, no login
     if (!user && isGuest()) {
       const gp = getGuestProfile();
       setProfile(gp as any);
@@ -53,15 +83,15 @@ export default function DashboardPage() {
       setMeals(
         todays.map((m) => ({
           id: m.id,
-          items: (m.items as { name: string }[]) || [],
+          items: normalizeItems(m.items),
           total_calories: m.total_calories,
           total_protein: m.total_protein,
           total_carbs: m.total_carbs,
           total_fat: m.total_fat,
           logged_at: m.logged_at,
+          notes: m.notes,
         }))
       );
-      // streak from guest meals
       const days = new Set(all.map((m) => m.logged_at.slice(0, 10)));
       let s = 0;
       const d = new Date();
@@ -106,9 +136,19 @@ export default function DashboardPage() {
       .gte("logged_at", today.toISOString())
       .order("logged_at", { ascending: false });
 
-    setMeals(data || []);
+    setMeals(
+      (data || []).map((m: any) => ({
+        id: m.id,
+        items: normalizeItems(m.items),
+        total_calories: m.total_calories,
+        total_protein: m.total_protein,
+        total_carbs: m.total_carbs,
+        total_fat: m.total_fat,
+        logged_at: m.logged_at,
+        notes: m.notes,
+      }))
+    );
 
-    // Streak: consecutive days with ≥1 meal
     const { data: recent } = await supabase
       .from("meals")
       .select("logged_at")
@@ -116,9 +156,7 @@ export default function DashboardPage() {
       .order("logged_at", { ascending: false })
       .limit(60);
     if (recent?.length) {
-      const days = new Set(
-        recent.map((m) => new Date(m.logged_at).toISOString().slice(0, 10))
-      );
+      const days = new Set(recent.map((r) => r.logged_at.slice(0, 10)));
       let s = 0;
       const d = new Date();
       for (let i = 0; i < 60; i++) {
@@ -128,7 +166,6 @@ export default function DashboardPage() {
           d.setDate(d.getDate() - 1);
         } else if (i === 0) {
           d.setDate(d.getDate() - 1);
-          continue;
         } else break;
       }
       setStreak(s);
@@ -144,58 +181,149 @@ export default function DashboardPage() {
   const totals = useMemo(() => {
     return meals.reduce(
       (acc, m) => ({
-        calories: acc.calories + Number(m.total_calories),
-        protein: acc.protein + Number(m.total_protein),
-        carbs: acc.carbs + Number(m.total_carbs),
-        fat: acc.fat + Number(m.total_fat),
+        cal: acc.cal + (m.total_calories || 0),
+        p: acc.p + (m.total_protein || 0),
+        c: acc.c + (m.total_carbs || 0),
+        f: acc.f + (m.total_fat || 0),
       }),
-      { calories: 0, protein: 0, carbs: 0, fat: 0 }
+      { cal: 0, p: 0, c: 0, f: 0 }
     );
   }, [meals]);
 
   const targets = {
-    calories: Number(profile?.daily_calorie_target) || 2000,
-    protein: Number(profile?.daily_protein_target) || 120,
-    carbs: Number(profile?.daily_carbs_target) || 200,
-    fat: Number(profile?.daily_fat_target) || 65,
+    cal: Number(profile?.daily_calorie_target) || 2000,
+    p: Number(profile?.daily_protein_target) || 120,
+    c: Number(profile?.daily_carbs_target) || 200,
+    f: Number(profile?.daily_fat_target) || 65,
   };
 
-  const remaining = {
-    calories: Math.max(0, targets.calories - totals.calories),
-    protein: Math.max(0, targets.protein - totals.protein),
+  const remaining = Math.max(0, targets.cal - totals.cal);
+  const over = totals.cal > targets.cal;
+
+  const openMeal = (m: MealRow) => {
+    setSelected(m);
+    setDraftItems(m.items.map((i) => ({ ...i })));
   };
 
-  const excess = totals.calories - targets.calories;
-
-  const applyBalance = async () => {
-    if (excess <= 0) return;
-    const res = await fetch("/api/balance", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ excess_calories: Math.round(excess), days: 7 }),
-    });
-    const data = await res.json();
-    if (data.ok) {
-      setLastBalanceId(data.event?.id || null);
-      setBalanceMsg(data.message);
-    } else setBalanceMsg(data.error || "Failed");
+  const updateDraft = (idx: number, patch: Partial<FoodItem>) => {
+    setDraftItems((prev) => prev.map((it, i) => (i === idx ? { ...it, ...patch } : it)));
   };
 
-  const undoBalance = async () => {
-    if (!lastBalanceId) return;
-    await fetch("/api/balance", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "undo", event_id: lastBalanceId }),
-    });
-    setBalanceMsg("Balance undone. Targets unchanged for future days.");
-    setLastBalanceId(null);
+  const removeDraftItem = (idx: number) => {
+    setDraftItems((prev) => prev.filter((_, i) => i !== idx));
+  };
+
+  const draftTotals = useMemo(() => {
+    return {
+      cal: draftItems.reduce((s, i) => s + (Number(i.calories) || 0), 0),
+      p: draftItems.reduce((s, i) => s + (Number(i.protein) || 0), 0),
+      c: draftItems.reduce((s, i) => s + (Number(i.carbs) || 0), 0),
+      f: draftItems.reduce((s, i) => s + (Number(i.fat) || 0), 0),
+    };
+  }, [draftItems]);
+
+  const saveSelectedMeal = async () => {
+    if (!selected) return;
+    setSavingMeal(true);
+    try {
+      const patch = {
+        items: draftItems,
+        total_calories: draftTotals.cal,
+        total_protein: draftTotals.p,
+        total_carbs: draftTotals.c,
+        total_fat: draftTotals.f,
+      };
+
+      if (!user && isGuest()) {
+        updateGuestMeal(selected.id, patch);
+      } else if (user) {
+        const { error } = await supabase
+          .from("meals")
+          .update(patch)
+          .eq("id", selected.id)
+          .eq("user_id", user.id);
+        if (error) throw error;
+      }
+
+      setMeals((prev) =>
+        prev.map((m) =>
+          m.id === selected.id
+            ? {
+                ...m,
+                items: draftItems,
+                total_calories: draftTotals.cal,
+                total_protein: draftTotals.p,
+                total_carbs: draftTotals.c,
+                total_fat: draftTotals.f,
+              }
+            : m
+        )
+      );
+      setSelected(null);
+    } catch (e: unknown) {
+      alert(e instanceof Error ? e.message : "Could not save");
+    } finally {
+      setSavingMeal(false);
+    }
+  };
+
+  const deleteSelectedMeal = async () => {
+    if (!selected) return;
+    if (!confirm("Delete this meal?")) return;
+    setSavingMeal(true);
+    try {
+      if (!user && isGuest()) {
+        deleteGuestMeal(selected.id);
+      } else if (user) {
+        const { error } = await supabase
+          .from("meals")
+          .delete()
+          .eq("id", selected.id)
+          .eq("user_id", user.id);
+        if (error) throw error;
+      }
+      setMeals((prev) => prev.filter((m) => m.id !== selected.id));
+      setSelected(null);
+    } catch (e: unknown) {
+      alert(e instanceof Error ? e.message : "Could not delete");
+    } finally {
+      setSavingMeal(false);
+    }
   };
 
   const signOut = async () => {
     disableGuest();
     await supabase.auth.signOut();
     router.push("/");
+  };
+
+  const balanceGently = async () => {
+    if (!user) {
+      setBalanceMsg("Sign in to use Balance (guest keeps local control).");
+      return;
+    }
+    setBalanceMsg(null);
+    const res = await fetch("/api/balance", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ remaining_calories: remaining }),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      setBalanceMsg(data.error || "Balance failed");
+      return;
+    }
+    setLastBalanceId(data.meal_id || null);
+    setBalanceMsg(data.message || "Balanced");
+    load();
+  };
+
+  const undoBalance = async () => {
+    if (!lastBalanceId || !user) return;
+    await supabase.from("meals").delete().eq("id", lastBalanceId).eq("user_id", user.id);
+    setLastBalanceId(null);
+    setBalanceMsg("Undone");
+    load();
   };
 
   if (loading) {
@@ -207,78 +335,60 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      <header className="sticky top-0 z-20 border-b border-border/60 bg-background/80 backdrop-blur-xl">
-        <div className="mx-auto max-w-lg px-5 h-14 flex items-center justify-between">
-          <div>
-            <div className="font-semibold tracking-tight">Today</div>
-            {streak > 0 && (
-              <div className="text-[11px] text-muted-foreground">{streak}-day streak</div>
-            )}
-          </div>
+    <div className="min-h-screen bg-background pb-24">
+      <header className="sticky top-0 z-40 border-b border-border/60 bg-background/90 backdrop-blur-xl">
+        <div className="mx-auto max-w-lg px-4 h-14 flex items-center justify-between">
+          <div className="font-semibold tracking-tight">Today</div>
           <div className="flex items-center gap-1">
-            <Link href="/settings" className="p-2 rounded-xl hover:bg-muted text-muted-foreground">
-              <Settings2 className="w-5 h-5" />
+            <Link href="/settings" className="p-2 rounded-lg hover:bg-muted text-muted-foreground">
+              <Settings2 className="w-4 h-4" />
             </Link>
-            <button onClick={signOut} className="p-2 rounded-xl hover:bg-muted text-muted-foreground">
-              <LogOut className="w-5 h-5" />
+            <button type="button" onClick={signOut} className="p-2 rounded-lg hover:bg-muted text-muted-foreground">
+              <LogOut className="w-4 h-4" />
             </button>
           </div>
         </div>
       </header>
 
-      <main className="flex-1 mx-auto w-full max-w-lg px-5 py-6 space-y-6">
-        {/* Rings — single source of truth from meals sum */}
-        <div className="card-elevated p-6">
-          <div className="flex justify-center mb-2">
-            <ProgressRing
-              value={totals.calories}
-              max={targets.calories}
-              size={120}
-              stroke={9}
-              label="kcal"
-              unit={`/ ${targets.calories}`}
-            />
-          </div>
-          <div className="grid grid-cols-3 gap-2 mt-4">
-            <ProgressRing value={totals.protein} max={targets.protein} label="Protein" unit="g" size={72} stroke={6} />
-            <ProgressRing value={totals.carbs} max={targets.carbs} label="Carbs" unit="g" size={72} stroke={6} />
-            <ProgressRing value={totals.fat} max={targets.fat} label="Fat" unit="g" size={72} stroke={6} />
+      <main className="mx-auto max-w-lg px-4 py-5 space-y-5">
+        <div className="card-elevated p-5 flex items-center gap-5">
+          <ProgressRing value={totals.cal} max={targets.cal} size={96} stroke={8} />
+          <div className="min-w-0 flex-1">
+            <div className="text-xs text-muted-foreground uppercase tracking-wide">Calories</div>
+            <div className="text-2xl font-bold tabular-nums">
+              {formatCalories(totals.cal)}
+              <span className="text-sm font-medium text-muted-foreground"> / {formatCalories(targets.cal)}</span>
+            </div>
+            <div className={`text-sm mt-1 ${over ? "text-amber-600" : "text-muted-foreground"}`}>
+              {over ? `${formatCalories(totals.cal - targets.cal)} over` : `${formatCalories(remaining)} left`}
+              {streak > 0 && <span className="ml-2">· {streak}d streak</span>}
+            </div>
           </div>
         </div>
 
-        {/* What fits rest of day */}
-        {remaining.calories > 50 && (
-          <div className="card-soft p-4 flex gap-3 items-start">
-            <Sparkles className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-            <div className="text-sm">
-              <div className="font-semibold">Rest of today</div>
-              <p className="text-muted-foreground mt-1 leading-relaxed">
-                ~{formatCalories(remaining.calories)} kcal left
-                {remaining.protein > 10 && (
-                  <> · aim for ~{formatMacro(remaining.protein)}g protein</>
-                )}
-                . A rice bowl set or pho often fits; go lighter on fried noodles if oil is high.
-              </p>
+        <div className="grid grid-cols-3 gap-2">
+          {[
+            ["Protein", totals.p, targets.p],
+            ["Carbs", totals.c, targets.c],
+            ["Fat", totals.f, targets.f],
+          ].map(([label, val, tgt]) => (
+            <div key={String(label)} className="card-soft p-3 text-center">
+              <div className="text-[10px] uppercase text-muted-foreground">{label}</div>
+              <div className="font-semibold tabular-nums mt-0.5">{formatMacro(Number(val))}g</div>
+              <div className="text-[10px] text-muted-foreground">/ {formatMacro(Number(tgt))}g</div>
             </div>
-          </div>
-        )}
+          ))}
+        </div>
 
-        {/* Soft balance if over */}
-        {excess > 80 && (
-          <div className="card-soft p-4 space-y-3 border border-amber-500/20">
-            <div className="text-sm">
-              <div className="font-semibold">Over by ~{formatCalories(excess)} kcal</div>
-              <p className="text-muted-foreground mt-1">
-                Optional: spread across the next 7 days (~{Math.round(excess / 7)}/day). Always undoable.
-              </p>
-            </div>
+        {remaining > 80 && user && (
+          <div className="card-soft p-4 space-y-2">
+            <div className="text-sm font-medium">Still room today</div>
             <div className="flex gap-2">
-              <button onClick={applyBalance} className="btn-secondary flex-1 h-10 text-sm">
+              <button type="button" onClick={balanceGently} className="btn-secondary flex-1 h-10 text-sm">
                 Balance gently
               </button>
               {lastBalanceId && (
-                <button onClick={undoBalance} className="btn-secondary h-10 px-3 text-sm flex items-center gap-1">
+                <button type="button" onClick={undoBalance} className="btn-secondary h-10 px-3 text-sm flex items-center gap-1">
                   <RotateCcw className="w-3.5 h-3.5" />
                   Undo
                 </button>
@@ -288,10 +398,7 @@ export default function DashboardPage() {
           </div>
         )}
 
-        <Link
-          href="/app"
-          className="btn-primary w-full h-14 flex items-center justify-center gap-2 text-[16px]"
-        >
+        <Link href="/app" className="btn-primary w-full h-14 flex items-center justify-center gap-2 text-[16px]">
           <Camera className="w-5 h-5" />
           Log a meal
         </Link>
@@ -315,8 +422,13 @@ export default function DashboardPage() {
           ) : (
             <div className="space-y-2">
               {meals.map((m) => (
-                <div key={m.id} className="card-soft p-4 flex justify-between gap-3">
-                  <div className="min-w-0">
+                <button
+                  key={m.id}
+                  type="button"
+                  onClick={() => openMeal(m)}
+                  className="w-full card-soft p-4 flex justify-between gap-3 text-left hover:border-primary/30 transition-colors active:scale-[0.99]"
+                >
+                  <div className="min-w-0 flex-1">
                     <div className="font-medium truncate">
                       {(m.items || []).map((i) => i.name).join(", ") || "Meal"}
                     </div>
@@ -325,18 +437,162 @@ export default function DashboardPage() {
                         hour: "2-digit",
                         minute: "2-digit",
                       })}
+                      {" · "}
+                      P {formatMacro(m.total_protein)} · C {formatMacro(m.total_carbs)} · F{" "}
+                      {formatMacro(m.total_fat)}
                     </div>
                   </div>
-                  <div className="text-right shrink-0">
-                    <div className="font-bold">{formatCalories(m.total_calories)}</div>
-                    <div className="text-[10px] text-muted-foreground">kcal</div>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <div className="text-right">
+                      <div className="font-bold tabular-nums">{formatCalories(m.total_calories)}</div>
+                      <div className="text-[10px] text-muted-foreground">kcal</div>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-muted-foreground" />
                   </div>
-                </div>
+                </button>
               ))}
             </div>
           )}
         </div>
       </main>
+
+      {/* Meal detail / edit sheet */}
+      {selected && (
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
+          <button
+            type="button"
+            className="absolute inset-0 bg-black/40"
+            aria-label="Close"
+            onClick={() => setSelected(null)}
+          />
+          <div className="relative w-full max-w-lg max-h-[92vh] overflow-y-auto bg-background rounded-t-3xl sm:rounded-2xl shadow-xl border border-border">
+            <div className="sticky top-0 z-10 flex items-center justify-between px-4 py-3 border-b border-border bg-background/95 backdrop-blur">
+              <div>
+                <div className="font-semibold">Meal details</div>
+                <div className="text-xs text-muted-foreground">
+                  {new Date(selected.logged_at).toLocaleString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    month: "short",
+                    day: "numeric",
+                  })}
+                </div>
+              </div>
+              <button type="button" onClick={() => setSelected(null)} className="p-2 rounded-lg hover:bg-muted">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-4 space-y-4">
+              <div className="card-elevated p-4">
+                <div className="text-xs text-muted-foreground uppercase">Total</div>
+                <div className="text-3xl font-bold tabular-nums mt-1">
+                  {formatCalories(draftTotals.cal)}
+                  <span className="text-sm font-medium text-muted-foreground ml-1">kcal</span>
+                </div>
+                <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm tabular-nums text-muted-foreground">
+                  <span>P {formatMacro(draftTotals.p)}g</span>
+                  <span>C {formatMacro(draftTotals.c)}g</span>
+                  <span>F {formatMacro(draftTotals.f)}g</span>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                {draftItems.map((item, idx) => (
+                  <div key={idx} className="card-soft p-3 space-y-2 min-w-0 overflow-hidden">
+                    <div className="flex gap-2">
+                      <input
+                        className="input-modern flex-1 min-w-0 px-3 py-2 text-sm font-medium"
+                        value={item.name}
+                        onChange={(e) => updateDraft(idx, { name: e.target.value })}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => removeDraftItem(idx)}
+                        className="p-2 rounded-lg text-muted-foreground hover:bg-muted shrink-0"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                    <input
+                      className="input-modern w-full px-3 py-2 text-sm"
+                      value={item.portion || ""}
+                      onChange={(e) => updateDraft(idx, { portion: e.target.value })}
+                      placeholder="Portion e.g. 1 bowl"
+                    />
+                    <div className="grid grid-cols-1 gap-2 min-w-0">
+                      {(
+                        [
+                          ["calories", "kcal", 10],
+                          ["protein", "protein", 1],
+                          ["carbs", "carbs", 1],
+                          ["fat", "fat", 1],
+                        ] as const
+                      ).map(([key, label, step]) => (
+                        <div key={key} className="flex items-center gap-2 min-w-0">
+                          <label className="w-14 shrink-0 text-[11px] uppercase text-muted-foreground">
+                            {label}
+                          </label>
+                          <button
+                            type="button"
+                            className="p-2 rounded-lg bg-muted shrink-0"
+                            onClick={() =>
+                              updateDraft(idx, {
+                                [key]: Math.max(0, Number(item[key]) - step),
+                              })
+                            }
+                          >
+                            <Minus className="w-3.5 h-3.5" />
+                          </button>
+                          <input
+                            type="number"
+                            inputMode="decimal"
+                            className="input-modern min-w-0 flex-1 px-2 py-2 text-sm text-center tabular-nums"
+                            value={item[key]}
+                            onChange={(e) =>
+                              updateDraft(idx, { [key]: Number(e.target.value) || 0 })
+                            }
+                          />
+                          <button
+                            type="button"
+                            className="p-2 rounded-lg bg-muted shrink-0"
+                            onClick={() =>
+                              updateDraft(idx, {
+                                [key]: Number(item[key]) + step,
+                              })
+                            }
+                          >
+                            <Plus className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex gap-2 pb-4">
+                <button
+                  type="button"
+                  onClick={deleteSelectedMeal}
+                  disabled={savingMeal}
+                  className="btn-secondary h-12 px-4 text-red-600"
+                >
+                  Delete
+                </button>
+                <button
+                  type="button"
+                  onClick={saveSelectedMeal}
+                  disabled={savingMeal}
+                  className="btn-primary flex-1 h-12 disabled:opacity-50"
+                >
+                  {savingMeal ? "Saving…" : "Save changes"}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
