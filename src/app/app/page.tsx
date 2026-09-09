@@ -835,7 +835,31 @@ export default function TrackerPage() {
               <div className="rounded-2xl bg-red-500/10 text-red-600 px-4 py-3 text-sm">{error}</div>
             )}
 
-            <div className="flex gap-2 sticky bottom-4 pt-1">
+            <div className="card-soft p-4 space-y-3">
+              <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+                Wrong dish? Correct it
+              </div>
+              <input
+                type="text"
+                value={correctionHint}
+                onChange={(e) => setCorrectionHint(e.target.value)}
+                placeholder="e.g. It's Hokkien mee, not spaghetti"
+                className="input-modern w-full px-3 py-2.5 text-sm"
+              />
+              <button
+                type="button"
+                onClick={reanalyzeWithCorrection}
+                disabled={reanalyzing}
+                className="btn-secondary w-full h-11 text-sm disabled:opacity-50"
+              >
+                {reanalyzing ? "Re-analyzing…" : "Re-analyze with my correction"}
+              </button>
+              <p className="text-[11px] text-muted-foreground leading-snug">
+                Or tap the pencil on any item to rename it and edit macros — your edit is what gets saved.
+              </p>
+            </div>
+
+            <div className="flex gap-2 sticky bottom-4 pt-1 pb-2 bg-background">
               <button type="button" onClick={reset} className="btn-secondary flex-1 h-12">
                 Cancel
               </button>
