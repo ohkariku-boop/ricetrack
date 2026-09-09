@@ -6,6 +6,7 @@ import { enableGuest } from "@/lib/guest";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { RiceLogo } from "@/components/RiceLogo";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -42,8 +43,8 @@ export default function LoginPage() {
     <div className="min-h-screen flex flex-col items-center justify-center px-5 bg-background">
       <div className="w-full max-w-sm space-y-6 page-enter">
         <div className="text-center">
-          <div className="w-14 h-14 rounded-2xl bg-primary mx-auto flex items-center justify-center text-primary-foreground font-bold text-xl shadow-sm mb-5">
-            RT
+          <div className="mx-auto mb-5 flex justify-center">
+            <RiceLogo size={56} />
           </div>
           <h1 className="text-2xl font-bold tracking-tight">Welcome</h1>
           <p className="text-muted-foreground text-[15px] mt-2">

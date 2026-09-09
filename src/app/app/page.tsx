@@ -23,6 +23,7 @@ import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { MEAL_TEMPLATES, PORTION_PRESETS } from "@/data/meal-templates";
+import { RiceLogo } from "@/components/RiceLogo";
 import { isGuest, enableGuest, saveGuestMeal, getGuestMeals } from "@/lib/guest";
 
 type RecentMeal = {

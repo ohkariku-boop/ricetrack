@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { RiceLogo } from "@/components/RiceLogo";
 
 /** Hero mosaic — distinct set */
 const HERO = [
@@ -85,7 +86,8 @@ export default function LandingPage() {
 
       <header className="sticky top-0 z-50 border-b border-[#1a1814]/8 bg-[#f6f3ee]/95 backdrop-blur-xl">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 h-12 flex items-center justify-between">
-          <Link href="/" className="text-[12px] tracking-[0.18em] uppercase font-medium">
+          <Link href="/" className="flex items-center gap-2 text-[12px] tracking-[0.18em] uppercase font-medium">
+            <RiceLogo size={22} />
             RiceTrack
           </Link>
           <nav className="hidden sm:flex items-center gap-6 text-[12px] text-[#1a1814]/55">

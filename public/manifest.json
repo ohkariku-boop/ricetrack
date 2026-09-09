@@ -1,7 +1,7 @@
 {
   "name": "RiceTrack",
   "short_name": "RiceTrack",
-  "description": "Asia-first calorie tracker — photo or type, honest macros",
+  "description": "Asia-first calorie tracker \u2014 photo or type, honest macros",
   "start_url": "/app",
   "display": "standalone",
   "background_color": "#f6f3ee",
