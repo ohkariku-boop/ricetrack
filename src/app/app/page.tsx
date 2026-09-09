@@ -9,6 +9,8 @@ import {
   Loader2,
   AlertTriangle,
   Check,
+  ThumbsUp,
+  ThumbsDown,
   X,
   LayoutDashboard,
   Pencil,
@@ -51,6 +53,7 @@ export default function TrackerPage() {
   const [showTemplates, setShowTemplates] = useState(false);
   const [correctionHint, setCorrectionHint] = useState("");
   const [reanalyzing, setReanalyzing] = useState(false);
+  const [feedback, setFeedback] = useState<"up" | "down" | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const galleryInputRef = useRef<HTMLInputElement>(null);
   const supabase = createClient();
@@ -209,7 +212,28 @@ export default function TrackerPage() {
     }
   };
 
-    const updateItem = (idx: number, patch: Partial<FoodItem>) => {
+  
+  const sendFeedback = (vote: "up" | "down") => {
+    if (!analysis) return;
+    setFeedback(vote);
+    try {
+      const key = "ricetrack_ai_feedback";
+      const prev = JSON.parse(localStorage.getItem(key) || "[]");
+      prev.unshift({
+        at: new Date().toISOString(),
+        vote,
+        meal_title: analysis.meal_title,
+        items: analysis.items.map((i) => i.name),
+        total_calories: analysis.total_calories,
+        cuisine: analysis.cuisine_detected,
+      });
+      localStorage.setItem(key, JSON.stringify(prev.slice(0, 200)));
+    } catch {
+      /* ignore */
+    }
+  };
+
+  const updateItem = (idx: number, patch: Partial<FoodItem>) => {
     if (!analysis) return;
     const items = analysis.items.map((item, i) =>
       i === idx ? { ...item, ...patch } : item
@@ -253,6 +277,7 @@ export default function TrackerPage() {
       setError(null);
       try {
         saveGuestMeal({
+          meal_title: analysis.meal_title || analysis.items.map((i) => i.name).join(", "),
           items: analysis.items,
           total_calories: analysis.total_calories,
           total_protein: analysis.total_protein,
@@ -294,7 +319,9 @@ export default function TrackerPage() {
         total_carbs: analysis.total_carbs,
         total_fat: analysis.total_fat,
         cuisine_detected: analysis.cuisine_detected,
-        notes: analysis.notes || null,
+        notes: analysis.meal_title
+          ? `[title] ${analysis.meal_title}${analysis.notes ? " · " + analysis.notes : ""}`
+          : analysis.notes || null,
       });
       if (insertError) throw insertError;
 
@@ -399,6 +426,7 @@ export default function TrackerPage() {
     setEditingIdx(null);
     setTextDescription("");
     setCorrectionHint("");
+    setFeedback(null);
     if (fileInputRef.current) fileInputRef.current.value = "";
     if (galleryInputRef.current) galleryInputRef.current.value = "";
   };
@@ -659,7 +687,21 @@ export default function TrackerPage() {
         {/* Results */}
         {analysis && (
           <div className="space-y-5">
-            <div className="card-elevated p-5">
+            <div className="card-elevated p-5 space-y-4">
+              <div>
+                <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                  Meal title
+                </label>
+                <input
+                  type="text"
+                  className="input-modern mt-1.5 w-full px-3 py-2.5 text-base font-semibold"
+                  value={analysis.meal_title || ""}
+                  onChange={(e) =>
+                    setAnalysis({ ...analysis, meal_title: e.target.value })
+                  }
+                  placeholder="e.g. Nasi Lemak"
+                />
+              </div>
               <div className="flex items-end justify-between gap-4">
                 <div>
                   <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
@@ -691,11 +733,47 @@ export default function TrackerPage() {
                   {Math.round((analysis.confidence_overall || 0.8) * 100)}%
                 </div>
               )}
+              <div className="pt-3 border-t border-border/60 flex items-center justify-between gap-3">
+                <span className="text-xs text-muted-foreground">Was this analysis good?</span>
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => sendFeedback("up")}
+                    className={`p-2.5 rounded-xl border transition-colors ${
+                      feedback === "up"
+                        ? "bg-primary/15 border-primary text-primary"
+                        : "border-border hover:bg-muted"
+                    }`}
+                    aria-label="Thumbs up"
+                  >
+                    <ThumbsUp className="w-4 h-4" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => sendFeedback("down")}
+                    className={`p-2.5 rounded-xl border transition-colors ${
+                      feedback === "down"
+                        ? "bg-red-500/10 border-red-500/40 text-red-600"
+                        : "border-border hover:bg-muted"
+                    }`}
+                    aria-label="Thumbs down"
+                  >
+                    <ThumbsDown className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+              {feedback && (
+                <p className="text-[11px] text-muted-foreground">
+                  {feedback === "up"
+                    ? "Thanks — this helps improve Asian dish detection."
+                    : "Thanks — use the correction box or edit items so we learn what was wrong."}
+                </p>
+              )}
             </div>
 
             <div className="space-y-2">
               <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide px-1">
-                Items · tap to edit
+                Components · edit for accuracy (title is separate)
               </div>
               {analysis.items.map((item, idx) => (
                 <div key={idx} className="card-soft p-3 sm:p-4 space-y-3 overflow-hidden">

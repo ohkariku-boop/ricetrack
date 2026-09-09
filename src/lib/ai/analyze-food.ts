@@ -9,17 +9,21 @@ CRITICAL RULES FOR ASIAN FOOD:
 2. Always consider cooking methods: stir-fried, deep-fried, steamed, braised, grilled, raw, boiled. These dramatically affect calories (especially oil).
 3. Flag hidden calorie risks: wok oil, coconut milk, peanut sauce, thick gravies, deep-frying, fatty cuts, sweet sauces.
 4. Portion strings MUST be in English by default, e.g. "1 bowl of rice (150g)", "1 plate of noodles", "small shared dish", "1 serving", "1 piece of dim sum". Do NOT use Chinese characters in portion unless the user explicitly wrote Chinese in their description.
-5. For mixed plates / shared Asian meals, break into individual items.
-6. Primary dish name in English. You may put original-language name in name_original only.
+5. For set meals / combo plates (nasi lemak, chicken rice, bento, thali, economy rice, etc.):
+   - Set "meal_title" to the set name in English (e.g. "Nasi Lemak").
+   - List ONLY the component items with their own calories (coconut rice, egg, fried chicken, sambal…).
+   - NEVER also add a full-calorie line item that duplicates the whole set (no item named "Nasi Lemak" with the full plate calories).
+6. Primary item names in English. Optional original script only in name_original.
 7. Be conservative on oil/fat estimation for stir-fries and fried foods — better to slightly overestimate than underestimate.
 8. Confidence should be lower for complex mixed dishes, soups, and items with heavy sauce.
 
 Return ONLY valid JSON in this exact shape (no markdown, no extra text):
 
 {
+  "meal_title": "English plate/set name e.g. Nasi Lemak (required when it is a named set; else short summary)",
   "items": [
     {
-      "name": "English name",
+      "name": "English component name",
       "name_original": "original name if known",
       "calories": number,
       "protein": number,
@@ -140,7 +144,23 @@ export async function analyzeFoodPhoto(
       parsed.total_fat ||
       parsed.items.reduce((s, i) => s + i.fat, 0);
 
-    parsed.confidence_overall =
+    parsed.meal_title = parsed.meal_title || (parsed.items?.[0]?.name ?? "Meal");
+  // Drop combo line that duplicates the title with near-full calories
+  if (parsed.meal_title && parsed.items?.length > 1) {
+    const title = String(parsed.meal_title).toLowerCase().trim();
+    const total = Number(parsed.total_calories) || parsed.items.reduce((s: number, i: FoodItem) => s + (Number(i.calories) || 0), 0);
+    parsed.items = parsed.items.filter((item: FoodItem) => {
+      const n = String(item.name || "").toLowerCase().trim();
+      if (n === title || n.includes(title) || title.includes(n)) {
+        // Keep only if it's clearly a small component, not the whole plate
+        const cal = Number(item.calories) || 0;
+        if (total > 0 && cal >= total * 0.55) return false;
+        if (parsed.items.length > 2 && cal >= total * 0.45) return false;
+      }
+      return true;
+    });
+  }
+  parsed.confidence_overall =
       parsed.confidence_overall ||
       (parsed.items.length
         ? parsed.items.reduce((s, i) => s + i.confidence, 0) / parsed.items.length
@@ -156,6 +176,7 @@ export async function analyzeFoodPhoto(
 const TEXT_SYSTEM_PROMPT = `You are an expert nutritionist specialized in Asian cuisines (Chinese, Japanese, Korean, Thai, Vietnamese, Indian, Malay, Indonesian, Filipino, Singaporean hawker food, and other Asian foods).
 
 The user describes a meal in free text (English, Chinese, Malay, etc.). Parse it into structured nutrition.
+Always set meal_title to a short English plate name. For set meals, items are COMPONENTS only — never double-count the set as an item.
 
 CRITICAL RULES:
 1. Expand shorthand: "半碗饭" = half bowl rice ~75-100g; "一碟青菜" = side of greens; "大份" = large portion.
@@ -216,6 +237,22 @@ function normalizeAnalysis(parsed: MealAnalysis): MealAnalysis {
     parsed.total_fat ||
     parsed.items.reduce((s, i) => s + i.fat, 0);
 
+  parsed.meal_title = parsed.meal_title || (parsed.items?.[0]?.name ?? "Meal");
+  // Drop combo line that duplicates the title with near-full calories
+  if (parsed.meal_title && parsed.items?.length > 1) {
+    const title = String(parsed.meal_title).toLowerCase().trim();
+    const total = Number(parsed.total_calories) || parsed.items.reduce((s: number, i: FoodItem) => s + (Number(i.calories) || 0), 0);
+    parsed.items = parsed.items.filter((item: FoodItem) => {
+      const n = String(item.name || "").toLowerCase().trim();
+      if (n === title || n.includes(title) || title.includes(n)) {
+        // Keep only if it's clearly a small component, not the whole plate
+        const cal = Number(item.calories) || 0;
+        if (total > 0 && cal >= total * 0.55) return false;
+        if (parsed.items.length > 2 && cal >= total * 0.45) return false;
+      }
+      return true;
+    });
+  }
   parsed.confidence_overall =
     parsed.confidence_overall ||
     (parsed.items.length

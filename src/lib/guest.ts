@@ -7,6 +7,7 @@ export const GUEST_PROFILE_KEY = "ricetrack_guest_profile";
 export type GuestMeal = {
   id: string;
   items: unknown[];
+  meal_title?: string;
   total_calories: number;
   total_protein: number;
   total_carbs: number;

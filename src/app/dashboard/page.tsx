@@ -31,6 +31,7 @@ import type { FoodItem } from "@/types";
 
 type MealRow = {
   id: string;
+  meal_title?: string;
   items: FoodItem[];
   total_calories: number;
   total_protein: number;
@@ -83,6 +84,7 @@ export default function DashboardPage() {
       setMeals(
         todays.map((m) => ({
           id: m.id,
+          meal_title: m.meal_title,
           items: normalizeItems(m.items),
           total_calories: m.total_calories,
           total_protein: m.total_protein,
@@ -137,8 +139,15 @@ export default function DashboardPage() {
       .order("logged_at", { ascending: false });
 
     setMeals(
-      (data || []).map((m: any) => ({
+      (data || []).map((m: any) => {
+        let meal_title: string | undefined;
+        const notes = m.notes as string | null;
+        if (notes?.startsWith("[title] ")) {
+          meal_title = notes.replace("[title] ", "").split(" · ")[0];
+        }
+        return {
         id: m.id,
+        meal_title,
         items: normalizeItems(m.items),
         total_calories: m.total_calories,
         total_protein: m.total_protein,
@@ -146,7 +155,8 @@ export default function DashboardPage() {
         total_fat: m.total_fat,
         logged_at: m.logged_at,
         notes: m.notes,
-      }))
+      };
+      })
     );
 
     const { data: recent } = await supabase
@@ -430,8 +440,15 @@ export default function DashboardPage() {
                 >
                   <div className="min-w-0 flex-1">
                     <div className="font-medium truncate">
-                      {(m.items || []).map((i) => i.name).join(", ") || "Meal"}
+                      {m.meal_title ||
+                        (m.items || []).map((i) => i.name).join(", ") ||
+                        "Meal"}
                     </div>
+                    {m.meal_title && m.items?.length > 0 && (
+                      <div className="text-xs text-muted-foreground truncate mt-0.5">
+                        {(m.items || []).map((i) => i.name).join(", ")}
+                      </div>
+                    )}
                     <div className="text-xs text-muted-foreground mt-0.5">
                       {new Date(m.logged_at).toLocaleTimeString([], {
                         hour: "2-digit",
@@ -467,8 +484,10 @@ export default function DashboardPage() {
           />
           <div className="relative w-full max-w-lg max-h-[92vh] overflow-y-auto bg-background rounded-t-3xl sm:rounded-2xl shadow-xl border border-border">
             <div className="sticky top-0 z-10 flex items-center justify-between px-4 py-3 border-b border-border bg-background/95 backdrop-blur">
-              <div>
-                <div className="font-semibold">Meal details</div>
+              <div className="min-w-0">
+                <div className="font-semibold truncate">
+                  {selected.meal_title || "Meal details"}
+                </div>
                 <div className="text-xs text-muted-foreground">
                   {new Date(selected.logged_at).toLocaleString([], {
                     hour: "2-digit",

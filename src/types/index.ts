@@ -31,6 +31,8 @@ export interface FoodItem {
 
 export interface MealAnalysis {
   items: FoodItem[];
+  /** Human-facing plate name e.g. "Nasi Lemak" — not counted as an extra item */
+  meal_title?: string;
   total_calories: number;
   total_protein: number;
   total_carbs: number;
@@ -66,6 +68,7 @@ export interface LoggedMeal {
   id: string;
   user_id: string;
   photo_url?: string;
+  meal_title?: string;
   items: FoodItem[];
   total_calories: number;
   total_protein: number;
