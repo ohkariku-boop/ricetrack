@@ -34,6 +34,7 @@ const CUISINES = [
   "singaporean",
   "filipino",
   "other_asian",
+  "western",
 ];
 
 const LABELS: Record<string, string> = {
@@ -48,7 +49,8 @@ const LABELS: Record<string, string> = {
   indonesian: "Indonesian",
   singaporean: "Singaporean",
   filipino: "Filipino",
-  other_asian: "Other",
+  other_asian: "Other Asia / ME",
+  western: "Western",
 };
 
 export default function LibraryPage() {

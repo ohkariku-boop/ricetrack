@@ -45,6 +45,7 @@ import {
   deleteActivity,
   type ActivityLog,
 } from "@/lib/activity";
+import { getTodaySteps, setTodaySteps, addTodaySteps, startStepListener } from "@/lib/steps";
 
 type MealRow = {
   id: string;
@@ -93,6 +94,8 @@ export default function DashboardPage() {
   const [activities, setActivities] = useState<ActivityLog[]>([]);
   const [loggedDaySet, setLoggedDaySet] = useState<Set<string>>(new Set());
   const [accountLabel, setAccountLabel] = useState("");
+  const [steps, setSteps] = useState(0);
+  const [stepSource, setStepSource] = useState<"sensor" | "manual" | "estimate">("manual");
   const todayKey = new Date().toISOString().slice(0, 10);
   const router = useRouter();
   const supabase = createClient();
@@ -135,6 +138,9 @@ export default function DashboardPage() {
       }
       setStreak(s);
       setWaterMlState(getWaterMl(todayKey));
+      const st = getTodaySteps();
+      setSteps(st.steps);
+      setStepSource(st.source);
       setActivities(getActivities(todayKey));
       setLoggedDaySet(new Set(all.map((m) => m.logged_at.slice(0, 10))));
       const acc = getSessionAccount();
@@ -220,6 +226,14 @@ export default function DashboardPage() {
 
   useEffect(() => {
     load();
+    const st = getTodaySteps();
+    setSteps(st.steps);
+    setStepSource(st.source);
+    const stop = startStepListener((n) => {
+      setSteps(n);
+      setStepSource("estimate");
+    });
+    return stop;
   }, []);
 
   const totals = useMemo(() => {
@@ -424,6 +438,69 @@ export default function DashboardPage() {
               </div>
             );
           })}
+        </div>
+
+        <div className="grid grid-cols-2 gap-3">
+          <div className="card-soft p-4">
+            <div className="text-xs text-muted-foreground flex items-center gap-1">
+              <Footprints className="w-3.5 h-3.5" /> Steps today
+            </div>
+            <div className="text-xl font-bold tabular-nums mt-1">
+              {steps.toLocaleString()}
+              <span className="text-xs font-medium text-muted-foreground"> / 8,000</span>
+            </div>
+            <div className="mt-2 h-1.5 rounded-full bg-muted overflow-hidden">
+              <div
+                className="h-full bg-primary rounded-full"
+                style={{ width: `${Math.min(100, (steps / 8000) * 100)}%` }}
+              />
+            </div>
+            <div className="flex gap-2 mt-3">
+              <button
+                type="button"
+                className="text-[10px] px-2 py-1 rounded-full border border-border"
+                onClick={() => {
+                  const n = addTodaySteps(500, "manual");
+                  setSteps(n.steps);
+                  setStepSource(n.source);
+                }}
+              >
+                +500
+              </button>
+              <button
+                type="button"
+                className="text-[10px] px-2 py-1 rounded-full border border-border"
+                onClick={async () => {
+                  try {
+                    const anyDM = DeviceMotionEvent as unknown as {
+                      requestPermission?: () => Promise<string>;
+                    };
+                    if (typeof anyDM.requestPermission === "function") {
+                      await anyDM.requestPermission();
+                    }
+                    setStepSource("estimate");
+                  } catch {
+                    /* ignore */
+                  }
+                }}
+              >
+                Enable motion
+              </button>
+            </div>
+            <div className="text-[10px] text-muted-foreground mt-1 capitalize">{stepSource}</div>
+          </div>
+          <div className="card-soft p-4">
+            <div className="text-xs text-muted-foreground flex items-center gap-1">
+              <Flame className="w-3.5 h-3.5 text-orange-500" /> Burned
+            </div>
+            <div className="text-xl font-bold tabular-nums mt-1">
+              {activities.reduce((s, a) => s + a.calories, 0) + Math.round(steps * 0.04)}
+              <span className="text-xs font-medium text-muted-foreground"> kcal</span>
+            </div>
+            <div className="text-[11px] text-muted-foreground mt-1">
+              Activities + step estimate
+            </div>
+          </div>
         </div>
 
         <div className="card-elevated p-5 flex items-center gap-5">

@@ -24,6 +24,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { MEAL_TEMPLATES, PORTION_PRESETS } from "@/data/meal-templates";
 import { RiceLogo } from "@/components/RiceLogo";
+import { scoreMeal, scoreColor } from "@/lib/health-score";
 import { isGuest, enableGuest, saveGuestMeal, getGuestMeals, getSessionAccount, isLocalSession } from "@/lib/guest";
 
 type RecentMeal = {
@@ -763,6 +764,30 @@ export default function TrackerPage() {
                   {Math.round((analysis.confidence_overall || 0.8) * 100)}%
                 </div>
               )}
+              {(() => {
+                const hs = scoreMeal(analysis);
+                return (
+                  <div className="pt-3 border-t border-border/60 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-medium text-muted-foreground">Plate health score</span>
+                      <span className={`text-sm font-bold tabular-nums ${scoreColor(hs.score)}`}>
+                        {hs.score}/10 · {hs.label}
+                      </span>
+                    </div>
+                    <div className="h-2 rounded-full bg-muted overflow-hidden">
+                      <div
+                        className="h-full rounded-full bg-primary transition-all"
+                        style={{ width: `${(hs.score / 10) * 100}%` }}
+                      />
+                    </div>
+                    <ul className="text-[11px] text-muted-foreground space-y-0.5">
+                      {hs.reasons.map((r) => (
+                        <li key={r}>· {r}</li>
+                      ))}
+                    </ul>
+                  </div>
+                );
+              })()}
               <div className="pt-3 border-t border-border/60 flex items-center justify-between gap-3">
                 <span className="text-xs text-muted-foreground">Was this analysis good?</span>
                 <div className="flex gap-2">
