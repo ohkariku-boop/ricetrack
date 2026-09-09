@@ -16,6 +16,10 @@ import {
   Minus,
   Plus,
   Trash2,
+  Droplets,
+  Dumbbell,
+  Footprints,
+  Flame,
 } from "lucide-react";
 import { formatCalories, formatMacro } from "@/lib/utils";
 import { ProgressRing } from "@/components/ProgressRing";
@@ -31,6 +35,16 @@ import {
   needsOnboarding,
 } from "@/lib/guest";
 import type { FoodItem } from "@/types";
+import { BottomNav } from "@/components/BottomNav";
+import {
+  weekStrip,
+  getWaterMl,
+  setWaterMl,
+  getActivities,
+  addActivity,
+  deleteActivity,
+  type ActivityLog,
+} from "@/lib/activity";
 
 type MealRow = {
   id: string;
@@ -75,6 +89,11 @@ export default function DashboardPage() {
   const touchStartX = useState<{ current: number }>({ current: 0 })[0];
   const touchStartY = useState<{ current: number }>({ current: 0 })[0];
   const swiping = useState<{ current: boolean }>({ current: false })[0];
+  const [waterMl, setWaterMlState] = useState(0);
+  const [activities, setActivities] = useState<ActivityLog[]>([]);
+  const [loggedDaySet, setLoggedDaySet] = useState<Set<string>>(new Set());
+  const [accountLabel, setAccountLabel] = useState("");
+  const todayKey = new Date().toISOString().slice(0, 10);
   const router = useRouter();
   const supabase = createClient();
 
@@ -115,6 +134,13 @@ export default function DashboardPage() {
         } else break;
       }
       setStreak(s);
+      setWaterMlState(getWaterMl(todayKey));
+      setActivities(getActivities(todayKey));
+      setLoggedDaySet(new Set(all.map((m) => m.logged_at.slice(0, 10))));
+      const acc = getSessionAccount();
+      setAccountLabel(
+        acc ? `${acc.name}${acc.paid ? " · Paid" : ""}` : ""
+      );
       setLoading(false);
       return;
     }
@@ -360,11 +386,8 @@ export default function DashboardPage() {
         <div className="mx-auto max-w-lg px-4 h-14 flex items-center justify-between">
           <div className="leading-tight">
             <div className="font-semibold tracking-tight">Today</div>
-            {typeof window !== "undefined" && getSessionAccount() && (
-              <div className="text-[11px] text-muted-foreground">
-                {getSessionAccount()?.name}
-                {getSessionAccount()?.paid ? " · Paid" : ""}
-              </div>
+            {accountLabel && (
+              <div className="text-[11px] text-muted-foreground">{accountLabel}</div>
             )}
           </div>
           <div className="flex items-center gap-1">
@@ -379,6 +402,30 @@ export default function DashboardPage() {
       </header>
 
       <main className="mx-auto max-w-lg px-4 py-5 space-y-5">
+        {/* Week consistency strip */}
+        <div className="flex justify-between gap-1">
+          {weekStrip().map((d) => {
+            const logged = loggedDaySet.has(d.date);
+            const isToday = d.date === todayKey;
+            return (
+              <div key={d.date} className="flex-1 flex flex-col items-center gap-1">
+                <span className="text-[10px] text-muted-foreground font-medium">{d.label}</span>
+                <div
+                  className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-semibold border ${
+                    isToday
+                      ? "border-primary bg-primary text-primary-foreground"
+                      : logged
+                        ? "border-primary/40 bg-primary/10 text-primary"
+                        : "border-border text-muted-foreground"
+                  }`}
+                >
+                  {d.dayNum}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
         <div className="card-elevated p-5 flex items-center gap-5">
           <ProgressRing value={totals.cal} max={targets.cal} size={96} stroke={8} label="kcal" unit="" />
           <div className="min-w-0 flex-1">
@@ -406,6 +453,95 @@ export default function DashboardPage() {
               <div className="text-[10px] text-muted-foreground">/ {formatMacro(Number(tgt))}g</div>
             </div>
           ))}
+        </div>
+
+        {/* Water */}
+        <div className="card-soft p-4 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="w-10 h-10 rounded-xl bg-sky-500/10 flex items-center justify-center shrink-0">
+              <Droplets className="w-5 h-5 text-sky-600" />
+            </div>
+            <div className="min-w-0">
+              <div className="text-sm font-medium">Water</div>
+              <div className="text-xs text-muted-foreground tabular-nums">
+                {(waterMl / 250).toFixed(0)} cups · {waterMl} ml
+              </div>
+            </div>
+          </div>
+          <div className="flex gap-2 shrink-0">
+            <button
+              type="button"
+              className="w-9 h-9 rounded-full border border-border flex items-center justify-center"
+              onClick={() => {
+                const next = Math.max(0, waterMl - 250);
+                setWaterMl(next, todayKey);
+                setWaterMlState(next);
+              }}
+            >
+              −
+            </button>
+            <button
+              type="button"
+              className="w-9 h-9 rounded-full border border-border bg-sky-500/10 text-sky-700 flex items-center justify-center font-semibold"
+              onClick={() => {
+                const next = waterMl + 250;
+                setWaterMl(next, todayKey);
+                setWaterMlState(next);
+              }}
+            >
+              +
+            </button>
+          </div>
+        </div>
+
+        {/* Movement today */}
+        <div className="card-soft p-4 space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="text-sm font-medium flex items-center gap-1.5">
+              <Flame className="w-4 h-4 text-orange-500" />
+              Movement
+            </div>
+            <span className="text-xs text-muted-foreground tabular-nums">
+              {activities.reduce((s, a) => s + a.calories, 0)} kcal burned
+            </span>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {(
+              [
+                ["walk", "Walk 20m", 70, Footprints],
+                ["weights", "Weights 30m", 120, Dumbbell],
+                ["cardio", "Cardio 20m", 150, Flame],
+              ] as const
+            ).map(([type, label, cal, Icon]) => (
+              <button
+                key={type}
+                type="button"
+                className="text-xs font-medium px-3 py-2 rounded-full border border-border bg-card hover:border-primary/40 flex items-center gap-1.5"
+                onClick={() => {
+                  addActivity({
+                    type: type as "walk" | "weights" | "cardio",
+                    label,
+                    calories: cal,
+                    minutes: type === "weights" ? 30 : 20,
+                  });
+                  setActivities(getActivities(todayKey));
+                }}
+              >
+                <Icon className="w-3.5 h-3.5" />
+                {label}
+              </button>
+            ))}
+          </div>
+          {activities.length > 0 && (
+            <div className="space-y-1.5 pt-1">
+              {activities.slice(0, 5).map((a) => (
+                <div key={a.id} className="flex justify-between text-xs text-muted-foreground">
+                  <span>{a.label}</span>
+                  <span className="tabular-nums">+{a.calories} kcal</span>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {remaining > 80 && user && (
@@ -695,6 +831,7 @@ export default function DashboardPage() {
           </div>
         </div>
       )}
+      <BottomNav />
     </div>
   );
 }
