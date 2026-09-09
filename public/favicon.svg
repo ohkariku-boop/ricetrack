@@ -1,21 +1,18 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
   <defs>
-    <linearGradient id="rice" x1="18" y1="8" x2="46" y2="56" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#F7F0E0"/>
-      <stop offset="0.45" stop-color="#E8D9B8"/>
+    <linearGradient id="rice" x1="20" y1="10" x2="44" y2="54" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F8F1E4"/>
+      <stop offset="0.5" stop-color="#E6D5B3"/>
       <stop offset="1" stop-color="#C4A574"/>
     </linearGradient>
-    <linearGradient id="shade" x1="22" y1="12" x2="40" y2="52" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#FFFFFF" stop-opacity="0.55"/>
+    <linearGradient id="shine" x1="24" y1="16" x2="36" y2="44" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF" stop-opacity="0.5"/>
       <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
     </linearGradient>
   </defs>
-  <!-- soft plate -->
   <circle cx="32" cy="32" r="30" fill="#2d5a3d"/>
-  <!-- rice grain body -->
-  <ellipse cx="32" cy="33" rx="11" ry="20" fill="url(#rice)" transform="rotate(-18 32 33)"/>
-  <!-- highlight -->
-  <ellipse cx="28" cy="26" rx="4.2" ry="9" fill="url(#shade)" transform="rotate(-18 28 26)"/>
-  <!-- germ tip -->
-  <ellipse cx="38.5" cy="17" rx="3.2" ry="4.5" fill="#F4EBD8" transform="rotate(-18 38.5 17)"/>
+  <!-- single rice grain -->
+  <ellipse cx="32" cy="33" rx="10.5" ry="19.5" fill="url(#rice)" transform="rotate(-18 32 33)"/>
+  <!-- soft highlight only (not a second grain) -->
+  <ellipse cx="28.5" cy="27" rx="3.2" ry="8" fill="url(#shine)" transform="rotate(-18 28.5 27)"/>
 </svg>

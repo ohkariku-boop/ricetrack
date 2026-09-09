@@ -2,12 +2,11 @@ import { cn } from "@/lib/utils";
 
 type Props = {
   className?: string;
-  /** pixel size of the mark */
   size?: number;
   title?: string;
 };
 
-/** Rice grain mark — RiceTrack brand */
+/** Single rice grain mark — RiceTrack brand */
 export function RiceLogo({ className, size = 28, title = "RiceTrack" }: Props) {
   return (
     <svg
@@ -19,41 +18,33 @@ export function RiceLogo({ className, size = 28, title = "RiceTrack" }: Props) {
       role="img"
       aria-label={title}
     >
-      <circle cx="32" cy="32" r="30" fill="#2d5a3d" />
       <defs>
-        <linearGradient id="rt-rice" x1="18" y1="8" x2="46" y2="56" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#F7F0E0" />
-          <stop offset="0.45" stopColor="#E8D9B8" />
+        <linearGradient id="rt-rice" x1="20" y1="10" x2="44" y2="54" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#F8F1E4" />
+          <stop offset="0.5" stopColor="#E6D5B3" />
           <stop offset="1" stopColor="#C4A574" />
         </linearGradient>
-        <linearGradient id="rt-shade" x1="22" y1="12" x2="40" y2="52" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#FFFFFF" stopOpacity="0.55" />
+        <linearGradient id="rt-shine" x1="24" y1="16" x2="36" y2="44" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#FFFFFF" stopOpacity="0.5" />
           <stop offset="1" stopColor="#FFFFFF" stopOpacity="0" />
         </linearGradient>
       </defs>
+      <circle cx="32" cy="32" r="30" fill="#2d5a3d" />
       <ellipse
         cx="32"
         cy="33"
-        rx="11"
-        ry="20"
+        rx="10.5"
+        ry="19.5"
         fill="url(#rt-rice)"
         transform="rotate(-18 32 33)"
       />
       <ellipse
-        cx="28"
-        cy="26"
-        rx="4.2"
-        ry="9"
-        fill="url(#rt-shade)"
-        transform="rotate(-18 28 26)"
-      />
-      <ellipse
-        cx="38.5"
-        cy="17"
+        cx="28.5"
+        cy="27"
         rx="3.2"
-        ry="4.5"
-        fill="#F4EBD8"
-        transform="rotate(-18 38.5 17)"
+        ry="8"
+        fill="url(#rt-shine)"
+        transform="rotate(-18 28.5 27)"
       />
     </svg>
   );
