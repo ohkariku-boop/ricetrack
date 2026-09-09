@@ -149,16 +149,22 @@ export async function analyzeFoodPhoto(
   if (parsed.meal_title && parsed.items?.length > 1) {
     const title = String(parsed.meal_title).toLowerCase().trim();
     const total = Number(parsed.total_calories) || parsed.items.reduce((s: number, i: FoodItem) => s + (Number(i.calories) || 0), 0);
+    const before = parsed.items.length;
     parsed.items = parsed.items.filter((item: FoodItem) => {
       const n = String(item.name || "").toLowerCase().trim();
-      if (n === title || n.includes(title) || title.includes(n)) {
-        // Keep only if it's clearly a small component, not the whole plate
+      if (n === title || title.includes(n) || n.includes(title)) {
         const cal = Number(item.calories) || 0;
-        if (total > 0 && cal >= total * 0.55) return false;
-        if (parsed.items.length > 2 && cal >= total * 0.45) return false;
+        // Drop only near-full plate duplicates of the title
+        if (total > 0 && cal >= total * 0.5) return false;
       }
       return true;
     });
+    if (parsed.items.length !== before) {
+      parsed.total_calories = parsed.items.reduce((s, i) => s + (Number(i.calories) || 0), 0);
+      parsed.total_protein = parsed.items.reduce((s, i) => s + (Number(i.protein) || 0), 0);
+      parsed.total_carbs = parsed.items.reduce((s, i) => s + (Number(i.carbs) || 0), 0);
+      parsed.total_fat = parsed.items.reduce((s, i) => s + (Number(i.fat) || 0), 0);
+    }
   }
   parsed.confidence_overall =
       parsed.confidence_overall ||
@@ -242,16 +248,22 @@ function normalizeAnalysis(parsed: MealAnalysis): MealAnalysis {
   if (parsed.meal_title && parsed.items?.length > 1) {
     const title = String(parsed.meal_title).toLowerCase().trim();
     const total = Number(parsed.total_calories) || parsed.items.reduce((s: number, i: FoodItem) => s + (Number(i.calories) || 0), 0);
+    const before = parsed.items.length;
     parsed.items = parsed.items.filter((item: FoodItem) => {
       const n = String(item.name || "").toLowerCase().trim();
-      if (n === title || n.includes(title) || title.includes(n)) {
-        // Keep only if it's clearly a small component, not the whole plate
+      if (n === title || title.includes(n) || n.includes(title)) {
         const cal = Number(item.calories) || 0;
-        if (total > 0 && cal >= total * 0.55) return false;
-        if (parsed.items.length > 2 && cal >= total * 0.45) return false;
+        // Drop only near-full plate duplicates of the title
+        if (total > 0 && cal >= total * 0.5) return false;
       }
       return true;
     });
+    if (parsed.items.length !== before) {
+      parsed.total_calories = parsed.items.reduce((s, i) => s + (Number(i.calories) || 0), 0);
+      parsed.total_protein = parsed.items.reduce((s, i) => s + (Number(i.protein) || 0), 0);
+      parsed.total_carbs = parsed.items.reduce((s, i) => s + (Number(i.carbs) || 0), 0);
+      parsed.total_fat = parsed.items.reduce((s, i) => s + (Number(i.fat) || 0), 0);
+    }
   }
   parsed.confidence_overall =
     parsed.confidence_overall ||
