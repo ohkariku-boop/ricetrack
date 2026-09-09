@@ -21,26 +21,33 @@
   --shadow-card: 0 2px 12px -2px rgba(15, 26, 18, 0.05);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0b0f0c;
-    --foreground: #f0f5f1;
-    --card: #141a15;
-    --card-elevated: #1a221c;
-    --primary: #34d399;
-    --primary-soft: #0f2a1a;
-    --primary-foreground: #052e16;
-    --muted: #1c241e;
-    --muted-foreground: #8fa396;
-    --border: #243028;
-    --ring: #34d399;
-    --accent: #152019;
-    --success: #22c55e;
-    --warning: #f59e0b;
-    --danger: #ef4444;
-    --shadow-soft: 0 4px 24px -4px rgba(0, 0, 0, 0.4);
-    --shadow-card: 0 2px 12px -2px rgba(0, 0, 0, 0.3);
-  }
+/* Explicit dark theme — toggled via .dark on <html> */
+html.dark {
+  --background: #0a0e0b;
+  --foreground: #f2f7f3;
+  --card: #141b16;
+  --card-elevated: #1a231d;
+  --primary: #3dd68c;
+  --primary-soft: #0f291c;
+  --primary-foreground: #042010;
+  --muted: #1c261f;
+  --muted-foreground: #a8b8ac;
+  --border: #2a3630;
+  --ring: #3dd68c;
+  --accent: #152019;
+  --success: #34d399;
+  --warning: #fbbf24;
+  --danger: #f87171;
+  --shadow-soft: 0 4px 24px -4px rgba(0, 0, 0, 0.45);
+  --shadow-card: 0 2px 12px -2px rgba(0, 0, 0, 0.35);
+}
+
+html.light {
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
 }
 
 @theme inline {
@@ -72,6 +79,42 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
   font-feature-settings: "ss01" on, "cv01" on;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Ensure text utilities stay readable in both themes */
+.text-muted-foreground {
+  color: var(--muted-foreground) !important;
+}
+.text-foreground {
+  color: var(--foreground) !important;
+}
+.bg-background {
+  background-color: var(--background) !important;
+}
+.bg-card {
+  background-color: var(--card) !important;
+}
+.border-border {
+  border-color: var(--border) !important;
+}
+
+/* Dark mode: avoid washed-out secondary text */
+html.dark input,
+html.dark textarea {
+  color: var(--foreground);
+  background-color: var(--card);
+}
+html.dark input::placeholder,
+html.dark textarea::placeholder {
+  color: var(--muted-foreground);
+  opacity: 0.85;
+}
+
+/* Light mode: solid contrast for labels */
+html.light .text-muted-foreground {
+  color: #4a5c50 !important;
 }
 
 /* Smooth page transitions feel */

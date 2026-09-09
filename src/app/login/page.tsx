@@ -7,6 +7,7 @@ import { Loader2, Crown } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { RiceLogo } from "@/components/RiceLogo";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -47,7 +48,10 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-5 bg-background">
+    <div className="min-h-screen flex flex-col items-center justify-center px-5 bg-background relative">
+      <div className="absolute top-4 right-4">
+        <ThemeToggle />
+      </div>
       <div className="w-full max-w-sm space-y-6 page-enter">
         <div className="text-center">
           <div className="mx-auto mb-5 flex justify-center">

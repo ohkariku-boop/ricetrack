@@ -36,6 +36,7 @@ import {
 } from "@/lib/guest";
 import type { FoodItem } from "@/types";
 import { BottomNav } from "@/components/BottomNav";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import {
   weekStrip,
   getWaterMl,
@@ -405,6 +406,7 @@ export default function DashboardPage() {
             )}
           </div>
           <div className="flex items-center gap-1">
+            <ThemeToggle className="!p-2 border-0 bg-transparent" />
             <Link href="/settings" className="p-2 rounded-lg hover:bg-muted text-muted-foreground">
               <Settings2 className="w-4 h-4" />
             </Link>

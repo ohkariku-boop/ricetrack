@@ -24,6 +24,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { MEAL_TEMPLATES, PORTION_PRESETS } from "@/data/meal-templates";
 import { RiceLogo } from "@/components/RiceLogo";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { scoreMeal, scoreColor } from "@/lib/health-score";
 import { isGuest, enableGuest, saveGuestMeal, getGuestMeals, getSessionAccount, isLocalSession } from "@/lib/guest";
 
@@ -493,6 +494,7 @@ export default function TrackerPage() {
               )}
             </div>
           </div>
+          <ThemeToggle className="!p-2 border-0 bg-transparent" />
           <Link
             href="/dashboard"
             className="p-2.5 text-muted-foreground hover:text-foreground rounded-xl hover:bg-muted transition-colors"

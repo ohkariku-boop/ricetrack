@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { isLocalSession, getGuestProfile, setGuestProfile } from "@/lib/guest";
 
@@ -105,10 +106,18 @@ export default function SettingsPage() {
           <Link href="/dashboard" className="p-2 -ml-2 rounded-xl hover:bg-muted">
             <ArrowLeft className="w-5 h-5" />
           </Link>
-          <h1 className="font-semibold">Daily calorie goal</h1>
+          <h1 className="font-semibold flex-1">Daily calorie goal</h1>
+          <ThemeToggle />
         </div>
       </header>
       <main className="mx-auto max-w-lg px-5 py-6 space-y-6">
+        <div className="card-soft p-4 flex items-center justify-between gap-3">
+          <div>
+            <div className="text-sm font-medium">Appearance</div>
+            <div className="text-xs text-muted-foreground">Light or dark background</div>
+          </div>
+          <ThemeToggle />
+        </div>
         <p className="text-sm text-muted-foreground">
           Override the plan calculator anytime. Experienced trackers stay in control.
         </p>

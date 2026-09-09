@@ -14,6 +14,7 @@ import {
 } from "@/lib/guest";
 import { getWeightLogs, addWeightLog, type WeightLog } from "@/lib/activity";
 import { BottomNav } from "@/components/BottomNav";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { calcBmi, bmiCategory } from "@/lib/nutrition";
 
 type Range = "30" | "90" | "180" | "all";
@@ -129,9 +130,12 @@ export default function ProgressPage() {
             <div className="font-semibold tracking-tight">Progress</div>
             <div className="text-[11px] text-muted-foreground">{name}&apos;s journey</div>
           </div>
-          <Link href="/settings" className="text-xs text-primary font-medium">
-            Edit goals
-          </Link>
+          <div className="flex items-center gap-2">
+            <ThemeToggle className="!p-2" />
+            <Link href="/settings" className="text-xs text-primary font-medium">
+              Edit goals
+            </Link>
+          </div>
         </div>
       </header>
 
