@@ -5,14 +5,14 @@ export function ProgressRing({
   max,
   size = 88,
   stroke = 7,
-  label,
+  label = "",
   unit = "",
 }: {
   value: number;
   max: number;
   size?: number;
   stroke?: number;
-  label: string;
+  label?: string;
   unit?: string;
 }) {
   const radius = (size - stroke) / 2;
@@ -53,7 +53,9 @@ export function ProgressRing({
           <span className="text-[10px] text-muted-foreground mt-0.5">{unit}</span>
         </div>
       </div>
-      <span className="text-xs font-medium text-muted-foreground">{label}</span>
+      {label ? (
+        <span className="text-xs font-medium text-muted-foreground">{label}</span>
+      ) : null}
     </div>
   );
 }

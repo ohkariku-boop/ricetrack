@@ -369,7 +369,7 @@ export default function DashboardPage() {
 
       <main className="mx-auto max-w-lg px-4 py-5 space-y-5">
         <div className="card-elevated p-5 flex items-center gap-5">
-          <ProgressRing value={totals.cal} max={targets.cal} size={96} stroke={8} />
+          <ProgressRing value={totals.cal} max={targets.cal} size={96} stroke={8} label="kcal" unit="" />
           <div className="min-w-0 flex-1">
             <div className="text-xs text-muted-foreground uppercase tracking-wide">Calories</div>
             <div className="text-2xl font-bold tabular-nums">
