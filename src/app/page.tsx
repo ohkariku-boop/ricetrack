@@ -33,32 +33,33 @@ function MarqueeStrip() {
   const items = [...MARQUEE, ...MARQUEE];
   return (
     <section
-      className="relative border-y border-[#1a1814]/8 bg-[#1a1814]/[0.03] overflow-hidden"
+      className="relative overflow-hidden"
       aria-label="Cuisines across Asia"
     >
-      <div className="marquee-track flex w-max gap-3 py-3 sm:py-3.5 pl-3">
+      <div className="marquee-track flex w-max gap-0">
         {items.map((item, i) => (
           <div
             key={`${item.cuisine}-${i}`}
-            className="relative shrink-0 w-[140px] sm:w-[168px] h-[88px] sm:h-[100px] rounded-xl overflow-hidden shadow-sm ring-1 ring-[#1a1814]/10"
+            className="relative shrink-0 w-[148px] sm:w-[180px] h-[96px] sm:h-[112px] overflow-hidden"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={item.src}
               alt={item.cuisine}
-              className="absolute inset-0 w-full h-full object-cover opacity-90"
+              className="absolute inset-0 w-full h-full object-cover"
               loading="lazy"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#1a1814]/75 via-[#1a1814]/15 to-transparent" />
-            <span className="absolute bottom-2 left-2.5 text-[11px] sm:text-[12px] font-medium tracking-wide text-[#f6f3ee]/95">
+            {/* Soft center wash only for label legibility — image stays vivid */}
+            <div className="absolute inset-0 bg-[#1a1814]/25" />
+            <span className="absolute inset-0 flex items-center justify-center text-[12px] sm:text-[13px] font-semibold tracking-wide text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.55)]">
               {item.cuisine}
             </span>
           </div>
         ))}
       </div>
       {/* Soft edge fades */}
-      <div className="pointer-events-none absolute inset-y-0 left-0 w-10 sm:w-16 bg-gradient-to-r from-[#f6f3ee] to-transparent z-10" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 w-10 sm:w-16 bg-gradient-to-l from-[#f6f3ee] to-transparent z-10" />
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-8 sm:w-12 bg-gradient-to-r from-[#f6f3ee] to-transparent z-10" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-8 sm:w-12 bg-gradient-to-l from-[#f6f3ee] to-transparent z-10" />
     </section>
   );
 }
