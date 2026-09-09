@@ -36,9 +36,21 @@ export type GuestProfile = {
   daily_carbs_target: number;
   daily_fat_target: number;
   weight_kg?: number;
+  height_cm?: number;
+  age?: number;
+  sex?: "male" | "female" | "other";
+  activity?: "sedentary" | "light" | "moderate" | "active" | "very_active";
+  goal?: "lose" | "maintain" | "gain";
+  goal_kg?: number;
+  goal_weeks?: number;
+  bmi?: number;
+  bmr?: number;
+  tdee?: number;
   targets_manual?: boolean;
   display_name?: string;
   is_paid?: boolean;
+  /** First-time planner completed */
+  onboarding_complete?: boolean;
 };
 
 function mealsKey(id: LocalAccountId) {
@@ -57,6 +69,7 @@ const DEFAULT_PROFILES: Record<LocalAccountId, GuestProfile> = {
     targets_manual: true,
     display_name: "Guest",
     is_paid: false,
+    onboarding_complete: true,
   },
   joe: {
     daily_calorie_target: 2200,
@@ -64,9 +77,15 @@ const DEFAULT_PROFILES: Record<LocalAccountId, GuestProfile> = {
     daily_carbs_target: 220,
     daily_fat_target: 70,
     weight_kg: 75,
+    height_cm: 175,
+    age: 30,
+    sex: "male",
+    activity: "moderate",
+    goal: "lose",
     targets_manual: true,
     display_name: "Joe",
     is_paid: true,
+    onboarding_complete: false,
   },
   mel: {
     daily_calorie_target: 1800,
@@ -74,9 +93,15 @@ const DEFAULT_PROFILES: Record<LocalAccountId, GuestProfile> = {
     daily_carbs_target: 180,
     daily_fat_target: 55,
     weight_kg: 58,
+    height_cm: 162,
+    age: 28,
+    sex: "female",
+    activity: "light",
+    goal: "lose",
     targets_manual: true,
     display_name: "Mel",
     is_paid: true,
+    onboarding_complete: false,
   },
 };
 
@@ -214,4 +239,12 @@ export function setGuestProfile(p: Partial<GuestProfile>): void {
   const id = activeId();
   const next = { ...getGuestProfile(), ...p };
   localStorage.setItem(profileKey(id), JSON.stringify(next));
+}
+
+
+export function needsOnboarding(): boolean {
+  const acc = getSessionAccount();
+  if (!acc || acc.id === "guest") return false;
+  const p = getGuestProfile();
+  return !p.onboarding_complete;
 }

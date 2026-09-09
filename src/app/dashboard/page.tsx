@@ -28,6 +28,7 @@ import {
   deleteGuestMeal,
   getSessionAccount,
   isLocalSession,
+  needsOnboarding,
 } from "@/lib/guest";
 import type { FoodItem } from "@/types";
 
@@ -381,7 +382,7 @@ export default function DashboardPage() {
         <div className="card-elevated p-5 flex items-center gap-5">
           <ProgressRing value={totals.cal} max={targets.cal} size={96} stroke={8} label="kcal" unit="" />
           <div className="min-w-0 flex-1">
-            <div className="text-xs text-muted-foreground uppercase tracking-wide">Calories</div>
+            <div className="text-xs text-muted-foreground uppercase tracking-wide">Daily calorie goal</div>
             <div className="text-2xl font-bold tabular-nums">
               {formatCalories(totals.cal)}
               <span className="text-sm font-medium text-muted-foreground"> / {formatCalories(targets.cal)}</span>
@@ -436,7 +437,7 @@ export default function DashboardPage() {
           </Link>
           <Link href="/settings" className="btn-secondary flex-1 h-11 text-sm flex items-center justify-center gap-1">
             <Scale className="w-4 h-4" />
-            Targets
+            Calorie goal
           </Link>
         </div>
 

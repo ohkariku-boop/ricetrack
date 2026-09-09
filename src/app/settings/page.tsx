@@ -1,18 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
-import { ArrowLeft, Loader2, Check } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { ArrowLeft, Loader2 } from "lucide-react";
 import { isLocalSession, getGuestProfile, setGuestProfile } from "@/lib/guest";
 
 export default function SettingsPage() {
-  const supabase = createClient();
-  const router = useRouter();
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [msg, setMsg] = useState<string | null>(null);
   const [form, setForm] = useState({
     daily_calorie_target: 2000,
     daily_protein_target: 120,
@@ -21,10 +16,17 @@ export default function SettingsPage() {
     weight_kg: 70,
     targets_manual: true,
   });
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [msg, setMsg] = useState<string | null>(null);
+  const router = useRouter();
+  const supabase = createClient();
 
   useEffect(() => {
     (async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (!user && isLocalSession()) {
         const g = getGuestProfile();
         setForm({
@@ -55,12 +57,14 @@ export default function SettingsPage() {
       }
       setLoading(false);
     })();
-  }, []);
+  }, [router, supabase]);
 
   const save = async () => {
     setSaving(true);
     setMsg(null);
-    const { data: { user } } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
     if (!user && isLocalSession()) {
       setGuestProfile({
         daily_calorie_target: form.daily_calorie_target,
@@ -71,7 +75,7 @@ export default function SettingsPage() {
         targets_manual: true,
       });
       setSaving(false);
-      setMsg("Saved on this device (guest).");
+      setMsg("Saved on this device.");
       return;
     }
     if (!user) return;
@@ -83,19 +87,7 @@ export default function SettingsPage() {
     });
     setSaving(false);
     if (error) setMsg(error.message);
-    else setMsg("Saved — your targets are under your control.");
-  };
-
-  const logWeight = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
-    await supabase.from("weight_logs").upsert({
-      user_id: user.id,
-      weight_kg: form.weight_kg,
-      logged_at: new Date().toISOString().slice(0, 10),
-    });
-    await supabase.from("profiles").update({ weight_kg: form.weight_kg }).eq("id", user.id);
-    setMsg("Weight logged for today.");
+    else setMsg("Saved — your daily calorie goal is under your control.");
   };
 
   if (loading) {
@@ -113,20 +105,21 @@ export default function SettingsPage() {
           <Link href="/dashboard" className="p-2 -ml-2 rounded-xl hover:bg-muted">
             <ArrowLeft className="w-5 h-5" />
           </Link>
-          <h1 className="font-semibold">Targets & weight</h1>
+          <h1 className="font-semibold">Daily calorie goal</h1>
         </div>
       </header>
       <main className="mx-auto max-w-lg px-5 py-6 space-y-6">
         <p className="text-sm text-muted-foreground">
-          Override anything the calculator suggested. Experienced trackers stay in control.
+          Override the plan calculator anytime. Experienced trackers stay in control.
         </p>
         <div className="space-y-4">
           {(
             [
-              ["daily_calorie_target", "Calories (kcal)"],
-              ["daily_protein_target", "Protein (g)"],
-              ["daily_carbs_target", "Carbs (g)"],
-              ["daily_fat_target", "Fat (g)"],
+              ["daily_calorie_target", "Daily calorie goal (kcal)"],
+              ["daily_protein_target", "Protein goal (g)"],
+              ["daily_carbs_target", "Carbs goal (g)"],
+              ["daily_fat_target", "Fat goal (g)"],
+              ["weight_kg", "Current weight (kg)"],
             ] as const
           ).map(([key, label]) => (
             <div key={key}>
@@ -142,29 +135,31 @@ export default function SettingsPage() {
             </div>
           ))}
         </div>
-        <button onClick={save} disabled={saving} className="btn-primary w-full h-12">
-          {saving ? "Saving…" : "Save targets"}
+
+        <button
+          type="button"
+          onClick={save}
+          disabled={saving}
+          className="btn-primary w-full h-12 disabled:opacity-50"
+        >
+          {saving ? "Saving…" : "Save goals"}
         </button>
 
-        <div className="border-t border-border pt-6 space-y-3">
-          <h2 className="font-semibold">Weight today</h2>
-          <input
-            type="number"
-            step="0.1"
-            className="input-modern w-full px-4 py-3"
-            value={form.weight_kg}
-            onChange={(e) =>
-              setForm((f) => ({ ...f, weight_kg: Number(e.target.value) || 0 }))
-            }
-          />
-          <button onClick={logWeight} className="btn-secondary w-full h-11">
-            Log weight
+        {isLocalSession() && (
+          <button
+            type="button"
+            className="btn-secondary w-full h-12 text-sm"
+            onClick={() => {
+              setGuestProfile({ onboarding_complete: false });
+              router.push("/onboarding");
+            }}
+          >
+            Redo fitness plan
           </button>
-        </div>
+        )}
 
         {msg && (
-          <div className="rounded-2xl bg-primary/10 text-primary px-4 py-3 text-sm flex items-center gap-2">
-            <Check className="w-4 h-4" />
+          <div className="rounded-2xl bg-primary/10 text-primary px-4 py-3 text-sm text-center">
             {msg}
           </div>
         )}

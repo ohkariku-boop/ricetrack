@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { enableAccount, enableGuest, LOCAL_ACCOUNTS } from "@/lib/guest";
+import { enableAccount, enableGuest, LOCAL_ACCOUNTS, needsOnboarding } from "@/lib/guest";
 import { Loader2, Crown } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -35,9 +35,15 @@ export default function LoginPage() {
   };
 
   const pickAccount = (id: "guest" | "joe" | "mel") => {
-    if (id === "guest") enableGuest();
-    else enableAccount(id);
-    router.push("/app");
+    if (id === "guest") {
+      enableGuest();
+      router.push("/app");
+      return;
+    }
+    enableAccount(id);
+    // Paid demo users: complete fitness planner first
+    if (needsOnboarding()) router.push("/onboarding");
+    else router.push("/dashboard");
   };
 
   return (
