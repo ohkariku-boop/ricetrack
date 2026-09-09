@@ -67,6 +67,11 @@ export default function DashboardPage() {
   const [selected, setSelected] = useState<MealRow | null>(null);
   const [draftItems, setDraftItems] = useState<FoodItem[]>([]);
   const [savingMeal, setSavingMeal] = useState(false);
+  const [swipeId, setSwipeId] = useState<string | null>(null);
+  const [swipeX, setSwipeX] = useState(0);
+  const touchStartX = useState<{ current: number }>({ current: 0 })[0];
+  const touchStartY = useState<{ current: number }>({ current: 0 })[0];
+  const swiping = useState<{ current: boolean }>({ current: false })[0];
   const router = useRouter();
   const supabase = createClient();
 
@@ -277,28 +282,30 @@ export default function DashboardPage() {
     }
   };
 
-  const deleteSelectedMeal = async () => {
-    if (!selected) return;
-    if (!confirm("Delete this meal?")) return;
+  const deleteMealById = async (id: string, skipConfirm = false) => {
+    if (!skipConfirm && !confirm("Delete this meal?")) return;
     setSavingMeal(true);
     try {
       if (!user && isGuest()) {
-        deleteGuestMeal(selected.id);
+        deleteGuestMeal(id);
       } else if (user) {
-        const { error } = await supabase
-          .from("meals")
-          .delete()
-          .eq("id", selected.id)
-          .eq("user_id", user.id);
+        const { error } = await supabase.from("meals").delete().eq("id", id).eq("user_id", user.id);
         if (error) throw error;
       }
-      setMeals((prev) => prev.filter((m) => m.id !== selected.id));
-      setSelected(null);
+      setMeals((prev) => prev.filter((m) => m.id !== id));
+      if (selected?.id === id) setSelected(null);
+      setSwipeId(null);
+      setSwipeX(0);
     } catch (e: unknown) {
       alert(e instanceof Error ? e.message : "Could not delete");
     } finally {
       setSavingMeal(false);
     }
+  };
+
+  const deleteSelectedMeal = async () => {
+    if (!selected) return;
+    await deleteMealById(selected.id);
   };
 
   const signOut = async () => {
@@ -431,43 +438,107 @@ export default function DashboardPage() {
             </div>
           ) : (
             <div className="space-y-2">
-              {meals.map((m) => (
-                <button
-                  key={m.id}
-                  type="button"
-                  onClick={() => openMeal(m)}
-                  className="w-full card-soft p-4 flex justify-between gap-3 text-left hover:border-primary/30 transition-colors active:scale-[0.99]"
-                >
-                  <div className="min-w-0 flex-1">
-                    <div className="font-medium truncate">
-                      {m.meal_title ||
-                        (m.items || []).map((i) => i.name).join(", ") ||
-                        "Meal"}
+              {meals.map((m) => {
+                const open = swipeId === m.id;
+                const dx = open ? Math.min(0, Math.max(-88, swipeX)) : 0;
+                return (
+                  <div key={m.id} className="relative overflow-hidden rounded-2xl">
+                    {/* Delete revealed behind */}
+                    <div className="absolute inset-y-0 right-0 w-[88px] flex items-stretch">
+                      <button
+                        type="button"
+                        disabled={savingMeal}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          deleteMealById(m.id);
+                        }}
+                        className="flex-1 bg-red-600 text-white text-sm font-semibold flex items-center justify-center gap-1 active:bg-red-700"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                        Delete
+                      </button>
                     </div>
-                    {m.meal_title && m.items?.length > 0 && (
-                      <div className="text-xs text-muted-foreground truncate mt-0.5">
-                        {(m.items || []).map((i) => i.name).join(", ")}
+
+                    {/* Swipeable row */}
+                    <div
+                      className="relative card-soft p-4 flex justify-between gap-3 bg-card border border-border/60 select-none"
+                      style={{
+                        transform: `translateX(${dx}px)`,
+                        transition: open && swipeX === -88 ? "transform 0.15s ease-out" : undefined,
+                      }}
+                      onTouchStart={(e) => {
+                        touchStartX.current = e.touches[0].clientX;
+                        touchStartY.current = e.touches[0].clientY;
+                        swiping.current = false;
+                        setSwipeId(m.id);
+                        setSwipeX(0);
+                      }}
+                      onTouchMove={(e) => {
+                        const x = e.touches[0].clientX - touchStartX.current;
+                        const y = e.touches[0].clientY - touchStartY.current;
+                        if (!swiping.current) {
+                          if (Math.abs(x) > 8 && Math.abs(x) > Math.abs(y)) {
+                            swiping.current = true;
+                          } else if (Math.abs(y) > 8) {
+                            return;
+                          }
+                        }
+                        if (swiping.current) {
+                          setSwipeX(Math.min(0, Math.max(-88, x)));
+                        }
+                      }}
+                      onTouchEnd={() => {
+                        if (swiping.current) {
+                          if (swipeX < -48) {
+                            setSwipeX(-88);
+                          } else {
+                            setSwipeX(0);
+                            setSwipeId(null);
+                          }
+                        }
+                        swiping.current = false;
+                      }}
+                      onClick={() => {
+                        if (swipeX < -20) {
+                          setSwipeX(0);
+                          setSwipeId(null);
+                          return;
+                        }
+                        openMeal(m);
+                      }}
+                    >
+                      <div className="min-w-0 flex-1 pointer-events-none">
+                        <div className="font-medium truncate">
+                          {m.meal_title ||
+                            (m.items || []).map((i) => i.name).join(", ") ||
+                            "Meal"}
+                        </div>
+                        {m.meal_title && m.items?.length > 0 && (
+                          <div className="text-xs text-muted-foreground truncate mt-0.5">
+                            {(m.items || []).map((i) => i.name).join(", ")}
+                          </div>
+                        )}
+                        <div className="text-xs text-muted-foreground mt-0.5">
+                          {new Date(m.logged_at).toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                          {" · "}
+                          P {formatMacro(m.total_protein)} · C {formatMacro(m.total_carbs)} · F{" "}
+                          {formatMacro(m.total_fat)}
+                        </div>
                       </div>
-                    )}
-                    <div className="text-xs text-muted-foreground mt-0.5">
-                      {new Date(m.logged_at).toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                      {" · "}
-                      P {formatMacro(m.total_protein)} · C {formatMacro(m.total_carbs)} · F{" "}
-                      {formatMacro(m.total_fat)}
+                      <div className="flex items-center gap-2 shrink-0 pointer-events-none">
+                        <div className="text-right">
+                          <div className="font-bold tabular-nums">{formatCalories(m.total_calories)}</div>
+                          <div className="text-[10px] text-muted-foreground">kcal</div>
+                        </div>
+                        <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                      </div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2 shrink-0">
-                    <div className="text-right">
-                      <div className="font-bold tabular-nums">{formatCalories(m.total_calories)}</div>
-                      <div className="text-[10px] text-muted-foreground">kcal</div>
-                    </div>
-                    <ChevronRight className="w-4 h-4 text-muted-foreground" />
-                  </div>
-                </button>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
@@ -595,8 +666,9 @@ export default function DashboardPage() {
                   type="button"
                   onClick={deleteSelectedMeal}
                   disabled={savingMeal}
-                  className="btn-secondary h-12 px-4 text-red-600"
+                  className="h-12 px-4 rounded-xl border border-red-500/30 bg-red-500/10 text-red-600 font-semibold text-sm flex items-center gap-1.5 disabled:opacity-50"
                 >
+                  <Trash2 className="w-4 h-4" />
                   Delete
                 </button>
                 <button
