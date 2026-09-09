@@ -277,8 +277,17 @@ export default function TrackerPage() {
 
     // Guest path — local only, no account needed
     if (!user) {
-      if (!isLocalSession()) enableGuest();
-      setGuest(true);
+      if (!isLocalSession()) {
+        enableGuest();
+        setGuest(true);
+        setLocalName("Guest");
+        setLocalPaid(false);
+      } else {
+        const acc = getSessionAccount();
+        setGuest(acc?.id === "guest");
+        setLocalName(acc?.name || null);
+        setLocalPaid(!!acc?.paid);
+      }
       setSaving(true);
       setError(null);
       try {
@@ -301,7 +310,14 @@ export default function TrackerPage() {
           total_fat: m.total_fat,
         }));
         setRecents(meals);
-        setSuccess("Saved on this device (guest)");
+        const acc = getSessionAccount();
+        setSuccess(
+          acc?.paid
+            ? `Saved to ${acc.name}'s diary`
+            : acc
+              ? `Saved on this device (${acc.name})`
+              : "Saved on this device (guest)"
+        );
         setTimeout(() => {
           reset();
           router.push("/dashboard");
@@ -962,7 +978,13 @@ export default function TrackerPage() {
                 disabled={saving}
                 className="btn-primary flex-[2] h-12 disabled:opacity-50"
               >
-                {saving ? "Saving…" : user ? "Save meal" : "Save (guest)"}
+                {saving
+                  ? "Saving…"
+                  : user
+                    ? "Save meal"
+                    : localName
+                      ? `Save as ${localName}`
+                      : "Save (guest)"}
               </button>
             </div>
           </div>
