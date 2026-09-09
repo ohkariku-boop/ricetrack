@@ -64,22 +64,60 @@ export default function TrackerPage() {
     });
   }, []);
 
-  const handleFile = (file: File) => {
-    if (!file.type.startsWith("image/")) {
+  const compressImage = (file: File): Promise<{ base64: string; preview: string; mime: string }> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onerror = () => reject(new Error("Could not read image"));
+      reader.onload = () => {
+        const img = new window.Image();
+        img.onload = () => {
+          const maxSide = 1280;
+          let { width, height } = img;
+          if (width > maxSide || height > maxSide) {
+            const scale = maxSide / Math.max(width, height);
+            width = Math.round(width * scale);
+            height = Math.round(height * scale);
+          }
+          const canvas = document.createElement("canvas");
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext("2d");
+          if (!ctx) {
+            reject(new Error("Could not process image"));
+            return;
+          }
+          ctx.drawImage(img, 0, 0, width, height);
+          const mime = "image/jpeg";
+          const dataUrl = canvas.toDataURL(mime, 0.82);
+          resolve({
+            base64: dataUrl.split(",")[1],
+            preview: dataUrl,
+            mime,
+          });
+        };
+        img.onerror = () => reject(new Error("Invalid image"));
+        img.src = reader.result as string;
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const handleFile = async (file: File) => {
+    if (!file.type.startsWith("image/") && !file.name.match(/\.(jpe?g|png|webp|heic|heif)$/i)) {
       setError("Please select an image");
       return;
     }
     setError(null);
     setAnalysis(null);
     setSuccess(null);
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const result = e.target?.result as string;
-      setImagePreview(result);
-      setImageBase64(result.split(",")[1]);
-      setMimeType(file.type || "image/jpeg");
-    };
-    reader.readAsDataURL(file);
+    try {
+      const { base64, preview, mime } = await compressImage(file);
+      setImagePreview(preview);
+      setImageBase64(base64);
+      setMimeType(mime);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Could not process image");
+    }
   };
 
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -106,7 +144,12 @@ export default function TrackerPage() {
       if (!res.ok) throw new Error(data.error || "Analysis failed");
       setAnalysis(data);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Something went wrong");
+      const msg = err instanceof Error ? err.message : "Something went wrong";
+      setError(
+        msg.toLowerCase().includes("terminated") || msg.toLowerCase().includes("fetch")
+          ? "Analysis timed out or failed. Try a smaller/clearer photo, or use Type it."
+          : msg
+      );
     } finally {
       setLoading(false);
     }

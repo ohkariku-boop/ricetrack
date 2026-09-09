@@ -66,7 +66,7 @@ export async function analyzeFoodPhoto(
       "X-Title": "RiceTrack",
     },
     body: JSON.stringify({
-      model: "google/gemini-2.0-flash-001", // strong vision + free/cheap tier friendly
+      model: "google/gemini-2.5-flash", // strong vision + free/cheap tier friendly
       messages: [
         {
           role: "system",
@@ -93,7 +93,12 @@ export async function analyzeFoodPhoto(
   if (!response.ok) {
     const errText = await response.text();
     console.error("OpenRouter error:", errText);
-    throw new Error(`AI analysis failed: ${response.status}`);
+    let detail = `AI analysis failed (${response.status})`;
+    try {
+      const j = JSON.parse(errText);
+      if (j?.error?.message) detail = j.error.message;
+    } catch { /* keep default */ }
+    throw new Error(detail);
   }
 
   const data = await response.json();
@@ -256,7 +261,7 @@ export async function analyzeFoodText(
       "X-Title": "RiceTrack",
     },
     body: JSON.stringify({
-      model: "google/gemini-2.0-flash-001",
+      model: "google/gemini-2.5-flash",
       messages: [
         { role: "system", content: TEXT_SYSTEM_PROMPT },
         { role: "user", content: userPrompt },
@@ -269,7 +274,12 @@ export async function analyzeFoodText(
   if (!response.ok) {
     const errText = await response.text();
     console.error("OpenRouter error:", errText);
-    throw new Error(`AI analysis failed: ${response.status}`);
+    let detail = `AI analysis failed (${response.status})`;
+    try {
+      const j = JSON.parse(errText);
+      if (j?.error?.message) detail = j.error.message;
+    } catch { /* keep default */ }
+    throw new Error(detail);
   }
 
   const data = await response.json();
