@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { formatCalories, formatMacro } from "@/lib/utils";
 import { ProgressRing } from "@/components/ProgressRing";
+import { isGuest, getGuestMeals, getGuestProfile, disableGuest } from "@/lib/guest";
 
 export default function DashboardPage() {
   const [user, setUser] = useState<{ id: string } | null>(null);
@@ -41,6 +42,43 @@ export default function DashboardPage() {
     const {
       data: { user },
     } = await supabase.auth.getUser();
+
+    // Guest mode — local meals, no login
+    if (!user && isGuest()) {
+      const gp = getGuestProfile();
+      setProfile(gp as any);
+      const today = new Date().toISOString().slice(0, 10);
+      const all = getGuestMeals();
+      const todays = all.filter((m) => m.logged_at.slice(0, 10) === today);
+      setMeals(
+        todays.map((m) => ({
+          id: m.id,
+          items: (m.items as { name: string }[]) || [],
+          total_calories: m.total_calories,
+          total_protein: m.total_protein,
+          total_carbs: m.total_carbs,
+          total_fat: m.total_fat,
+          logged_at: m.logged_at,
+        }))
+      );
+      // streak from guest meals
+      const days = new Set(all.map((m) => m.logged_at.slice(0, 10)));
+      let s = 0;
+      const d = new Date();
+      for (let i = 0; i < 60; i++) {
+        const key = d.toISOString().slice(0, 10);
+        if (days.has(key)) {
+          s++;
+          d.setDate(d.getDate() - 1);
+        } else if (i === 0) {
+          d.setDate(d.getDate() - 1);
+        } else break;
+      }
+      setStreak(s);
+      setLoading(false);
+      return;
+    }
+
     if (!user) {
       router.push("/login");
       return;
@@ -155,6 +193,7 @@ export default function DashboardPage() {
   };
 
   const signOut = async () => {
+    disableGuest();
     await supabase.auth.signOut();
     router.push("/");
   };

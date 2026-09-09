@@ -2,7 +2,10 @@
 
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { enableGuest } from "@/lib/guest";
 import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -10,6 +13,7 @@ export default function LoginPage() {
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const supabase = createClient();
+  const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,17 +33,36 @@ export default function LoginPage() {
     else setMessage("Check your email for the magic link");
   };
 
+  const continueAsGuest = () => {
+    enableGuest();
+    router.push("/app");
+  };
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-5 bg-background">
-      <div className="w-full max-w-sm space-y-8 page-enter">
+      <div className="w-full max-w-sm space-y-6 page-enter">
         <div className="text-center">
           <div className="w-14 h-14 rounded-2xl bg-primary mx-auto flex items-center justify-center text-primary-foreground font-bold text-xl shadow-sm mb-5">
             RT
           </div>
-          <h1 className="text-2xl font-bold tracking-tight">Welcome back</h1>
+          <h1 className="text-2xl font-bold tracking-tight">Welcome</h1>
           <p className="text-muted-foreground text-[15px] mt-2">
-            Sign in to track Asian meals accurately
+            Track Asian meals — or try first without an account
           </p>
+        </div>
+
+        <button
+          type="button"
+          onClick={continueAsGuest}
+          className="btn-primary w-full h-14 text-[15px]"
+        >
+          Continue as guest
+        </button>
+
+        <div className="relative flex items-center gap-3">
+          <div className="flex-1 h-px bg-border" />
+          <span className="text-xs text-muted-foreground">or sign in</span>
+          <div className="flex-1 h-px bg-border" />
         </div>
 
         <form onSubmit={handleLogin} className="space-y-4">
@@ -58,7 +81,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="btn-primary w-full h-14 flex items-center justify-center gap-2 disabled:opacity-70"
+            className="btn-secondary w-full h-12 flex items-center justify-center gap-2 disabled:opacity-70"
           >
             {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Send magic link"}
           </button>
@@ -76,7 +99,10 @@ export default function LoginPage() {
         )}
 
         <p className="text-center text-xs text-muted-foreground leading-relaxed">
-          No password needed. We’ll email you a secure one-time link.
+          Guest mode saves meals on this device only.{" "}
+          <Link href="/app" className="text-primary font-medium">
+            Skip to log →
+          </Link>
         </p>
       </div>
     </div>

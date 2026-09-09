@@ -40,12 +40,7 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Protect dashboard routes
-  if (request.nextUrl.pathname.startsWith("/dashboard") && !user) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/login";
-    return NextResponse.redirect(url);
-  }
+  // Dashboard allowed without auth — client supports guest mode via localStorage
 
   // Protect onboarding if needed — allow logged out to reach login
   if (request.nextUrl.pathname === "/login" && user) {

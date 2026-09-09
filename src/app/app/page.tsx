@@ -21,6 +21,7 @@ import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { MEAL_TEMPLATES, PORTION_PRESETS } from "@/data/meal-templates";
+import { isGuest, enableGuest, saveGuestMeal, getGuestMeals } from "@/lib/guest";
 
 type RecentMeal = {
   id: string;
@@ -44,6 +45,7 @@ export default function TrackerPage() {
   const [mode, setMode] = useState<"photo" | "text">("photo");
   const [textDescription, setTextDescription] = useState("");
   const [user, setUser] = useState<{ id: string } | null>(null);
+  const [guest, setGuest] = useState(false);
   const [editingIdx, setEditingIdx] = useState<number | null>(null);
   const [recents, setRecents] = useState<RecentMeal[]>([]);
   const [showTemplates, setShowTemplates] = useState(false);
@@ -53,6 +55,8 @@ export default function TrackerPage() {
   const router = useRouter();
 
   useEffect(() => {
+    const g = isGuest();
+    setGuest(g);
     supabase.auth.getUser().then(({ data: { user } }) => {
       setUser(user);
       if (user) {
@@ -60,6 +64,16 @@ export default function TrackerPage() {
           .then((r) => r.json())
           .then((d) => setRecents((d.meals || []).slice(0, 10)))
           .catch(() => {});
+      } else if (g) {
+        const meals = getGuestMeals().slice(0, 10).map((m) => ({
+          id: m.id,
+          items: (m.items || []) as any,
+          total_calories: m.total_calories,
+          total_protein: m.total_protein,
+          total_carbs: m.total_carbs,
+          total_fat: m.total_fat,
+        }));
+        setRecents(meals);
       }
     });
   }, []);
@@ -189,10 +203,46 @@ export default function TrackerPage() {
   };
 
   const saveMeal = async () => {
-    if (!analysis || !user) {
-      if (!user) router.push("/login");
+    if (!analysis) return;
+
+    // Guest path — local only, no account needed
+    if (!user) {
+      if (!isGuest()) enableGuest();
+      setGuest(true);
+      setSaving(true);
+      setError(null);
+      try {
+        saveGuestMeal({
+          items: analysis.items,
+          total_calories: analysis.total_calories,
+          total_protein: analysis.total_protein,
+          total_carbs: analysis.total_carbs,
+          total_fat: analysis.total_fat,
+          cuisine_detected: analysis.cuisine_detected,
+          notes: analysis.notes || null,
+        });
+        const meals = getGuestMeals().slice(0, 10).map((m) => ({
+          id: m.id,
+          items: (m.items || []) as any,
+          total_calories: m.total_calories,
+          total_protein: m.total_protein,
+          total_carbs: m.total_carbs,
+          total_fat: m.total_fat,
+        }));
+        setRecents(meals);
+        setSuccess("Saved on this device (guest)");
+        setTimeout(() => {
+          reset();
+          router.push("/dashboard");
+        }, 900);
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : "Could not save");
+      } finally {
+        setSaving(false);
+      }
       return;
     }
+
     setSaving(true);
     setError(null);
     try {
@@ -729,10 +779,10 @@ export default function TrackerPage() {
               <button
                 type="button"
                 onClick={saveMeal}
-                disabled={saving || !user}
+                disabled={saving}
                 className="btn-primary flex-[2] h-12 disabled:opacity-50"
               >
-                {saving ? "Saving…" : user ? "Save meal" : "Sign in to save"}
+                {saving ? "Saving…" : user ? "Save meal" : "Save (guest)"}
               </button>
             </div>
           </div>

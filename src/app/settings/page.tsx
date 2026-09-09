@@ -5,6 +5,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { ArrowLeft, Loader2, Check } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { isGuest, getGuestProfile, setGuestProfile } from "@/lib/guest";
 
 export default function SettingsPage() {
   const supabase = createClient();
@@ -24,6 +25,19 @@ export default function SettingsPage() {
   useEffect(() => {
     (async () => {
       const { data: { user } } = await supabase.auth.getUser();
+      if (!user && isGuest()) {
+        const g = getGuestProfile();
+        setForm({
+          daily_calorie_target: g.daily_calorie_target ?? 2000,
+          daily_protein_target: g.daily_protein_target ?? 120,
+          daily_carbs_target: g.daily_carbs_target ?? 200,
+          daily_fat_target: g.daily_fat_target ?? 65,
+          weight_kg: Number(g.weight_kg) || 70,
+          targets_manual: true,
+        });
+        setLoading(false);
+        return;
+      }
       if (!user) {
         router.push("/login");
         return;
@@ -47,6 +61,19 @@ export default function SettingsPage() {
     setSaving(true);
     setMsg(null);
     const { data: { user } } = await supabase.auth.getUser();
+    if (!user && isGuest()) {
+      setGuestProfile({
+        daily_calorie_target: form.daily_calorie_target,
+        daily_protein_target: form.daily_protein_target,
+        daily_carbs_target: form.daily_carbs_target,
+        daily_fat_target: form.daily_fat_target,
+        weight_kg: form.weight_kg,
+        targets_manual: true,
+      });
+      setSaving(false);
+      setMsg("Saved on this device (guest).");
+      return;
+    }
     if (!user) return;
     const { error } = await supabase.from("profiles").upsert({
       id: user.id,
