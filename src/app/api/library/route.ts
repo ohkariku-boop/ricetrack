@@ -37,6 +37,17 @@ function filterSeed(q: string, cuisine: string, country: string): FoodRow[] {
         (r.country || "").toLowerCase().includes(query)
     );
   }
+  // Prefer name prefix matches
+  if (query) {
+    rows = [...rows].sort((a, b) => {
+      const an = a.name.toLowerCase();
+      const bn = b.name.toLowerCase();
+      const aP = an.startsWith(query) ? 0 : 1;
+      const bP = bn.startsWith(query) ? 0 : 1;
+      if (aP !== bP) return aP - bP;
+      return an.localeCompare(bn);
+    });
+  }
   return rows;
 }
 
