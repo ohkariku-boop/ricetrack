@@ -34,6 +34,7 @@ import {
   needsOnboarding,
 } from "@/lib/guest";
 import type { FoodItem } from "@/types";
+import { localDateKey, localDateKeyFromIso, startOfLocalDay } from "@/lib/dates";
 import { BottomNav } from "@/components/BottomNav";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { WellnessCard } from "@/components/WellnessCard";
@@ -97,7 +98,7 @@ export default function DashboardPage() {
   const [accountLabel, setAccountLabel] = useState("");
   const [steps, setSteps] = useState(0);
   const [stepSource, setStepSource] = useState<"sensor" | "manual" | "estimate">("manual");
-  const todayKey = new Date().toISOString().slice(0, 10);
+  const todayKey = localDateKey();
   const router = useRouter();
   const supabase = createClient();
 
@@ -109,9 +110,9 @@ export default function DashboardPage() {
     if (!user && isLocalSession()) {
       const gp = getGuestProfile();
       setProfile(gp as any);
-      const today = new Date().toISOString().slice(0, 10);
+      const today = localDateKey();
       const all = getGuestMeals();
-      const todays = all.filter((m) => m.logged_at.slice(0, 10) === today);
+      const todays = all.filter((m) => localDateKeyFromIso(m.logged_at) === today);
       setMeals(
         todays.map((m) => ({
           id: m.id,
@@ -125,11 +126,11 @@ export default function DashboardPage() {
           notes: m.notes,
         }))
       );
-      const days = new Set(all.map((m) => m.logged_at.slice(0, 10)));
+      const days = new Set(all.map((m) => localDateKeyFromIso(m.logged_at)));
       let s = 0;
       const d = new Date();
       for (let i = 0; i < 60; i++) {
-        const key = d.toISOString().slice(0, 10);
+        const key = localDateKey(d);
         if (days.has(key)) {
           s++;
           d.setDate(d.getDate() - 1);
@@ -143,7 +144,7 @@ export default function DashboardPage() {
       setSteps(st.steps);
       setStepSource(st.source);
       setActivities(getActivities(todayKey));
-      setLoggedDaySet(new Set(all.map((m) => m.logged_at.slice(0, 10))));
+      setLoggedDaySet(new Set(all.map((m) => localDateKeyFromIso(m.logged_at))));
       const acc = getSessionAccount();
       setAccountLabel(
         acc ? `${acc.name}${acc.paid ? " · Paid" : ""}` : ""
@@ -170,13 +171,12 @@ export default function DashboardPage() {
     }
     setProfile(prof);
 
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const dayStart = startOfLocalDay();
     const { data } = await supabase
       .from("meals")
       .select("*")
       .eq("user_id", user.id)
-      .gte("logged_at", today.toISOString())
+      .gte("logged_at", dayStart.toISOString())
       .order("logged_at", { ascending: false });
 
     setMeals(
@@ -207,11 +207,11 @@ export default function DashboardPage() {
       .order("logged_at", { ascending: false })
       .limit(60);
     if (recent?.length) {
-      const days = new Set(recent.map((r) => r.logged_at.slice(0, 10)));
+      const days = new Set(recent.map((r) => localDateKeyFromIso(r.logged_at)));
       let s = 0;
       const d = new Date();
       for (let i = 0; i < 60; i++) {
-        const key = d.toISOString().slice(0, 10);
+        const key = localDateKey(d);
         if (days.has(key)) {
           s++;
           d.setDate(d.getDate() - 1);

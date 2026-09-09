@@ -1,11 +1,13 @@
 /** Best-effort step tracking for PWA — sensor when available, manual otherwise */
 
+import { localDateKey } from "@/lib/dates";
+
 const KEY = "ricetrack_steps_v1";
 
 type DaySteps = { date: string; steps: number; source: "sensor" | "manual" | "estimate" };
 
 function today() {
-  return new Date().toISOString().slice(0, 10);
+  return localDateKey();
 }
 
 function load(): Record<string, DaySteps> {

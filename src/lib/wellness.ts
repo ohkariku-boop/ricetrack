@@ -1,3 +1,4 @@
+import { localDateKey, localDateKeyDaysAgo } from "@/lib/dates";
 /** Sleep + energy logs — per local account */
 
 import { getSessionAccount, type LocalAccountId } from "@/lib/guest";
@@ -76,7 +77,7 @@ export function getEnergyForDate(date: string): EnergyLog | null {
 }
 
 export function saveEnergyLog(level: 1 | 2 | 3 | 4 | 5, date?: string, note?: string): EnergyLog {
-  const d = date || new Date().toISOString().slice(0, 10);
+  const d = date || localDateKey();
   const entry: EnergyLog = { date: d, level, note };
   const all = getEnergyLogs().filter((e) => e.date !== d);
   all.push(entry);
@@ -86,18 +87,14 @@ export function saveEnergyLog(level: 1 | 2 | 3 | 4 | 5, date?: string, note?: st
 }
 
 export function avgSleepHours(days = 7): number | null {
-  const cut = new Date();
-  cut.setDate(cut.getDate() - days);
-  const key = cut.toISOString().slice(0, 10);
+  const key = localDateKeyDaysAgo(days);
   const recent = getSleepLogs().filter((s) => s.date >= key);
   if (!recent.length) return null;
   return Math.round((recent.reduce((a, s) => a + s.duration_hours, 0) / recent.length) * 10) / 10;
 }
 
 export function avgEnergy(days = 7): number | null {
-  const cut = new Date();
-  cut.setDate(cut.getDate() - days);
-  const key = cut.toISOString().slice(0, 10);
+  const key = localDateKeyDaysAgo(days);
   const recent = getEnergyLogs().filter((e) => e.date >= key);
   if (!recent.length) return null;
   return Math.round((recent.reduce((a, e) => a + e.level, 0) / recent.length) * 10) / 10;

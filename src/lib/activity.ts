@@ -1,3 +1,4 @@
+import { localDateKey } from "@/lib/dates";
 /** Local activity, water, weight logs — per account */
 
 import { getSessionAccount, type LocalAccountId } from "@/lib/guest";
@@ -35,7 +36,7 @@ export function getWeightLogs(): WeightLog[] {
 
 export function addWeightLog(weight_kg: number, date?: string): WeightLog {
   const entry: WeightLog = {
-    date: date || new Date().toISOString().slice(0, 10),
+    date: date || localDateKey(),
     weight_kg,
   };
   const logs = getWeightLogs().filter((l) => l.date !== entry.date);
@@ -59,7 +60,7 @@ export function addActivity(input: Omit<ActivityLog, "id" | "date"> & { date?: s
   const entry: ActivityLog = {
     ...input,
     id: `act_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
-    date: input.date || new Date().toISOString().slice(0, 10),
+    date: input.date || localDateKey(),
   };
   const all = getActivities();
   all.unshift(entry);
@@ -73,7 +74,7 @@ export function deleteActivity(id: string): void {
 }
 
 export function getWaterMl(date?: string): number {
-  const d = date || new Date().toISOString().slice(0, 10);
+  const d = date || localDateKey();
   try {
     const map = JSON.parse(localStorage.getItem(k("water")) || "{}") as Record<string, number>;
     return map[d] || 0;
@@ -83,7 +84,7 @@ export function getWaterMl(date?: string): number {
 }
 
 export function setWaterMl(ml: number, date?: string): void {
-  const d = date || new Date().toISOString().slice(0, 10);
+  const d = date || localDateKey();
   try {
     const map = JSON.parse(localStorage.getItem(k("water")) || "{}") as Record<string, number>;
     map[d] = Math.max(0, ml);
@@ -110,7 +111,7 @@ export function weekStrip(today = new Date()): { date: string; label: string; da
     const x = new Date(start);
     x.setDate(start.getDate() + i);
     days.push({
-      date: x.toISOString().slice(0, 10),
+      date: localDateKey(x),
       label: labels[i],
       dayNum: x.getDate(),
     });

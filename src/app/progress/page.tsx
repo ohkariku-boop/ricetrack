@@ -16,6 +16,7 @@ import { getWeightLogs, addWeightLog, type WeightLog } from "@/lib/activity";
 import { BottomNav } from "@/components/BottomNav";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { calcBmi, bmiCategory } from "@/lib/nutrition";
+import { localDateKey, localDateKeyFromIso } from "@/lib/dates";
 import { avgSleepHours, avgEnergy, getSleepLogs, getEnergyLogs, ENERGY_LABELS } from "@/lib/wellness";
 
 type Range = "30" | "90" | "180" | "all";
@@ -48,12 +49,12 @@ export default function ProgressPage() {
     setProfile(p);
     setWeights(getWeightLogs());
     const meals = getGuestMeals();
-    const days = new Set(meals.map((m) => m.logged_at.slice(0, 10)));
+    const days = new Set(meals.map((m) => localDateKeyFromIso(m.logged_at)));
     setMealDays(days.size);
     let s = 0;
     const d = new Date();
     for (let i = 0; i < 60; i++) {
-      const key = d.toISOString().slice(0, 10);
+      const key = localDateKey(d);
       if (days.has(key)) {
         s++;
         d.setDate(d.getDate() - 1);
@@ -80,7 +81,7 @@ export default function ProgressPage() {
     const days = Number(range);
     const cut = new Date();
     cut.setDate(cut.getDate() - days);
-    const key = cut.toISOString().slice(0, 10);
+    const key = localDateKey(cut);
     return weights.filter((w) => w.date >= key);
   }, [weights, range]);
 
