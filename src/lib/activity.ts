@@ -98,13 +98,16 @@ export function loggedDaysSet(mealDates: string[]): Set<string> {
   return new Set(mealDates.map((d) => d.slice(0, 10)));
 }
 
-/** Last 7 days ending today, Mon-Sun style labels */
-export function weekStrip(today = new Date()): { date: string; label: string; dayNum: number }[] {
+/** Week Sun→Sat containing `anchor` (local). weekOffset: -1 = previous week */
+export function weekStrip(
+  anchor = new Date(),
+  weekOffset = 0
+): { date: string; label: string; dayNum: number }[] {
   const days: { date: string; label: string; dayNum: number }[] = [];
   const labels = ["S", "M", "T", "W", "T", "F", "S"];
-  // Show current week Sun→Sat containing today
-  const d = new Date(today);
-  const dow = d.getDay(); // 0 Sun
+  const d = new Date(anchor);
+  d.setDate(d.getDate() + weekOffset * 7);
+  const dow = d.getDay();
   const start = new Date(d);
   start.setDate(d.getDate() - dow);
   for (let i = 0; i < 7; i++) {

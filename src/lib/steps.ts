@@ -22,6 +22,11 @@ function save(map: Record<string, DaySteps>) {
   localStorage.setItem(KEY, JSON.stringify(map));
 }
 
+export function getStepsForDate(date: string): DaySteps {
+  const map = load();
+  return map[date] || { date, steps: 0, source: "manual" };
+}
+
 export function getTodaySteps(): DaySteps {
   const map = load();
   const d = today();

@@ -47,7 +47,7 @@ import {
   deleteActivity,
   type ActivityLog,
 } from "@/lib/activity";
-import { getTodaySteps, setTodaySteps, addTodaySteps, startStepListener } from "@/lib/steps";
+import { getTodaySteps, getStepsForDate, setTodaySteps, addTodaySteps, startStepListener } from "@/lib/steps";
 
 type MealRow = {
   id: string;
@@ -99,6 +99,9 @@ export default function DashboardPage() {
   const [steps, setSteps] = useState(0);
   const [stepSource, setStepSource] = useState<"sensor" | "manual" | "estimate">("manual");
   const todayKey = localDateKey();
+  const [selectedDate, setSelectedDate] = useState(todayKey);
+  const [weekOffset, setWeekOffset] = useState(0);
+  const isViewingToday = selectedDate === todayKey;
   const router = useRouter();
   const supabase = createClient();
 
@@ -110,11 +113,11 @@ export default function DashboardPage() {
     if (!user && isLocalSession()) {
       const gp = getGuestProfile();
       setProfile(gp as any);
-      const today = localDateKey();
+      const day = selectedDate || localDateKey();
       const all = getGuestMeals();
-      const todays = all.filter((m) => localDateKeyFromIso(m.logged_at) === today);
+      const daysMeals = all.filter((m) => localDateKeyFromIso(m.logged_at) === day);
       setMeals(
-        todays.map((m) => ({
+        daysMeals.map((m) => ({
           id: m.id,
           meal_title: m.meal_title,
           items: normalizeItems(m.items),
@@ -139,12 +142,12 @@ export default function DashboardPage() {
         } else break;
       }
       setStreak(s);
-      setWaterMlState(getWaterMl(todayKey));
-      const st = getTodaySteps();
+      setWaterMlState(getWaterMl(day));
+      const st = day === localDateKey() ? getTodaySteps() : getStepsForDate(day);
       setSteps(st.steps);
       setStepSource(st.source);
-      setActivities(getActivities(todayKey));
-      setLoggedDaySet(new Set(all.map((m) => localDateKeyFromIso(m.logged_at))));
+      setActivities(getActivities(day));
+      setLoggedDaySet(days);
       const acc = getSessionAccount();
       setAccountLabel(
         acc ? `${acc.name}${acc.paid ? " · Paid" : ""}` : ""
@@ -171,12 +174,16 @@ export default function DashboardPage() {
     }
     setProfile(prof);
 
-    const dayStart = startOfLocalDay();
+    const day = selectedDate || localDateKey();
+    const dayStart = new Date(day + "T00:00:00");
+    const dayEnd = new Date(day + "T00:00:00");
+    dayEnd.setDate(dayEnd.getDate() + 1);
     const { data } = await supabase
       .from("meals")
       .select("*")
       .eq("user_id", user.id)
       .gte("logged_at", dayStart.toISOString())
+      .lt("logged_at", dayEnd.toISOString())
       .order("logged_at", { ascending: false });
 
     setMeals(
@@ -199,6 +206,11 @@ export default function DashboardPage() {
       };
       })
     );
+    setWaterMlState(getWaterMl(day));
+    setActivities(getActivities(day));
+    const st = day === localDateKey() ? getTodaySteps() : getStepsForDate(day);
+    setSteps(st.steps);
+    setStepSource(st.source);
 
     const { data: recent } = await supabase
       .from("meals")
@@ -227,6 +239,10 @@ export default function DashboardPage() {
 
   useEffect(() => {
     load();
+  }, [selectedDate]);
+
+  useEffect(() => {
+    if (selectedDate !== localDateKey()) return;
     const st = getTodaySteps();
     setSteps(st.steps);
     setStepSource(st.source);
@@ -235,7 +251,7 @@ export default function DashboardPage() {
       setStepSource("estimate");
     });
     return stop;
-  }, []);
+  }, [selectedDate]);
 
   const totals = useMemo(() => {
     return meals.reduce(
@@ -400,7 +416,15 @@ export default function DashboardPage() {
       <header className="sticky top-0 z-40 border-b border-border/60 bg-background/90 backdrop-blur-xl">
         <div className="mx-auto max-w-lg px-4 h-14 flex items-center justify-between">
           <div className="leading-tight">
-            <div className="font-semibold tracking-tight">Today</div>
+            <div className="font-semibold tracking-tight">
+              {isViewingToday
+                ? "Today"
+                : new Date(selectedDate + "T12:00:00").toLocaleDateString(undefined, {
+                    weekday: "short",
+                    month: "short",
+                    day: "numeric",
+                  })}
+            </div>
             {accountLabel && (
               <div className="text-[11px] text-muted-foreground">{accountLabel}</div>
             )}
@@ -418,34 +442,73 @@ export default function DashboardPage() {
       </header>
 
       <main className="mx-auto max-w-lg px-4 py-5 space-y-5">
-        {/* Week consistency strip */}
-        <div className="flex justify-between gap-1">
-          {weekStrip().map((d) => {
-            const logged = loggedDaySet.has(d.date);
-            const isToday = d.date === todayKey;
-            return (
-              <div key={d.date} className="flex-1 flex flex-col items-center gap-1">
-                <span className="text-[10px] text-muted-foreground font-medium">{d.label}</span>
-                <div
-                  className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-semibold border ${
-                    isToday
-                      ? "border-primary bg-primary text-primary-foreground"
-                      : logged
-                        ? "border-primary/40 bg-primary/10 text-primary"
-                        : "border-border text-muted-foreground"
-                  }`}
+        {/* Week strip — tap a day to view history */}
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <button
+              type="button"
+              className="text-xs text-muted-foreground px-2 py-1 rounded-lg hover:bg-muted"
+              onClick={() => setWeekOffset((w) => w - 1)}
+            >
+              ← Prev
+            </button>
+            <button
+              type="button"
+              className="text-xs font-medium text-primary px-2 py-1"
+              onClick={() => {
+                setWeekOffset(0);
+                setSelectedDate(todayKey);
+              }}
+            >
+              {weekOffset === 0 ? "This week" : "Jump to today"}
+            </button>
+            <button
+              type="button"
+              className="text-xs text-muted-foreground px-2 py-1 rounded-lg hover:bg-muted disabled:opacity-30"
+              disabled={weekOffset >= 0}
+              onClick={() => setWeekOffset((w) => Math.min(0, w + 1))}
+            >
+              Next →
+            </button>
+          </div>
+          <div className="flex justify-between gap-1">
+            {weekStrip(new Date(), weekOffset).map((d) => {
+              const logged = loggedDaySet.has(d.date);
+              const isToday = d.date === todayKey;
+              const selected = d.date === selectedDate;
+              const future = d.date > todayKey;
+              return (
+                <button
+                  key={d.date}
+                  type="button"
+                  disabled={future}
+                  onClick={() => !future && setSelectedDate(d.date)}
+                  className="flex-1 flex flex-col items-center gap-1 disabled:opacity-35"
                 >
-                  {d.dayNum}
-                </div>
-              </div>
-            );
-          })}
+                  <span className="text-[10px] text-muted-foreground font-medium">{d.label}</span>
+                  <div
+                    className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-semibold border transition-colors ${
+                      selected
+                        ? "border-primary bg-primary text-primary-foreground"
+                        : isToday
+                          ? "border-primary/60 bg-primary/10 text-primary"
+                          : logged
+                            ? "border-primary/40 bg-primary/10 text-primary"
+                            : "border-border text-muted-foreground"
+                    }`}
+                  >
+                    {d.dayNum}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         <div className="grid grid-cols-2 gap-3">
           <div className="card-soft p-4">
             <div className="text-xs text-muted-foreground flex items-center gap-1">
-              <Footprints className="w-3.5 h-3.5" /> Steps today
+              <Footprints className="w-3.5 h-3.5" /> Steps
             </div>
             <div className="text-xl font-bold tabular-nums mt-1">
               {steps.toLocaleString()}
@@ -508,7 +571,9 @@ export default function DashboardPage() {
         <div className="card-elevated p-5 flex items-center gap-5">
           <ProgressRing value={totals.cal} max={targets.cal} size={96} stroke={8} label="kcal" unit="" />
           <div className="min-w-0 flex-1">
-            <div className="text-xs text-muted-foreground uppercase tracking-wide">Daily calorie goal</div>
+            <div className="text-xs text-muted-foreground uppercase tracking-wide">
+              {isViewingToday ? "Daily calorie goal" : "Calories that day"}
+            </div>
             <div className="text-2xl font-bold tabular-nums">
               {formatCalories(totals.cal)}
               <span className="text-sm font-medium text-muted-foreground"> / {formatCalories(targets.cal)}</span>
@@ -643,16 +708,36 @@ export default function DashboardPage() {
           </div>
         )}
 
-        <Link href="/app" className="btn-primary w-full h-14 flex items-center justify-center gap-2 text-[16px]">
-          <Camera className="w-5 h-5" />
-          Log a meal
-        </Link>
+        {isViewingToday ? (
+          <Link href="/app" className="btn-primary w-full h-14 flex items-center justify-center gap-2 text-[16px]">
+            <Camera className="w-5 h-5" />
+            Log a meal
+          </Link>
+        ) : (
+          <button
+            type="button"
+            onClick={() => {
+              setWeekOffset(0);
+              setSelectedDate(todayKey);
+            }}
+            className="btn-secondary w-full h-12 text-sm"
+          >
+            Back to today
+          </button>
+        )}
 
         <div>
-          <h2 className="text-sm font-semibold text-muted-foreground mb-3">Today&apos;s meals</h2>
+          <h2 className="text-sm font-semibold text-muted-foreground mb-3">{isViewingToday
+              ? "Today's meals"
+              : `Meals · ${new Date(selectedDate + "T12:00:00").toLocaleDateString(undefined, {
+                  month: "short",
+                  day: "numeric",
+                })}`}</h2>
           {meals.length === 0 ? (
             <div className="card-soft p-8 text-center text-sm text-muted-foreground">
-              Nothing logged yet. Snap or type your next plate.
+              {isViewingToday
+                ? "Nothing logged yet. Snap or type your next plate."
+                : "No meals logged on this day."}
             </div>
           ) : (
             <div className="space-y-2">
