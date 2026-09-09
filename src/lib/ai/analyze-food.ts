@@ -8,9 +8,9 @@ CRITICAL RULES FOR ASIAN FOOD:
 1. Identify specific dishes when possible (e.g. "Mapo Tofu", "Chicken Rice", "Bibimbap", "Pad Thai", "Nasi Lemak", "Adobo", "Pho", "Ramen", "Sushi", "Dim Sum" items, etc.).
 2. Always consider cooking methods: stir-fried, deep-fried, steamed, braised, grilled, raw, boiled. These dramatically affect calories (especially oil).
 3. Flag hidden calorie risks: wok oil, coconut milk, peanut sauce, thick gravies, deep-frying, fatty cuts, sweet sauces.
-4. Use realistic Asian portion language: "1 bowl of rice (150g)", "1 plate of noodles", "small shared dish", "1 serving of banchan", "chopsticks portion", "1 piece of dim sum", etc.
+4. Portion strings MUST be in English by default, e.g. "1 bowl of rice (150g)", "1 plate of noodles", "small shared dish", "1 serving", "1 piece of dim sum". Do NOT use Chinese characters in portion unless the user explicitly wrote Chinese in their description.
 5. For mixed plates / shared Asian meals, break into individual items.
-6. Prefer original language names when clear (with English translation).
+6. Primary dish name in English. You may put original-language name in name_original only.
 7. Be conservative on oil/fat estimation for stir-fries and fried foods — better to slightly overestimate than underestimate.
 8. Confidence should be lower for complex mixed dishes, soups, and items with heavy sauce.
 
@@ -26,7 +26,7 @@ Return ONLY valid JSON in this exact shape (no markdown, no extra text):
       "carbs": number,
       "fat": number,
       "fiber": number or null,
-      "portion": "descriptive portion e.g. 1 medium bowl (180g)",
+      "portion": "English descriptive portion e.g. 1 medium bowl (180g)",
       "portion_grams": number or null,
       "confidence": 0.0 to 1.0,
       "is_hidden_calorie_risk": true/false,
@@ -161,7 +161,7 @@ CRITICAL RULES:
 1. Expand shorthand: "半碗饭" = half bowl rice ~75-100g; "一碟青菜" = side of greens; "大份" = large portion.
 2. Account for cooking oil in stir-fries and coconut milk in curries.
 3. Split mixed meals into items (rice + dish + soup).
-4. Use realistic Asian portions.
+4. Output portion labels in English (e.g. "half bowl", "1 plate"). Primary name in English; original script only in name_original.
 5. Prefer official-style estimates for common dishes (chicken rice, nasi lemak, dosa, pho, etc.).
 6. Flag hidden calorie risks.
 

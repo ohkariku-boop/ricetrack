@@ -698,7 +698,7 @@ export default function TrackerPage() {
                 Items · tap to edit
               </div>
               {analysis.items.map((item, idx) => (
-                <div key={idx} className="card-soft p-4 space-y-3">
+                <div key={idx} className="card-soft p-3 sm:p-4 space-y-3 overflow-hidden">
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0 flex-1">
                       <div className="font-medium leading-snug">{item.name}</div>
@@ -724,7 +724,7 @@ export default function TrackerPage() {
                     </div>
                   </div>
 
-                  <div className="flex gap-3 text-sm tabular-nums">
+                  <div className="flex flex-wrap gap-x-3 gap-y-1 text-sm tabular-nums">
                     <span className="font-semibold">{formatCalories(item.calories)} kcal</span>
                     <span className="text-muted-foreground">P {formatMacro(item.protein)}</span>
                     <span className="text-muted-foreground">C {formatMacro(item.carbs)}</span>
@@ -770,52 +770,53 @@ export default function TrackerPage() {
                           className="input-modern mt-0.5 w-full px-3 py-2 text-sm"
                           value={item.portion || ""}
                           onChange={(e) => updateItem(idx, { portion: e.target.value })}
-                          placeholder="e.g. 1 plate, 半碗"
+                          placeholder="e.g. 1 plate, half bowl"
                         />
                       </div>
-                      <div className="grid grid-cols-2 gap-2">
+                      <div className="grid grid-cols-1 gap-2 min-w-0">
                         {(
                           [
                             ["calories", "kcal"],
-                            ["protein", "protein"],
-                            ["carbs", "carbs"],
-                            ["fat", "fat"],
+                            ["protein", "protein g"],
+                            ["carbs", "carbs g"],
+                            ["fat", "fat g"],
                           ] as const
                         ).map(([key, label]) => (
-                          <div key={key}>
-                            <label className="text-[10px] uppercase text-muted-foreground">{label}</label>
-                            <div className="flex items-center gap-1 mt-0.5">
-                              <button
-                                type="button"
-                                className="p-1.5 rounded-md bg-muted"
-                                onClick={() =>
-                                  updateItem(idx, {
-                                    [key]: Math.max(0, Number(item[key]) - (key === "calories" ? 10 : 1)),
-                                  })
-                                }
-                              >
-                                <Minus className="w-3 h-3" />
-                              </button>
-                              <input
-                                type="number"
-                                className="input-modern flex-1 px-2 py-1.5 text-sm text-center tabular-nums"
-                                value={item[key]}
-                                onChange={(e) =>
-                                  updateItem(idx, { [key]: Number(e.target.value) || 0 })
-                                }
-                              />
-                              <button
-                                type="button"
-                                className="p-1.5 rounded-md bg-muted"
-                                onClick={() =>
-                                  updateItem(idx, {
-                                    [key]: Number(item[key]) + (key === "calories" ? 10 : 1),
-                                  })
-                                }
-                              >
-                                <Plus className="w-3 h-3" />
-                              </button>
-                            </div>
+                          <div key={key} className="flex items-center gap-2 min-w-0">
+                            <label className="w-16 shrink-0 text-[11px] uppercase text-muted-foreground">
+                              {label}
+                            </label>
+                            <button
+                              type="button"
+                              className="p-2 rounded-lg bg-muted shrink-0"
+                              onClick={() =>
+                                updateItem(idx, {
+                                  [key]: Math.max(0, Number(item[key]) - (key === "calories" ? 10 : 1)),
+                                })
+                              }
+                            >
+                              <Minus className="w-3.5 h-3.5" />
+                            </button>
+                            <input
+                              type="number"
+                              inputMode="decimal"
+                              className="input-modern min-w-0 flex-1 px-2 py-2 text-sm text-center tabular-nums"
+                              value={item[key]}
+                              onChange={(e) =>
+                                updateItem(idx, { [key]: Number(e.target.value) || 0 })
+                              }
+                            />
+                            <button
+                              type="button"
+                              className="p-2 rounded-lg bg-muted shrink-0"
+                              onClick={() =>
+                                updateItem(idx, {
+                                  [key]: Number(item[key]) + (key === "calories" ? 10 : 1),
+                                })
+                              }
+                            >
+                              <Plus className="w-3.5 h-3.5" />
+                            </button>
                           </div>
                         ))}
                       </div>

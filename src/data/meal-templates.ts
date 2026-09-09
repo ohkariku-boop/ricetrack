@@ -79,17 +79,17 @@ export const MEAL_TEMPLATES: MealTemplate[] = [
     cuisine: "chinese",
     items: [
       { name: "Mapo tofu", calories: 320, protein: 18, carbs: 12, fat: 22, portion: "1 bowl" },
-      { name: "White rice", calories: 150, protein: 3, carbs: 34, fat: 0, portion: "半碗" },
+      { name: "White rice", calories: 150, protein: 3, carbs: 34, fat: 0, portion: "half bowl" },
     ],
   },
 ];
 
 export const PORTION_PRESETS = [
-  { label: "半碗", factor: 0.5 },
-  { label: "1 碗", factor: 1 },
-  { label: "大碗", factor: 1.4 },
-  { label: "小份", factor: 0.7 },
-  { label: "1 份", factor: 1 },
-  { label: "大份", factor: 1.5 },
-  { label: "分享", factor: 0.4 },
+  { label: "Half", factor: 0.5 },
+  { label: "1 bowl", factor: 1 },
+  { label: "Large", factor: 1.4 },
+  { label: "Small", factor: 0.7 },
+  { label: "1 serve", factor: 1 },
+  { label: "Big serve", factor: 1.5 },
+  { label: "Shared", factor: 0.4 },
 ];
