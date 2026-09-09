@@ -49,6 +49,8 @@ export default function TrackerPage() {
   const [editingIdx, setEditingIdx] = useState<number | null>(null);
   const [recents, setRecents] = useState<RecentMeal[]>([]);
   const [showTemplates, setShowTemplates] = useState(false);
+  const [correctionHint, setCorrectionHint] = useState("");
+  const [reanalyzing, setReanalyzing] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const galleryInputRef = useRef<HTMLInputElement>(null);
   const supabase = createClient();
@@ -169,7 +171,45 @@ export default function TrackerPage() {
     }
   };
 
-  const updateItem = (idx: number, patch: Partial<FoodItem>) => {
+  const reanalyzeWithCorrection = async () => {
+    if (!analysis) return;
+    setReanalyzing(true);
+    setError(null);
+    try {
+      const itemNames = analysis.items.map((i) => i.name).join(", ");
+      const hint = correctionHint.trim();
+      const text = hint
+        ? `User correction for this meal: ${hint}. Current detected items were: ${itemNames}. Please re-estimate calories and macros using the correction as ground truth.`
+        : `Please re-estimate this meal. Confirmed items: ${itemNames}. Use these names as the dishes present.`;
+      const body: Record<string, string> = { text, cuisineHint };
+      // If we still have the photo, include it for better portion sense
+      if (imageBase64) {
+        body.imageBase64 = imageBase64;
+        body.mimeType = mimeType;
+        body.text = text; // API prioritizes text if both? Check API - text takes precedence. Better send only image with hint in cuisine or custom field.
+      }
+      // Send as text path with strong correction (most reliable)
+      const res = await fetch("/api/analyze", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          text,
+          cuisineHint: cuisineHint || analysis.cuisine_detected || "",
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Re-analysis failed");
+      setAnalysis(data);
+      setCorrectionHint("");
+      setEditingIdx(null);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Re-analysis failed");
+    } finally {
+      setReanalyzing(false);
+    }
+  };
+
+    const updateItem = (idx: number, patch: Partial<FoodItem>) => {
     if (!analysis) return;
     const items = analysis.items.map((item, i) =>
       i === idx ? { ...item, ...patch } : item
@@ -358,6 +398,7 @@ export default function TrackerPage() {
     setSuccess(null);
     setEditingIdx(null);
     setTextDescription("");
+    setCorrectionHint("");
     if (fileInputRef.current) fileInputRef.current.value = "";
     if (galleryInputRef.current) galleryInputRef.current.value = "";
   };
@@ -711,51 +752,73 @@ export default function TrackerPage() {
                   </div>
 
                   {editingIdx === idx && (
-                    <div className="grid grid-cols-2 gap-2 pt-1 border-t border-border/60">
-                      {(
-                        [
-                          ["calories", "kcal"],
-                          ["protein", "protein"],
-                          ["carbs", "carbs"],
-                          ["fat", "fat"],
-                        ] as const
-                      ).map(([key, label]) => (
-                        <div key={key}>
-                          <label className="text-[10px] uppercase text-muted-foreground">{label}</label>
-                          <div className="flex items-center gap-1 mt-0.5">
-                            <button
-                              type="button"
-                              className="p-1.5 rounded-md bg-muted"
-                              onClick={() =>
-                                updateItem(idx, {
-                                  [key]: Math.max(0, Number(item[key]) - (key === "calories" ? 10 : 1)),
-                                })
-                              }
-                            >
-                              <Minus className="w-3 h-3" />
-                            </button>
-                            <input
-                              type="number"
-                              className="input-modern flex-1 px-2 py-1.5 text-sm text-center tabular-nums"
-                              value={item[key]}
-                              onChange={(e) =>
-                                updateItem(idx, { [key]: Number(e.target.value) || 0 })
-                              }
-                            />
-                            <button
-                              type="button"
-                              className="p-1.5 rounded-md bg-muted"
-                              onClick={() =>
-                                updateItem(idx, {
-                                  [key]: Number(item[key]) + (key === "calories" ? 10 : 1),
-                                })
-                              }
-                            >
-                              <Plus className="w-3 h-3" />
-                            </button>
+                    <div className="space-y-3 pt-2 border-t border-border/60">
+                      <div>
+                        <label className="text-[10px] uppercase text-muted-foreground">Dish name</label>
+                        <input
+                          type="text"
+                          className="input-modern mt-0.5 w-full px-3 py-2 text-sm"
+                          value={item.name}
+                          onChange={(e) => updateItem(idx, { name: e.target.value })}
+                          placeholder="e.g. Char kway teow"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-[10px] uppercase text-muted-foreground">Portion</label>
+                        <input
+                          type="text"
+                          className="input-modern mt-0.5 w-full px-3 py-2 text-sm"
+                          value={item.portion || ""}
+                          onChange={(e) => updateItem(idx, { portion: e.target.value })}
+                          placeholder="e.g. 1 plate, 半碗"
+                        />
+                      </div>
+                      <div className="grid grid-cols-2 gap-2">
+                        {(
+                          [
+                            ["calories", "kcal"],
+                            ["protein", "protein"],
+                            ["carbs", "carbs"],
+                            ["fat", "fat"],
+                          ] as const
+                        ).map(([key, label]) => (
+                          <div key={key}>
+                            <label className="text-[10px] uppercase text-muted-foreground">{label}</label>
+                            <div className="flex items-center gap-1 mt-0.5">
+                              <button
+                                type="button"
+                                className="p-1.5 rounded-md bg-muted"
+                                onClick={() =>
+                                  updateItem(idx, {
+                                    [key]: Math.max(0, Number(item[key]) - (key === "calories" ? 10 : 1)),
+                                  })
+                                }
+                              >
+                                <Minus className="w-3 h-3" />
+                              </button>
+                              <input
+                                type="number"
+                                className="input-modern flex-1 px-2 py-1.5 text-sm text-center tabular-nums"
+                                value={item[key]}
+                                onChange={(e) =>
+                                  updateItem(idx, { [key]: Number(e.target.value) || 0 })
+                                }
+                              />
+                              <button
+                                type="button"
+                                className="p-1.5 rounded-md bg-muted"
+                                onClick={() =>
+                                  updateItem(idx, {
+                                    [key]: Number(item[key]) + (key === "calories" ? 10 : 1),
+                                  })
+                                }
+                              >
+                                <Plus className="w-3 h-3" />
+                              </button>
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
                   )}
                 </div>
