@@ -37,6 +37,7 @@ import {
 import type { FoodItem } from "@/types";
 import { BottomNav } from "@/components/BottomNav";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { WellnessCard } from "@/components/WellnessCard";
 import {
   weekStrip,
   getWaterMl,
@@ -533,6 +534,8 @@ export default function DashboardPage() {
             </div>
           ))}
         </div>
+
+        <WellnessCard />
 
         {/* Water */}
         <div className="card-soft p-4 flex items-center justify-between gap-3">

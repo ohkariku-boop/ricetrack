@@ -16,6 +16,7 @@ import { getWeightLogs, addWeightLog, type WeightLog } from "@/lib/activity";
 import { BottomNav } from "@/components/BottomNav";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { calcBmi, bmiCategory } from "@/lib/nutrition";
+import { avgSleepHours, avgEnergy, getSleepLogs, getEnergyLogs, ENERGY_LABELS } from "@/lib/wellness";
 
 type Range = "30" | "90" | "180" | "all";
 
@@ -29,6 +30,9 @@ export default function ProgressPage() {
   const [weightInput, setWeightInput] = useState("");
   const [profile, setProfile] = useState(getGuestProfile());
   const [name, setName] = useState("You");
+  const [sleepAvg, setSleepAvg] = useState<number | null>(null);
+  const [energyAvg, setEnergyAvg] = useState<number | null>(null);
+  const [lastSleep, setLastSleep] = useState<string | null>(null);
 
   const refresh = () => {
     if (!isLocalSession()) {
@@ -59,6 +63,11 @@ export default function ProgressPage() {
     }
     setStreak(s);
     if (p.weight_kg) setWeightInput(String(p.weight_kg));
+    setSleepAvg(avgSleepHours(7));
+    setEnergyAvg(avgEnergy(7));
+    const sleeps = getSleepLogs();
+    const last = sleeps[sleeps.length - 1];
+    setLastSleep(last ? `${last.duration_hours}h (${last.bed_time}→${last.wake_time})` : null);
     setLoading(false);
   };
 
@@ -140,6 +149,35 @@ export default function ProgressPage() {
       </header>
 
       <main className="mx-auto max-w-lg px-4 py-5 space-y-5">
+        <div className="grid grid-cols-2 gap-3">
+          <div className="card-elevated p-4">
+            <div className="text-xs text-muted-foreground">Sleep (7-day avg)</div>
+            <div className="text-2xl font-bold tabular-nums mt-1">
+              {sleepAvg != null ? sleepAvg : "—"}
+              {sleepAvg != null && (
+                <span className="text-sm font-medium text-muted-foreground ml-1">h</span>
+              )}
+            </div>
+            <div className="text-[11px] text-muted-foreground mt-1 truncate">
+              {lastSleep || "Log sleep on Home"}
+            </div>
+          </div>
+          <div className="card-elevated p-4">
+            <div className="text-xs text-muted-foreground">Energy (7-day avg)</div>
+            <div className="text-2xl font-bold tabular-nums mt-1">
+              {energyAvg != null ? energyAvg : "—"}
+              {energyAvg != null && (
+                <span className="text-sm font-medium text-muted-foreground ml-1">/5</span>
+              )}
+            </div>
+            <div className="text-[11px] text-muted-foreground mt-1">
+              {energyAvg != null
+                ? ENERGY_LABELS[Math.round(energyAvg) as 1 | 2 | 3 | 4 | 5] || "—"
+                : "Tap 1–5 on Home"}
+            </div>
+          </div>
+        </div>
+
         <div className="grid grid-cols-2 gap-3">
           <div className="card-elevated p-4">
             <div className="flex items-center gap-2 text-muted-foreground text-xs">
