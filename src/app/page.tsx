@@ -67,7 +67,7 @@ function MarqueeStrip() {
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-[#f6f3ee] text-[#1a1814]">
+    <div className="min-h-screen page-enter bg-[#f6f3ee] text-[#1a1814]">
       <style>{`
         @keyframes ricetrack-marquee {
           from { transform: translateX(0); }

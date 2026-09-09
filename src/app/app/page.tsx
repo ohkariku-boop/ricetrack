@@ -477,7 +477,7 @@ export default function TrackerPage() {
   );
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen flex flex-col bg-background page-enter">
       <header className="sticky top-0 z-20 bg-background/90 backdrop-blur-xl border-b border-border/60">
         <div className="mx-auto max-w-lg px-5 h-14 flex items-center justify-between">
           <div className="flex items-center gap-2.5">

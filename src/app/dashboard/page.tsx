@@ -405,14 +405,17 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="w-6 h-6 animate-spin text-primary" />
+      <div className="min-h-screen flex flex-col items-center justify-center gap-3 bg-background">
+        <div className="w-12 h-12 rounded-2xl bg-primary/15 flex items-center justify-center">
+          <Loader2 className="w-6 h-6 animate-spin text-primary" />
+        </div>
+        <p className="text-sm text-muted-foreground">Loading your day…</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background pb-24">
+    <div className="min-h-screen bg-background safe-bottom page-enter">
       <header className="sticky top-0 z-40 border-b border-border/60 bg-background/90 backdrop-blur-xl">
         <div className="mx-auto max-w-lg px-4 h-14 flex items-center justify-between">
           <div className="leading-tight">
@@ -764,7 +767,7 @@ export default function DashboardPage() {
 
                     {/* Swipeable row */}
                     <div
-                      className="relative card-soft p-4 flex justify-between gap-3 bg-card border border-border/60 select-none"
+                      className="relative card-soft p-4 flex justify-between gap-3 bg-card border border-border/60 select-none pressable"
                       style={{
                         transform: `translateX(${dx}px)`,
                         transition: open && swipeX === -88 ? "transform 0.15s ease-out" : undefined,

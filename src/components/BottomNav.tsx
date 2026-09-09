@@ -17,36 +17,39 @@ const ITEMS = [
 export function BottomNav() {
   const path = usePathname();
   return (
-    <nav className="fixed bottom-0 inset-x-0 z-40 border-t border-border/60 bg-background/95 backdrop-blur-xl pb-[env(safe-area-inset-bottom)]">
-      <div className="mx-auto max-w-lg grid grid-cols-5 h-14">
+    <nav className="fixed bottom-0 inset-x-0 z-40 border-t border-border/70 bg-background/90 backdrop-blur-xl pb-[env(safe-area-inset-bottom)]">
+      <div className="mx-auto max-w-lg grid grid-cols-5 h-[3.6rem]">
         {ITEMS.map(({ href, label, icon: Icon }) => {
           const active =
-            path === href ||
-            (href !== "/dashboard" && !!path?.startsWith(href));
+            path === href || (href !== "/dashboard" && !!path?.startsWith(href));
           return (
             <Link
               key={href}
               href={href}
               className={cn(
-                "flex flex-col items-center justify-center gap-0.5 text-[10px] font-medium",
+                "relative flex flex-col items-center justify-center gap-0.5 text-[10px] font-semibold tracking-wide",
                 active ? "text-primary" : "text-muted-foreground"
               )}
             >
               {href === "/app" ? (
                 <span
                   className={cn(
-                    "w-10 h-10 -mt-5 rounded-full flex items-center justify-center shadow-md border border-border",
+                    "w-11 h-11 -mt-6 rounded-full flex items-center justify-center shadow-lg border transition-transform",
                     active
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-card text-foreground"
+                      ? "bg-primary border-primary scale-105"
+                      : "bg-card border-border"
                   )}
                 >
-                  <RiceLogo size={22} />
+                  <RiceLogo size={24} />
                 </span>
               ) : Icon ? (
-                <Icon className="w-5 h-5" />
+                <Icon
+                  className={cn("w-[1.35rem] h-[1.35rem]", active && "stroke-[2.25px]")}
+                  strokeWidth={active ? 2.25 : 1.75}
+                />
               ) : null}
-              {label}
+              <span className={cn(href === "/app" && "mt-0.5")}>{label}</span>
+              {active && href !== "/app" && <span className="nav-active-dot absolute bottom-1" />}
             </Link>
           );
         })}

@@ -47,7 +47,7 @@ export function WellnessCard() {
   const duration = calcDurationHours(bed, wake);
 
   return (
-    <div className="card-soft p-4 space-y-4">
+    <div className="card-soft p-4 space-y-4 animate-fade-up">
       <div className="flex items-center justify-between">
         <div className="text-sm font-medium flex items-center gap-1.5">
           <Moon className="w-4 h-4 text-indigo-400" />

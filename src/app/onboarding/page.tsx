@@ -183,7 +183,7 @@ export default function OnboardingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col page-enter">
       <header className="px-5 h-14 flex items-center gap-2 border-b border-border/60">
         <RiceLogo size={28} />
         <div className="leading-tight">

@@ -220,3 +220,58 @@ html.light .text-muted-foreground {
   0% { background-position: 200% 0; }
   100% { background-position: -200% 0; }
 }
+
+/* —— Polish layer —— */
+.btn-secondary {
+  background: var(--card);
+  color: var(--foreground);
+  border: 1.5px solid var(--border);
+  border-radius: 9999px;
+  font-weight: 600;
+  transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+.btn-secondary:active {
+  transform: scale(0.97);
+}
+.btn-secondary:hover {
+  background: var(--muted);
+}
+
+.section-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+
+.safe-bottom {
+  padding-bottom: calc(4.5rem + env(safe-area-inset-bottom, 0px));
+}
+
+/* Active press for cards */
+.pressable {
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+.pressable:active {
+  transform: scale(0.985);
+}
+
+html.dark .skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--muted) 25%,
+    color-mix(in srgb, var(--muted) 70%, var(--foreground) 8%) 50%,
+    var(--muted) 75%
+  );
+  background-size: 200% 100%;
+}
+
+/* Bottom nav active pill */
+.nav-active-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 9999px;
+  background: var(--primary);
+  margin-top: 2px;
+}
