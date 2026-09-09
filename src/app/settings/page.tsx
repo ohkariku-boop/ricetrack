@@ -5,7 +5,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { ArrowLeft, Loader2, Check } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { isGuest, getGuestProfile, setGuestProfile } from "@/lib/guest";
+import { isLocalSession, getGuestProfile, setGuestProfile } from "@/lib/guest";
 
 export default function SettingsPage() {
   const supabase = createClient();
@@ -25,7 +25,7 @@ export default function SettingsPage() {
   useEffect(() => {
     (async () => {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user && isGuest()) {
+      if (!user && isLocalSession()) {
         const g = getGuestProfile();
         setForm({
           daily_calorie_target: g.daily_calorie_target ?? 2000,
@@ -61,7 +61,7 @@ export default function SettingsPage() {
     setSaving(true);
     setMsg(null);
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user && isGuest()) {
+    if (!user && isLocalSession()) {
       setGuestProfile({
         daily_calorie_target: form.daily_calorie_target,
         daily_protein_target: form.daily_protein_target,

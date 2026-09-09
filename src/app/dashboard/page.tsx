@@ -26,6 +26,8 @@ import {
   disableGuest,
   updateGuestMeal,
   deleteGuestMeal,
+  getSessionAccount,
+  isLocalSession,
 } from "@/lib/guest";
 import type { FoodItem } from "@/types";
 
@@ -80,7 +82,7 @@ export default function DashboardPage() {
       data: { user },
     } = await supabase.auth.getUser();
 
-    if (!user && isGuest()) {
+    if (!user && isLocalSession()) {
       const gp = getGuestProfile();
       setProfile(gp as any);
       const today = new Date().toISOString().slice(0, 10);
@@ -249,7 +251,7 @@ export default function DashboardPage() {
         total_fat: draftTotals.f,
       };
 
-      if (!user && isGuest()) {
+      if (!user && isLocalSession()) {
         updateGuestMeal(selected.id, patch);
       } else if (user) {
         const { error } = await supabase
@@ -286,7 +288,7 @@ export default function DashboardPage() {
     if (!skipConfirm && !confirm("Delete this meal?")) return;
     setSavingMeal(true);
     try {
-      if (!user && isGuest()) {
+      if (!user && isLocalSession()) {
         deleteGuestMeal(id);
       } else if (user) {
         const { error } = await supabase.from("meals").delete().eq("id", id).eq("user_id", user.id);
@@ -355,7 +357,15 @@ export default function DashboardPage() {
     <div className="min-h-screen bg-background pb-24">
       <header className="sticky top-0 z-40 border-b border-border/60 bg-background/90 backdrop-blur-xl">
         <div className="mx-auto max-w-lg px-4 h-14 flex items-center justify-between">
-          <div className="font-semibold tracking-tight">Today</div>
+          <div className="leading-tight">
+            <div className="font-semibold tracking-tight">Today</div>
+            {typeof window !== "undefined" && getSessionAccount() && (
+              <div className="text-[11px] text-muted-foreground">
+                {getSessionAccount()?.name}
+                {getSessionAccount()?.paid ? " · Paid" : ""}
+              </div>
+            )}
+          </div>
           <div className="flex items-center gap-1">
             <Link href="/settings" className="p-2 rounded-lg hover:bg-muted text-muted-foreground">
               <Settings2 className="w-4 h-4" />

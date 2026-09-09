@@ -24,7 +24,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { MEAL_TEMPLATES, PORTION_PRESETS } from "@/data/meal-templates";
 import { RiceLogo } from "@/components/RiceLogo";
-import { isGuest, enableGuest, saveGuestMeal, getGuestMeals } from "@/lib/guest";
+import { isGuest, enableGuest, saveGuestMeal, getGuestMeals, getSessionAccount, isLocalSession } from "@/lib/guest";
 
 type RecentMeal = {
   id: string;
@@ -49,6 +49,8 @@ export default function TrackerPage() {
   const [textDescription, setTextDescription] = useState("");
   const [user, setUser] = useState<{ id: string } | null>(null);
   const [guest, setGuest] = useState(false);
+  const [localName, setLocalName] = useState<string | null>(null);
+  const [localPaid, setLocalPaid] = useState(false);
   const [editingIdx, setEditingIdx] = useState<number | null>(null);
   const [recents, setRecents] = useState<RecentMeal[]>([]);
   const [showTemplates, setShowTemplates] = useState(false);
@@ -63,6 +65,9 @@ export default function TrackerPage() {
   useEffect(() => {
     const g = isGuest();
     setGuest(g);
+    const acc = getSessionAccount();
+    setLocalName(acc?.name || null);
+    setLocalPaid(!!acc?.paid);
     supabase.auth.getUser().then(({ data: { user } }) => {
       setUser(user);
       if (user) {
@@ -272,7 +277,7 @@ export default function TrackerPage() {
 
     // Guest path — local only, no account needed
     if (!user) {
-      if (!isGuest()) enableGuest();
+      if (!isLocalSession()) enableGuest();
       setGuest(true);
       setSaving(true);
       setError(null);
@@ -459,7 +464,17 @@ export default function TrackerPage() {
         <div className="mx-auto max-w-lg px-5 h-14 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <RiceLogo size={32} />
-            <span className="font-semibold tracking-tight">RiceTrack</span>
+            <div className="leading-tight">
+              <span className="font-semibold tracking-tight">RiceTrack</span>
+              {localName && (
+                <div className="text-[11px] text-muted-foreground flex items-center gap-1">
+                  {localName}
+                  {localPaid && (
+                    <span className="text-[10px] font-semibold text-primary">Paid</span>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
           <Link
             href="/dashboard"

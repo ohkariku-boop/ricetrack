@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { enableGuest } from "@/lib/guest";
-import { Loader2 } from "lucide-react";
+import { enableAccount, enableGuest, LOCAL_ACCOUNTS } from "@/lib/guest";
+import { Loader2, Crown } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { RiceLogo } from "@/components/RiceLogo";
@@ -34,8 +34,9 @@ export default function LoginPage() {
     else setMessage("Check your email for the magic link");
   };
 
-  const continueAsGuest = () => {
-    enableGuest();
+  const pickAccount = (id: "guest" | "joe" | "mel") => {
+    if (id === "guest") enableGuest();
+    else enableAccount(id);
     router.push("/app");
   };
 
@@ -48,21 +49,39 @@ export default function LoginPage() {
           </div>
           <h1 className="text-2xl font-bold tracking-tight">Welcome</h1>
           <p className="text-muted-foreground text-[15px] mt-2">
-            Track Asian meals — or try first without an account
+            Choose an account to continue
           </p>
         </div>
 
-        <button
-          type="button"
-          onClick={continueAsGuest}
-          className="btn-primary w-full h-14 text-[15px]"
-        >
-          Continue as guest
-        </button>
+        <div className="space-y-2">
+          <button
+            type="button"
+            onClick={() => pickAccount("guest")}
+            className="btn-secondary w-full h-14 text-[15px] justify-between px-5 flex items-center"
+          >
+            <span>Continue as guest</span>
+            <span className="text-xs text-muted-foreground font-normal">Free</span>
+          </button>
+
+          {LOCAL_ACCOUNTS.filter((a) => a.paid).map((a) => (
+            <button
+              key={a.id}
+              type="button"
+              onClick={() => pickAccount(a.id)}
+              className="btn-primary w-full h-14 text-[15px] justify-between px-5 flex items-center"
+            >
+              <span className="flex items-center gap-2">
+                <Crown className="w-4 h-4 opacity-90" />
+                Continue as {a.name}
+              </span>
+              <span className="text-xs font-medium opacity-90">Paid</span>
+            </button>
+          ))}
+        </div>
 
         <div className="relative flex items-center gap-3">
           <div className="flex-1 h-px bg-border" />
-          <span className="text-xs text-muted-foreground">or sign in</span>
+          <span className="text-xs text-muted-foreground">or email magic link</span>
           <div className="flex-1 h-px bg-border" />
         </div>
 
@@ -100,10 +119,7 @@ export default function LoginPage() {
         )}
 
         <p className="text-center text-xs text-muted-foreground leading-relaxed">
-          Guest mode saves meals on this device only.{" "}
-          <Link href="/app" className="text-primary font-medium">
-            Skip to log →
-          </Link>
+          Joe & Mel are paid demo accounts on this device. Data stays separate per account.
         </p>
       </div>
     </div>
