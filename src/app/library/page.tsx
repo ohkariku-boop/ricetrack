@@ -1,5 +1,7 @@
 "use client";
 
+import { BottomNav } from "@/components/BottomNav";
+
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { formatCalories, formatMacro, cn } from "@/lib/utils";
@@ -91,7 +93,7 @@ export default function LibraryPage() {
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen pb-24 bg-background flex flex-col">
       <header className="sticky top-0 z-20 border-b border-border/60 bg-background/90 backdrop-blur-xl">
         <div className="mx-auto max-w-lg px-5 h-14 flex items-center gap-3">
           <Link href="/app" className="p-2 -ml-2 rounded-xl hover:bg-muted">
@@ -199,6 +201,7 @@ export default function LibraryPage() {
           </>
         )}
       </main>
+      <BottomNav />
     </div>
   );
 }

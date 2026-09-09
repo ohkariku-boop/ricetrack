@@ -9,7 +9,6 @@ import {
   LogOut,
   Loader2,
   Settings2,
-  Scale,
   RotateCcw,
   X,
   ChevronRight,
@@ -648,16 +647,6 @@ export default function DashboardPage() {
           <Camera className="w-5 h-5" />
           Log a meal
         </Link>
-
-        <div className="flex gap-2">
-          <Link href="/library" className="btn-secondary flex-1 h-11 text-sm text-center leading-[2.75rem]">
-            Library
-          </Link>
-          <Link href="/settings" className="btn-secondary flex-1 h-11 text-sm flex items-center justify-center gap-1">
-            <Scale className="w-4 h-4" />
-            Calorie goal
-          </Link>
-        </div>
 
         <div>
           <h2 className="text-sm font-semibold text-muted-foreground mb-3">Today&apos;s meals</h2>
