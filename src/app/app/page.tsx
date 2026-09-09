@@ -5,6 +5,7 @@ import type { MealAnalysis, FoodItem } from "@/types";
 import { formatCalories, formatMacro, cn } from "@/lib/utils";
 import {
   Camera,
+  Image as ImageIcon,
   Loader2,
   AlertTriangle,
   Check,
@@ -47,6 +48,7 @@ export default function TrackerPage() {
   const [recents, setRecents] = useState<RecentMeal[]>([]);
   const [showTemplates, setShowTemplates] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const galleryInputRef = useRef<HTMLInputElement>(null);
   const supabase = createClient();
   const router = useRouter();
 
@@ -264,6 +266,7 @@ export default function TrackerPage() {
     setEditingIdx(null);
     setTextDescription("");
     if (fileInputRef.current) fileInputRef.current.value = "";
+    if (galleryInputRef.current) galleryInputRef.current.value = "";
   };
 
   const cuisineOptions = (
@@ -343,25 +346,47 @@ export default function TrackerPage() {
             </div>
 
             {mode === "photo" ? (
-              <div className="space-y-4">
-                <button
-                  type="button"
-                  onClick={() => fileInputRef.current?.click()}
-                  className="w-full card-elevated p-8 flex flex-col items-center gap-4 hover:border-primary/40 transition-all active:scale-[0.99]"
-                >
-                  <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center">
-                    <Camera className="w-8 h-8 text-primary" />
-                  </div>
-                  <div className="text-center">
-                    <p className="font-semibold">Take or upload photo</p>
-                    <p className="text-sm text-muted-foreground mt-1">Good lighting works best</p>
-                  </div>
-                </button>
+              <div className="space-y-3">
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="card-elevated p-6 flex flex-col items-center gap-3 hover:border-primary/40 transition-all active:scale-[0.99]"
+                  >
+                    <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center">
+                      <Camera className="w-6 h-6 text-primary" />
+                    </div>
+                    <div className="text-center">
+                      <p className="font-semibold text-sm">Camera</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">Take a photo</p>
+                    </div>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => galleryInputRef.current?.click()}
+                    className="card-elevated p-6 flex flex-col items-center gap-3 hover:border-primary/40 transition-all active:scale-[0.99]"
+                  >
+                    <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center">
+                      <ImageIcon className="w-6 h-6 text-primary" />
+                    </div>
+                    <div className="text-center">
+                      <p className="font-semibold text-sm">Gallery</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">Photos & files</p>
+                    </div>
+                  </button>
+                </div>
                 <input
                   ref={fileInputRef}
                   type="file"
                   accept="image/*"
                   capture="environment"
+                  className="hidden"
+                  onChange={onFileChange}
+                />
+                <input
+                  ref={galleryInputRef}
+                  type="file"
+                  accept="image/*,.jpg,.jpeg,.png,.webp,.heic,.heif"
                   className="hidden"
                   onChange={onFileChange}
                 />
