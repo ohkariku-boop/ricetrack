@@ -56,7 +56,7 @@ export default function TrackerPage() {
   const [localPaid, setLocalPaid] = useState(false);
   const [editingIdx, setEditingIdx] = useState<number | null>(null);
   const [recents, setRecents] = useState<RecentMeal[]>([]);
-  const [showTemplates, setShowTemplates] = useState(false);
+  const [showTemplates, setShowTemplates] = useState(true);
   const [correctionHint, setCorrectionHint] = useState("");
   const [reanalyzing, setReanalyzing] = useState(false);
   const [feedback, setFeedback] = useState<"up" | "down" | null>(null);
@@ -66,10 +66,15 @@ export default function TrackerPage() {
   const router = useRouter();
 
   useEffect(() => {
-    const g = isGuest();
+    // Frictionless: if no account yet, start guest so saves always work
+    let acc = getSessionAccount();
+    if (!acc) {
+      enableGuest();
+      acc = getSessionAccount();
+    }
+    const g = isGuest() || acc?.id === "guest";
     setGuest(g);
-    const acc = getSessionAccount();
-    setLocalName(acc?.name || null);
+    setLocalName(acc?.name || "Guest");
     setLocalPaid(!!acc?.paid);
     supabase.auth.getUser().then(({ data: { user } }) => {
       setUser(user);
@@ -78,7 +83,7 @@ export default function TrackerPage() {
           .then((r) => r.json())
           .then((d) => setRecents((d.meals || []).slice(0, 10)))
           .catch(() => {});
-      } else if (g) {
+      } else {
         const meals = getGuestMeals().slice(0, 10).map((m) => ({
           id: m.id,
           items: (m.items || []) as any,
@@ -1010,9 +1015,9 @@ export default function TrackerPage() {
                   ? "Saving…"
                   : user
                     ? "Save meal"
-                    : localName
-                      ? `Save as ${localName}`
-                      : "Save (guest)"}
+                    : localName && localName !== "Guest"
+                      ? `Save · ${localName}`
+                      : "Save meal"}
               </button>
             </div>
           </div>

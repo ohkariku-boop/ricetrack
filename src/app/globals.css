@@ -246,7 +246,7 @@ html.light .text-muted-foreground {
 }
 
 .safe-bottom {
-  padding-bottom: calc(4.5rem + env(safe-area-inset-bottom, 0px));
+  padding-bottom: calc(5.75rem + env(safe-area-inset-bottom, 0px));
 }
 
 /* Active press for cards */

@@ -107,7 +107,7 @@ export default function SettingsPage() {
           <Link href="/dashboard" className="p-2 -ml-2 rounded-xl hover:bg-muted">
             <ArrowLeft className="w-5 h-5" />
           </Link>
-          <h1 className="font-semibold flex-1">Daily calorie goal</h1>
+          <h1 className="font-semibold flex-1">Settings</h1>
           <ThemeToggle />
         </div>
       </header>
@@ -119,9 +119,12 @@ export default function SettingsPage() {
           </div>
           <ThemeToggle />
         </div>
-        <p className="text-sm text-muted-foreground">
-          Override the plan calculator anytime. Experienced trackers stay in control.
-        </p>
+        <div>
+          <h2 className="text-sm font-semibold mb-1">Nutrition goals</h2>
+          <p className="text-sm text-muted-foreground">
+            Your daily targets for calories and macros. Change anytime.
+          </p>
+        </div>
         <div className="space-y-4">
           {(
             [

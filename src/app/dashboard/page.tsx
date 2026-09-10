@@ -652,7 +652,7 @@ export default function DashboardPage() {
 
         {remaining > 80 && user && (
           <div className="card-soft p-4 space-y-2">
-            <div className="text-sm font-medium">Still room today</div>
+            <div className="text-sm font-medium">Calories remaining</div>
             <div className="flex gap-2">
               <button type="button" onClick={balanceGently} className="btn-secondary flex-1 h-10 text-sm">
                 Balance gently
@@ -696,7 +696,7 @@ export default function DashboardPage() {
           {meals.length === 0 ? (
             <div className="card-soft p-8 text-center text-sm text-muted-foreground">
               {isViewingToday
-                ? "Nothing logged yet. Snap or type your next plate."
+                ? "No meals yet today. Tap Log a meal to snap or type a dish."
                 : "No meals logged on this day."}
             </div>
           ) : (
