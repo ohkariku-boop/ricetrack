@@ -23,6 +23,22 @@ type Food = {
 
 const PAGE_SIZE = 10;
 
+
+const CUISINE_AVATAR: Record<string, string> = {
+  chinese: "bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-300",
+  japanese: "bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300",
+  korean: "bg-orange-100 text-orange-800 dark:bg-orange-950 dark:text-orange-300",
+  thai: "bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-200",
+  vietnamese: "bg-lime-100 text-lime-900 dark:bg-lime-950 dark:text-lime-300",
+  indian: "bg-yellow-100 text-yellow-900 dark:bg-yellow-950 dark:text-yellow-200",
+  malay: "bg-emerald-100 text-emerald-900 dark:bg-emerald-950 dark:text-emerald-300",
+  indonesian: "bg-teal-100 text-teal-900 dark:bg-teal-950 dark:text-teal-300",
+  singaporean: "bg-cyan-100 text-cyan-900 dark:bg-cyan-950 dark:text-cyan-300",
+  filipino: "bg-sky-100 text-sky-900 dark:bg-sky-950 dark:text-sky-300",
+  western: "bg-indigo-100 text-indigo-900 dark:bg-indigo-950 dark:text-indigo-300",
+  other_asian: "bg-violet-100 text-violet-900 dark:bg-violet-950 dark:text-violet-300",
+};
+
 const CUISINES = [
   "all",
   "chinese",
@@ -151,9 +167,17 @@ export default function LibraryPage() {
               {items.map((f) => (
                 <div
                   key={f.id}
-                  className="card-soft p-3 flex items-start justify-between gap-3"
+                  className="card-soft p-3 flex items-start justify-between gap-3 pressable"
                 >
-                  <div className="min-w-0">
+                  <div
+                    className={`w-11 h-11 rounded-xl shrink-0 flex items-center justify-center text-xs font-bold uppercase ${
+                      CUISINE_AVATAR[f.cuisine] || "bg-muted text-muted-foreground"
+                    }`}
+                    aria-hidden
+                  >
+                    {(f.cuisine || "f").slice(0, 2)}
+                  </div>
+                  <div className="min-w-0 flex-1">
                     <div className="font-medium leading-snug">{f.name}</div>
                     {f.name_original && (
                       <div className="text-xs text-muted-foreground mt-0.5">{f.name_original}</div>

@@ -136,6 +136,15 @@ export function isPaidUser(): boolean {
   return getSessionAccount()?.paid === true;
 }
 
+
+/** Ensure a local session exists (defaults to guest). Call on every app shell page. */
+export function ensureLocalSession(): LocalAccount {
+  const existing = getSessionAccount();
+  if (existing) return existing;
+  enableGuest();
+  return getSessionAccount() || LOCAL_ACCOUNTS[0];
+}
+
 export function enableGuest(): void {
   enableAccount("guest");
 }

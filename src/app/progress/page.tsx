@@ -11,6 +11,7 @@ import {
   isLocalSession,
   needsOnboarding,
   setGuestProfile,
+  ensureLocalSession,
 } from "@/lib/guest";
 import { getWeightLogs, addWeightLog, type WeightLog } from "@/lib/activity";
 import { BottomNav } from "@/components/BottomNav";
@@ -36,6 +37,7 @@ export default function ProgressPage() {
   const [lastSleep, setLastSleep] = useState<string | null>(null);
 
   const refresh = () => {
+    ensureLocalSession();
     if (!isLocalSession()) {
       // still show local progress for demo accounts primarily
     }
@@ -151,6 +153,15 @@ export default function ProgressPage() {
       </header>
 
       <main className="mx-auto max-w-lg px-4 py-5 space-y-5 page-enter">
+        {weights.length === 0 && (
+          <div className="card-soft p-4 text-sm text-muted-foreground">
+            <p className="font-medium text-foreground mb-1">Build your progress</p>
+            Log meals on Home and add a weight below. Charts fill in as you go.
+            <Link href="/app" className="block mt-2 text-primary font-semibold text-sm">
+              Log a meal →
+            </Link>
+          </div>
+        )}
         <div className="grid grid-cols-2 gap-3">
           <div className="card-elevated p-4">
             <div className="text-xs text-muted-foreground">Sleep (7-day avg)</div>

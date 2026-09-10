@@ -7,7 +7,7 @@ import Link from "next/link";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { BottomNav } from "@/components/BottomNav";
 import { ArrowLeft, Loader2 } from "lucide-react";
-import { isLocalSession, getGuestProfile, setGuestProfile } from "@/lib/guest";
+import { isLocalSession, getGuestProfile, setGuestProfile, ensureLocalSession } from "@/lib/guest";
 
 export default function SettingsPage() {
   const [form, setForm] = useState({
@@ -26,6 +26,7 @@ export default function SettingsPage() {
 
   useEffect(() => {
     (async () => {
+      ensureLocalSession();
       const {
         data: { user },
       } = await supabase.auth.getUser();
@@ -43,7 +44,8 @@ export default function SettingsPage() {
         return;
       }
       if (!user) {
-        router.push("/login");
+        // stay on local session settings
+        setLoading(false);
         return;
       }
       const { data } = await supabase.from("profiles").select("*").eq("id", user.id).single();

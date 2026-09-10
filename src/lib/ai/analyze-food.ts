@@ -10,9 +10,10 @@ CRITICAL RULES FOR ASIAN FOOD:
 3. Flag hidden calorie risks: wok oil, coconut milk, peanut sauce, thick gravies, deep-frying, fatty cuts, sweet sauces.
 4. Portion strings MUST be in English by default, e.g. "1 bowl of rice (150g)", "1 plate of noodles", "small shared dish", "1 serving", "1 piece of dim sum". Do NOT use Chinese characters in portion unless the user explicitly wrote Chinese in their description.
 5. For set meals / combo plates (nasi lemak, chicken rice, bento, thali, economy rice, etc.):
-   - Set "meal_title" to the set name in English (e.g. "Nasi Lemak").
+   - Set "meal_title" to the common set name ONLY (e.g. "Nasi Lemak", "Chicken Rice", "Pad Thai") — never append "Rice", "Set", "Plate", or a component name.
    - List ONLY the component items with their own calories (coconut rice, egg, fried chicken, sambal…).
    - NEVER also add a full-calorie line item that duplicates the whole set (no item named "Nasi Lemak" with the full plate calories).
+   - meal_title must be short (2–4 words max). Prefer the dish name people say when ordering.
 6. Primary item names in English. Optional original script only in name_original.
 7. Be conservative on oil/fat estimation for stir-fries and fried foods — better to slightly overestimate than underestimate.
 8. Confidence should be lower for complex mixed dishes, soups, and items with heavy sauce.
@@ -46,6 +47,20 @@ Return ONLY valid JSON in this exact shape (no markdown, no extra text):
   "confidence_overall": 0.0 to 1.0,
   "warnings": ["optional list of warnings e.g. high oil risk"]
 }`;
+
+
+function normalizeMealTitle(title: string | undefined, items: { name?: string }[] | undefined): string {
+  let t = (title || "").trim();
+  if (!t && items?.length) {
+    // single item → use item name; multi → first distinctive or "Meal"
+    t = items.length === 1 ? String(items[0]?.name || "Meal") : "Meal";
+  }
+  // Strip awkward suffixes models add
+  t = t.replace(/\s+(rice|set|plate|bowl|combo|meal)$/i, "").trim();
+  // If title equals a component + " rice" style already stripped
+  if (t.length > 40) t = t.slice(0, 40).trim();
+  return t || "Meal";
+}
 
 export async function analyzeFoodPhoto(
   imageBase64: string,
@@ -144,7 +159,7 @@ export async function analyzeFoodPhoto(
       parsed.total_fat ||
       parsed.items.reduce((s, i) => s + i.fat, 0);
 
-    parsed.meal_title = parsed.meal_title || (parsed.items?.[0]?.name ?? "Meal");
+    parsed.meal_title = normalizeMealTitle(parsed.meal_title, parsed.items);
   // Drop combo line that duplicates the title with near-full calories
   if (parsed.meal_title && parsed.items?.length > 1) {
     const title = String(parsed.meal_title).toLowerCase().trim();
@@ -243,7 +258,7 @@ function normalizeAnalysis(parsed: MealAnalysis): MealAnalysis {
     parsed.total_fat ||
     parsed.items.reduce((s, i) => s + i.fat, 0);
 
-  parsed.meal_title = parsed.meal_title || (parsed.items?.[0]?.name ?? "Meal");
+  parsed.meal_title = normalizeMealTitle(parsed.meal_title, parsed.items);
   // Drop combo line that duplicates the title with near-full calories
   if (parsed.meal_title && parsed.items?.length > 1) {
     const title = String(parsed.meal_title).toLowerCase().trim();

@@ -27,7 +27,7 @@ import { RiceLogo } from "@/components/RiceLogo";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { BottomNav } from "@/components/BottomNav";
 import { scoreMeal, scoreColor } from "@/lib/health-score";
-import { isGuest, enableGuest, saveGuestMeal, getGuestMeals, getSessionAccount, isLocalSession } from "@/lib/guest";
+import { isGuest, enableGuest, ensureLocalSession, saveGuestMeal, getGuestMeals, getSessionAccount, isLocalSession } from "@/lib/guest";
 
 type RecentMeal = {
   id: string;
@@ -67,11 +67,7 @@ export default function TrackerPage() {
 
   useEffect(() => {
     // Frictionless: if no account yet, start guest so saves always work
-    let acc = getSessionAccount();
-    if (!acc) {
-      enableGuest();
-      acc = getSessionAccount();
-    }
+    const acc = ensureLocalSession();
     const g = isGuest() || acc?.id === "guest";
     setGuest(g);
     setLocalName(acc?.name || "Guest");
@@ -654,6 +650,16 @@ export default function TrackerPage() {
                   ))}
                 </div>
               )}
+            </div>
+
+
+            <div className="card-soft p-4 space-y-2 mt-2">
+              <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Tips</div>
+              <ul className="text-[13px] text-muted-foreground space-y-1.5 leading-snug">
+                <li>· Snap the whole plate — include rice, sides, and sauces.</li>
+                <li>· Or type “nasi lemak with fried chicken” for a fast estimate.</li>
+                <li>· Edit any item before saving — AI is a starting point.</li>
+              </ul>
             </div>
 
             {/* Recents — 10 max */}

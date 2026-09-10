@@ -101,7 +101,7 @@ export default function LandingPage() {
               Library
             </Link>
           </nav>
-          <Link href="/app" className="text-[12px] font-medium text-[#2d5a3d]">
+          <Link href="/app" className="text-[12px] font-medium text-[#3d8f5c]">
             Open →
           </Link>
         </div>
@@ -118,7 +118,7 @@ export default function LandingPage() {
               <br />
               Hard to fool
               <br />
-              <span className="text-[#2d5a3d]">on Asian food.</span>
+              <span className="text-[#3d8f5c]">on Asian food.</span>
             </h1>
             <p className="text-[14px] leading-snug text-[#1a1814]/55 max-w-sm">
               Snap or type. Rice bowls, noodles, curry, hawker sets — not Western defaults.
@@ -126,7 +126,7 @@ export default function LandingPage() {
             <div className="flex flex-wrap gap-2 pt-1">
               <Link
                 href="/app"
-                className="inline-flex h-10 px-6 items-center rounded-full bg-[#1a1814] text-[#f6f3ee] text-[13px] font-medium hover:bg-[#2d5a3d] transition-colors"
+                className="inline-flex h-10 px-6 items-center rounded-full bg-[#1a1814] text-[#f6f3ee] text-[13px] font-medium hover:bg-[#3d8f5c] transition-colors"
               >
                 Try free
               </Link>
@@ -222,7 +222,7 @@ export default function LandingPage() {
               ["Library", "1,000+ dishes · 10 per page · fast search."],
             ].map(([t, d]) => (
               <div key={t} className="space-y-1">
-                <h3 className="text-lg font-medium text-[#2d5a3d]">{t}</h3>
+                <h3 className="text-lg font-medium text-[#3d8f5c]">{t}</h3>
                 <p className="text-[13px] text-[#1a1814]/50 leading-snug">{d}</p>
               </div>
             ))}
@@ -262,7 +262,7 @@ export default function LandingPage() {
         </h2>
         <Link
           href="/app"
-          className="mt-6 inline-flex h-10 px-8 items-center rounded-full bg-[#1a1814] text-[#f6f3ee] text-[13px] hover:bg-[#2d5a3d] transition-colors"
+          className="mt-6 inline-flex h-10 px-8 items-center rounded-full bg-[#1a1814] text-[#f6f3ee] text-[13px] hover:bg-[#3d8f5c] transition-colors"
         >
           Open RiceTrack
         </Link>

@@ -4,7 +4,8 @@ import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { enableAccount, enableGuest, LOCAL_ACCOUNTS, needsOnboarding } from "@/lib/guest";
 import { Loader2, Crown } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 import Link from "next/link";
 import { RiceLogo } from "@/components/RiceLogo";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -16,6 +17,13 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const supabase = createClient();
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    if (searchParams.get("error") === "auth") {
+      setError("Sign-in link expired or invalid. Try again, or continue as Guest / Joe / Mel.");
+    }
+  }, [searchParams]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,7 +40,7 @@ export default function LoginPage() {
 
     setLoading(false);
     if (error) setError(error.message);
-    else setMessage("Check your email for the magic link");
+    else setMessage("Check your email for the magic link. If nothing arrives in a few minutes, check spam — or continue as Guest / Joe / Mel on this device.");
   };
 
   const pickAccount = (id: "guest" | "joe" | "mel") => {

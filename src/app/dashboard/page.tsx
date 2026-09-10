@@ -30,6 +30,7 @@ import {
   deleteGuestMeal,
   getSessionAccount,
   isLocalSession,
+  ensureLocalSession,
   needsOnboarding,
 } from "@/lib/guest";
 import type { FoodItem } from "@/types";
@@ -104,6 +105,10 @@ export default function DashboardPage() {
   const supabase = createClient();
 
   const load = async () => {
+    // Soft guest: never dump Try-free users on login for Home
+    if (typeof window !== "undefined") {
+      ensureLocalSession();
+    }
     const {
       data: { user },
     } = await supabase.auth.getUser();
@@ -155,7 +160,9 @@ export default function DashboardPage() {
     }
 
     if (!user) {
-      router.push("/login");
+      // Local session should already exist; reload path above handles it
+      ensureLocalSession();
+      setLoading(false);
       return;
     }
     setUser(user);
@@ -553,7 +560,7 @@ export default function DashboardPage() {
                 Enable motion
               </button>
             </div>
-            <div className="text-[10px] text-muted-foreground mt-1 capitalize">{stepSource}</div>
+            <div className="text-[10px] text-muted-foreground mt-1 capitalize">{stepSource === "estimate" ? "phone estimate" : stepSource}</div>
           </div>
           <div className="card-soft p-4">
             <div className="text-xs text-muted-foreground flex items-center gap-1">
