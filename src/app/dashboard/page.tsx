@@ -16,7 +16,6 @@ import {
   Plus,
   Trash2,
   Droplets,
-  Dumbbell,
   Footprints,
   Flame,
 } from "lucide-react";
@@ -38,13 +37,12 @@ import { localDateKey, localDateKeyFromIso, startOfLocalDay } from "@/lib/dates"
 import { BottomNav } from "@/components/BottomNav";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { WellnessCard } from "@/components/WellnessCard";
+import { MovementCard } from "@/components/MovementCard";
 import {
   weekStrip,
   getWaterMl,
   setWaterMl,
   getActivities,
-  addActivity,
-  deleteActivity,
   type ActivityLog,
 } from "@/lib/activity";
 import { getTodaySteps, getStepsForDate, setTodaySteps, addTodaySteps, startStepListener } from "@/lib/steps";
@@ -643,55 +641,14 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Movement today */}
-        <div className="card-soft p-4 space-y-3">
-          <div className="flex items-center justify-between">
-            <div className="text-sm font-medium flex items-center gap-1.5">
-              <Flame className="w-4 h-4 text-orange-500" />
-              Movement
-            </div>
-            <span className="text-xs text-muted-foreground tabular-nums">
-              {activities.reduce((s, a) => s + a.calories, 0)} kcal burned
-            </span>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {(
-              [
-                ["walk", "Walk 20m", 70, Footprints],
-                ["weights", "Weights 30m", 120, Dumbbell],
-                ["cardio", "Cardio 20m", 150, Flame],
-              ] as const
-            ).map(([type, label, cal, Icon]) => (
-              <button
-                key={type}
-                type="button"
-                className="text-xs font-medium px-3 py-2 rounded-full border border-border bg-card hover:border-primary/40 flex items-center gap-1.5"
-                onClick={() => {
-                  addActivity({
-                    type: type as "walk" | "weights" | "cardio",
-                    label,
-                    calories: cal,
-                    minutes: type === "weights" ? 30 : 20,
-                  });
-                  setActivities(getActivities(todayKey));
-                }}
-              >
-                <Icon className="w-3.5 h-3.5" />
-                {label}
-              </button>
-            ))}
-          </div>
-          {activities.length > 0 && (
-            <div className="space-y-1.5 pt-1">
-              {activities.slice(0, 5).map((a) => (
-                <div key={a.id} className="flex justify-between text-xs text-muted-foreground">
-                  <span>{a.label}</span>
-                  <span className="tabular-nums">+{a.calories} kcal</span>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+        <MovementCard
+          date={selectedDate}
+          activities={activities}
+          readOnly={!isViewingToday}
+          onChange={() => {
+            setActivities(getActivities(selectedDate));
+          }}
+        />
 
         {remaining > 80 && user && (
           <div className="card-soft p-4 space-y-2">

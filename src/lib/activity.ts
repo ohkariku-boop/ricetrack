@@ -1,21 +1,23 @@
 import { localDateKey } from "@/lib/dates";
-/** Local activity, water, weight logs — per account */
-
 import { getSessionAccount, type LocalAccountId } from "@/lib/guest";
 
 export type WeightLog = { date: string; weight_kg: number };
+
+export type ActivityType = "walk" | "weights" | "cardio" | "other";
+
 export type ActivityLog = {
   id: string;
   date: string;
-  type: "steps" | "weights" | "cardio" | "walk" | "other";
+  type: ActivityType;
   label: string;
   calories: number;
+  /** duration in minutes */
   minutes?: number;
-  steps?: number;
-};
-export type DayMeta = {
-  date: string;
-  water_ml: number;
+  /** walking / running distance */
+  distance_km?: number;
+  sets?: number;
+  reps?: number;
+  note?: string;
 };
 
 function accountId(): LocalAccountId {
@@ -24,6 +26,42 @@ function accountId(): LocalAccountId {
 
 function k(suffix: string) {
   return `ricetrack_${suffix}_${accountId()}`;
+}
+
+/** Rough kcal estimates — honest enough for logging, not lab-grade */
+export function estimateActivityCalories(input: {
+  type: ActivityType;
+  minutes?: number;
+  distance_km?: number;
+  sets?: number;
+  reps?: number;
+}): number {
+  const { type, minutes = 0, distance_km = 0, sets = 0, reps = 0 } = input;
+  if (type === "walk") {
+    if (distance_km > 0) return Math.round(distance_km * 55); // ~55 kcal/km easy pace
+    if (minutes > 0) return Math.round(minutes * 4); // ~4 kcal/min walking
+  }
+  if (type === "cardio") {
+    if (minutes > 0) return Math.round(minutes * 8);
+  }
+  if (type === "weights") {
+    // strength: prefer volume proxy, else time
+    if (sets > 0 && reps > 0) return Math.round(sets * reps * 0.5 + sets * 5);
+    if (minutes > 0) return Math.round(minutes * 5);
+  }
+  if (minutes > 0) return Math.round(minutes * 5);
+  return 50;
+}
+
+export function formatActivityDetail(a: ActivityLog): string {
+  const parts: string[] = [];
+  if (a.distance_km) parts.push(`${a.distance_km} km`);
+  if (a.minutes) parts.push(`${a.minutes} min`);
+  if (a.sets && a.reps) parts.push(`${a.sets}×${a.reps} reps`);
+  else if (a.sets) parts.push(`${a.sets} sets`);
+  else if (a.reps) parts.push(`${a.reps} reps`);
+  if (a.note) parts.push(a.note);
+  return parts.join(" · ");
 }
 
 export function getWeightLogs(): WeightLog[] {
@@ -56,7 +94,9 @@ export function getActivities(date?: string): ActivityLog[] {
   }
 }
 
-export function addActivity(input: Omit<ActivityLog, "id" | "date"> & { date?: string }): ActivityLog {
+export function addActivity(
+  input: Omit<ActivityLog, "id" | "date"> & { date?: string }
+): ActivityLog {
   const entry: ActivityLog = {
     ...input,
     id: `act_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
@@ -98,7 +138,6 @@ export function loggedDaysSet(mealDates: string[]): Set<string> {
   return new Set(mealDates.map((d) => d.slice(0, 10)));
 }
 
-/** Week Sun→Sat containing `anchor` (local). weekOffset: -1 = previous week */
 export function weekStrip(
   anchor = new Date(),
   weekOffset = 0
