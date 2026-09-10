@@ -268,13 +268,56 @@ export default function LandingPage() {
         </Link>
       </section>
 
-      <footer className="px-4 sm:px-6 py-6 border-t border-[#1a1814]/8 text-[11px] text-[#1a1814]/40">
-        <div className="mx-auto max-w-6xl flex flex-col sm:flex-row justify-between gap-3">
-          <span>© {new Date().getFullYear()} RiceTrack</span>
-          <div className="flex gap-5">
-            <Link href="/app">App</Link>
-            <Link href="/library">Library</Link>
-            <Link href="/login">Sign in</Link>
+      <footer className="px-4 sm:px-6 py-10 border-t border-[#1a1814]/8 text-[11px] text-[#1a1814]/45">
+        <div className="mx-auto max-w-6xl flex flex-col gap-6">
+          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-6">
+            <div className="space-y-1.5 max-w-xs">
+              <div className="flex items-center gap-2 text-[13px] font-semibold text-[#1a1814]/70">
+                <RiceLogo size={22} />
+                RiceTrack
+              </div>
+              <p className="leading-relaxed">
+                Asia-first calorie tracking. Estimates only — not medical advice.
+              </p>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-8 text-[12px]">
+              <div className="space-y-2">
+                <div className="font-semibold text-[#1a1814]/55 uppercase tracking-wide text-[10px]">
+                  Product
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <Link href="/app" className="hover:text-[#1a1814] transition-colors">
+                    Open app
+                  </Link>
+                  <Link href="/library" className="hover:text-[#1a1814] transition-colors">
+                    Food library
+                  </Link>
+                  <Link href="/login" className="hover:text-[#1a1814] transition-colors">
+                    Sign in
+                  </Link>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <div className="font-semibold text-[#1a1814]/55 uppercase tracking-wide text-[10px]">
+                  Legal
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <Link href="/terms" className="hover:text-[#1a1814] transition-colors">
+                    Terms of Service
+                  </Link>
+                  <Link href="/privacy" className="hover:text-[#1a1814] transition-colors">
+                    Privacy Policy
+                  </Link>
+                  <Link href="/disclaimer" className="hover:text-[#1a1814] transition-colors">
+                    Disclaimer
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col sm:flex-row justify-between gap-2 pt-4 border-t border-[#1a1814]/8">
+            <span>© {new Date().getFullYear()} RiceTrack. All rights reserved.</span>
+            <span className="text-[#1a1814]/35">Built for Asian plates first.</span>
           </div>
         </div>
       </footer>
