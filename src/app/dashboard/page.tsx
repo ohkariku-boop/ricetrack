@@ -413,7 +413,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background safe-bottom page-enter">
+    <div className="min-h-screen bg-background safe-bottom">
       <header className="sticky top-0 z-40 border-b border-border/60 bg-background/90 backdrop-blur-xl">
         <div className="mx-auto max-w-lg px-4 h-14 flex items-center justify-between">
           <div className="leading-tight">
@@ -442,7 +442,7 @@ export default function DashboardPage() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-lg px-4 py-5 space-y-5">
+      <main className="mx-auto max-w-lg px-4 py-5 space-y-5 page-enter">
         {/* Week strip — tap a day to view history */}
         <div className="space-y-2">
           <div className="flex items-center justify-between">

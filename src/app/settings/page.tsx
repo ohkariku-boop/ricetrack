@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { BottomNav } from "@/components/BottomNav";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { isLocalSession, getGuestProfile, setGuestProfile } from "@/lib/guest";
 
@@ -100,7 +101,7 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background page-enter">
+    <div className="min-h-screen bg-background safe-bottom">
       <header className="sticky top-0 z-20 border-b border-border/60 bg-background/80 backdrop-blur-xl">
         <div className="mx-auto max-w-lg px-5 h-14 flex items-center gap-3">
           <Link href="/dashboard" className="p-2 -ml-2 rounded-xl hover:bg-muted">
@@ -173,6 +174,7 @@ export default function SettingsPage() {
           </div>
         )}
       </main>
+      <BottomNav />
     </div>
   );
 }

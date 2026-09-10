@@ -134,7 +134,7 @@ export default function ProgressPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background safe-bottom page-enter">
+    <div className="min-h-screen bg-background safe-bottom">
       <header className="sticky top-0 z-30 border-b border-border/60 bg-background/90 backdrop-blur-xl">
         <div className="mx-auto max-w-lg px-4 h-14 flex items-center justify-between">
           <div>
@@ -150,7 +150,7 @@ export default function ProgressPage() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-lg px-4 py-5 space-y-5">
+      <main className="mx-auto max-w-lg px-4 py-5 space-y-5 page-enter">
         <div className="grid grid-cols-2 gap-3">
           <div className="card-elevated p-4">
             <div className="text-xs text-muted-foreground">Sleep (7-day avg)</div>

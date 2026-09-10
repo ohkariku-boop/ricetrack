@@ -275,3 +275,15 @@ html.dark .skeleton {
   background: var(--primary);
   margin-top: 2px;
 }
+
+
+/* Bottom nav must stay viewport-fixed (never inside a transformed parent) */
+.bottom-nav-fixed {
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 100 !important;
+  transform: none !important;
+  -webkit-transform: none !important;
+}

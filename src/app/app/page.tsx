@@ -25,6 +25,7 @@ import { useRouter } from "next/navigation";
 import { MEAL_TEMPLATES, PORTION_PRESETS } from "@/data/meal-templates";
 import { RiceLogo } from "@/components/RiceLogo";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { BottomNav } from "@/components/BottomNav";
 import { scoreMeal, scoreColor } from "@/lib/health-score";
 import { isGuest, enableGuest, saveGuestMeal, getGuestMeals, getSessionAccount, isLocalSession } from "@/lib/guest";
 
@@ -477,7 +478,7 @@ export default function TrackerPage() {
   );
 
   return (
-    <div className="min-h-screen flex flex-col bg-background page-enter">
+    <div className="min-h-screen flex flex-col bg-background safe-bottom">
       <header className="sticky top-0 z-20 bg-background/90 backdrop-blur-xl border-b border-border/60">
         <div className="mx-auto max-w-lg px-5 h-14 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
@@ -1017,6 +1018,7 @@ export default function TrackerPage() {
           </div>
         )}
       </main>
+      <BottomNav />
     </div>
   );
 }

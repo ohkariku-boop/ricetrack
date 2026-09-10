@@ -17,7 +17,17 @@ const ITEMS = [
 export function BottomNav() {
   const path = usePathname();
   return (
-    <nav className="fixed bottom-0 inset-x-0 z-40 border-t border-border/70 bg-background/90 backdrop-blur-xl pb-[env(safe-area-inset-bottom)]">
+    <nav
+      className="bottom-nav-fixed border-t border-border/70 bg-background/95 backdrop-blur-xl"
+      style={{
+        position: "fixed",
+        bottom: 0,
+        left: 0,
+        right: 0,
+        zIndex: 100,
+        paddingBottom: "env(safe-area-inset-bottom, 0px)",
+      }}
+    >
       <div className="mx-auto max-w-lg grid grid-cols-5 h-[3.6rem]">
         {ITEMS.map(({ href, label, icon: Icon }) => {
           const active =
@@ -49,7 +59,9 @@ export function BottomNav() {
                 />
               ) : null}
               <span className={cn(href === "/app" && "mt-0.5")}>{label}</span>
-              {active && href !== "/app" && <span className="nav-active-dot absolute bottom-1" />}
+              {active && href !== "/app" && (
+                <span className="nav-active-dot absolute bottom-1" />
+              )}
             </Link>
           );
         })}
