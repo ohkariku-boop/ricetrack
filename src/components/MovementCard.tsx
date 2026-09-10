@@ -73,39 +73,6 @@ export function MovementCard({ date, activities, onChange, readOnly }: Props) {
     else setName("");
   };
 
-  const save = () => {
-    const cal = Number(kcal) > 0 ? Math.round(Number(kcal)) : estimated;
-    if (cal <= 0 && !name.trim()) return;
-
-    const label =
-      name.trim() ||
-      (type === "walk"
-        ? "Walk"
-        : type === "weights"
-          ? "Weights"
-          : type === "cardio"
-            ? "Cardio"
-            : "Activity");
-
-    addActivity({
-      type,
-      label,
-      calories: Math.max(1, cal),
-      minutes: Number(minutes) || undefined,
-      distance_km: Number(km) || undefined,
-      sets: Number(sets) || undefined,
-      reps: Number(reps) || undefined,
-      date,
-    });
-    onChange(
-      // re-read would need getActivities — parent passes refresh
-      []
-    );
-    // Parent should refresh; call with getActivities via callback pattern
-    resetForm();
-    setOpen(false);
-  };
-
   const handleSave = () => {
     const cal = Number(kcal) > 0 ? Math.round(Number(kcal)) : estimated;
     if (cal <= 0) return;
