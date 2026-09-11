@@ -1,12 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
 
 const SESSION_KEY = "rt_splash_shown";
 
-function isMarketingPath(path: string | null) {
-  if (!path) return false;
+function isMarketingPath(path: string) {
   return (
     path === "/" ||
     path.startsWith("/terms") ||
@@ -15,32 +13,32 @@ function isMarketingPath(path: string | null) {
   );
 }
 
-/** Phone/PWA launch: rice bowl spins 2 turns in 2s; background stays still. */
+/**
+ * PWA/app launch splash. Avoid usePathname() here so we don't need a Suspense
+ * boundary in the root layout (that was crashing the client).
+ */
 export function LaunchSplash() {
-  const path = usePathname();
-  const marketing = isMarketingPath(path);
-
-  // Start visible for app routes so no logo flash before splash
-  const [show, setShow] = useState(() => !marketing);
+  const [show, setShow] = useState(false);
   const [leaving, setLeaving] = useState(false);
 
   useEffect(() => {
     document.documentElement.classList.add("rt-hydrated");
-    // Remove static boot cover; this component owns the splash now
     const boot = document.getElementById("rt-boot-splash");
     if (boot) boot.remove();
 
-    if (marketing) {
+    const path = window.location.pathname || "/";
+    if (isMarketingPath(path)) {
       setShow(false);
       return;
     }
+
     try {
       if (sessionStorage.getItem(SESSION_KEY)) {
         setShow(false);
         return;
       }
     } catch {
-      /* ignore */
+      /* private mode */
     }
 
     setShow(true);
@@ -54,13 +52,14 @@ export function LaunchSplash() {
         /* ignore */
       }
     }, 2400);
+
     return () => {
       window.clearTimeout(t1);
       window.clearTimeout(t2);
     };
-  }, [path, marketing]);
+  }, []);
 
-  if (!show || marketing) return null;
+  if (!show) return null;
 
   return (
     <div
@@ -73,7 +72,6 @@ export function LaunchSplash() {
       }}
       aria-hidden
     >
-      {/* Circle clips the plate; only the bowl spins, not the full-screen bg */}
       <div
         className="relative overflow-hidden rounded-full bg-[#e8f5ec]"
         style={{ width: 192, height: 192 }}

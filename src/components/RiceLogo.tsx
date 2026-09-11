@@ -1,5 +1,4 @@
 import { cn } from "@/lib/utils";
-import Image from "next/image";
 
 type Props = {
   className?: string;
@@ -8,7 +7,7 @@ type Props = {
   rounded?: boolean;
 };
 
-/** RiceTrack mark — plate of rice illustration */
+/** RiceTrack mark — plate of rice illustration (plain img, no next/image) */
 export function RiceLogo({
   className,
   size = 28,
@@ -16,7 +15,8 @@ export function RiceLogo({
   rounded = true,
 }: Props) {
   return (
-    <Image
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
       src="/logo-plate.png"
       alt={title}
       width={size}
@@ -26,7 +26,7 @@ export function RiceLogo({
         rounded && "rounded-[22%]",
         className
       )}
-      priority
+      draggable={false}
     />
   );
 }
