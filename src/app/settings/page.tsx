@@ -6,8 +6,18 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { BottomNav } from "@/components/BottomNav";
-import { ArrowLeft, Loader2 } from "lucide-react";
+import { ArrowLeft, Loader2, Bell } from "lucide-react";
 import { isLocalSession, getGuestProfile, setGuestProfile, ensureLocalSession } from "@/lib/guest";
+import {
+  DEFAULT_REMINDERS,
+  getReminderSettings,
+  saveReminderSettings,
+  requestNotificationPermission,
+  notificationPermission,
+  registerServiceWorker,
+  startReminderScheduler,
+  type ReminderSettings,
+} from "@/lib/reminders";
 
 export default function SettingsPage() {
   const [form, setForm] = useState({
@@ -21,10 +31,15 @@ export default function SettingsPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
+  const [reminders, setReminders] = useState<ReminderSettings>(DEFAULT_REMINDERS);
+  const [perm, setPerm] = useState<NotificationPermission | "unsupported">("default");
+  const [reminderMsg, setReminderMsg] = useState<string | null>(null);
   const router = useRouter();
   const supabase = createClient();
 
   useEffect(() => {
+    setReminders(getReminderSettings());
+    setPerm(notificationPermission());
     (async () => {
       ensureLocalSession();
       const {
@@ -44,7 +59,6 @@ export default function SettingsPage() {
         return;
       }
       if (!user) {
-        // stay on local session settings
         setLoading(false);
         return;
       }
@@ -91,7 +105,50 @@ export default function SettingsPage() {
     });
     setSaving(false);
     if (error) setMsg(error.message);
-    else setMsg("Saved, your daily calorie goal is under your control.");
+    else setMsg("Saved. Your daily calorie goal is under your control.");
+  };
+
+  const persistReminders = (next: ReminderSettings) => {
+    setReminders(next);
+    saveReminderSettings(next);
+  };
+
+  const enableReminders = async () => {
+    setReminderMsg(null);
+    await registerServiceWorker();
+    const p = await requestNotificationPermission();
+    setPerm(p);
+    if (p === "unsupported") {
+      setReminderMsg("Notifications are not supported in this browser.");
+      return;
+    }
+    if (p !== "granted") {
+      setReminderMsg("Permission blocked. Enable notifications in browser or phone settings.");
+      return;
+    }
+    const next = { ...reminders, enabled: true };
+    persistReminders(next);
+    startReminderScheduler();
+    setReminderMsg("Reminders on. Keep the app installed for best results on Android.");
+  };
+
+  const disableReminders = () => {
+    persistReminders({ ...reminders, enabled: false });
+    setReminderMsg("Reminders off.");
+  };
+
+  const testReminder = async () => {
+    setReminderMsg(null);
+    await registerServiceWorker();
+    const p = await requestNotificationPermission();
+    setPerm(p);
+    if (p !== "granted") {
+      setReminderMsg("Allow notifications first.");
+      return;
+    }
+    const { showMealReminder } = await import("@/lib/reminders");
+    await showMealReminder({ id: "test", label: "Test", time: "00:00", enabled: true });
+    setReminderMsg("Test notification sent.");
   };
 
   if (loading) {
@@ -121,6 +178,87 @@ export default function SettingsPage() {
           </div>
           <ThemeToggle />
         </div>
+
+        {/* Meal reminders */}
+        <div className="card-soft p-4 space-y-4">
+          <div className="flex items-start gap-3">
+            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+              <Bell className="w-5 h-5 text-primary" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <div className="text-sm font-medium">Meal reminders</div>
+              <div className="text-xs text-muted-foreground mt-0.5">
+                Local alerts to log breakfast, lunch, or dinner. No account required.
+              </div>
+            </div>
+          </div>
+
+          <div className="flex gap-2">
+            {!reminders.enabled ? (
+              <button type="button" onClick={enableReminders} className="btn-primary flex-1 h-11 text-sm">
+                Turn on
+              </button>
+            ) : (
+              <button type="button" onClick={disableReminders} className="btn-secondary flex-1 h-11 text-sm">
+                Turn off
+              </button>
+            )}
+            <button type="button" onClick={testReminder} className="btn-secondary h-11 px-4 text-sm">
+              Test
+            </button>
+          </div>
+
+          <div className="text-[11px] text-muted-foreground">
+            Permission:{" "}
+            <span className="font-medium text-foreground">
+              {perm === "granted" ? "allowed" : perm === "denied" ? "blocked" : perm === "unsupported" ? "unsupported" : "not asked"}
+            </span>
+            {reminders.enabled ? " · reminders on" : " · reminders off"}
+          </div>
+
+          <div className="space-y-3 pt-1">
+            {reminders.slots.map((slot, idx) => (
+              <div key={slot.id} className="flex items-center gap-3">
+                <label className="flex items-center gap-2 min-w-[5.5rem]">
+                  <input
+                    type="checkbox"
+                    checked={slot.enabled}
+                    onChange={(e) => {
+                      const slots = reminders.slots.map((s, i) =>
+                        i === idx ? { ...s, enabled: e.target.checked } : s
+                      );
+                      persistReminders({ ...reminders, slots });
+                    }}
+                    className="rounded border-border"
+                  />
+                  <span className="text-sm font-medium">{slot.label}</span>
+                </label>
+                <input
+                  type="time"
+                  value={slot.time}
+                  onChange={(e) => {
+                    const slots = reminders.slots.map((s, i) =>
+                      i === idx ? { ...s, time: e.target.value || s.time } : s
+                    );
+                    persistReminders({ ...reminders, slots });
+                  }}
+                  className="input-modern flex-1 px-3 py-2 text-sm"
+                />
+              </div>
+            ))}
+          </div>
+
+          <p className="text-[11px] text-muted-foreground leading-relaxed">
+            Works best on Android Chrome when RiceTrack is installed to the home screen. iPhone needs
+            Add to Home Screen and notification permission. Alerts are most reliable when the app has
+            been opened recently.
+          </p>
+
+          {reminderMsg && (
+            <div className="rounded-xl bg-muted px-3 py-2 text-xs text-center">{reminderMsg}</div>
+          )}
+        </div>
+
         <div>
           <h2 className="text-sm font-semibold mb-1">Nutrition goals</h2>
           <p className="text-sm text-muted-foreground">
