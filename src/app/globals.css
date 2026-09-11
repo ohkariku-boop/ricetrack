@@ -302,3 +302,16 @@ html.dark .skeleton {
 @media (prefers-reduced-motion: reduce) {
   .marquee-track { animation: none; }
 }
+
+
+/* PWA launch: bowl only spins (2 turns / 2s) */
+@keyframes rt-bowl-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(720deg); }
+}
+.rt-bowl-spin {
+  animation: rt-bowl-spin 2s linear forwards;
+}
+@media (prefers-reduced-motion: reduce) {
+  .rt-bowl-spin { animation: none; }
+}

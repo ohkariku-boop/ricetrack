@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { LaunchSplash } from "@/components/LaunchSplash";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -82,7 +83,8 @@ export default function RootLayout({
         <meta name="mobile-web-app-capable" content="yes" />
       </head>
       <body className="min-h-full flex flex-col antialiased bg-background text-foreground">
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <LaunchSplash />{children}</ThemeProvider>
       </body>
     </html>
   );
