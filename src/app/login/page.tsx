@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { enableAccount, enableGuest, LOCAL_ACCOUNTS, needsOnboarding } from "@/lib/guest";
 import { Loader2, Crown } from "lucide-react";
@@ -10,7 +10,7 @@ import Link from "next/link";
 import { RiceLogo } from "@/components/RiceLogo";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
-export default function LoginPage() {
+function LoginContent() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
@@ -141,5 +141,19 @@ export default function LoginPage() {
         </p>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-background">
+          <Loader2 className="w-6 h-6 animate-spin text-primary" />
+        </div>
+      }
+    >
+      <LoginContent />
+    </Suspense>
   );
 }
