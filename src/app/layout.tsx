@@ -84,7 +84,9 @@ export default function RootLayout({
       </head>
       <body className="min-h-full flex flex-col antialiased bg-background text-foreground">
         <ThemeProvider>
-          <LaunchSplash />{children}</ThemeProvider>
+          <LaunchSplash />
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );
