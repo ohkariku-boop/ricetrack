@@ -7,7 +7,7 @@ type Props = {
   rounded?: boolean;
 };
 
-/** Bowl of rice mark — RiceTrack brand (full-bleed light green) */
+/** Refined rice bowl mark — full-bleed light green */
 export function RiceLogo({
   className,
   size = 28,
@@ -25,52 +25,46 @@ export function RiceLogo({
       aria-label={title}
     >
       <rect width="64" height="64" fill="#3d8f5c" />
-      <path d="M14 30c0 12 8 20 18 20s18-8 18-20H14z" fill="#245a3a" />
-      <ellipse cx="32" cy="30" rx="20" ry="6" fill="#2d6b45" />
-      <ellipse cx="32" cy="26" rx="16" ry="10" fill="#F5ECD8" />
-      <ellipse cx="32" cy="24" rx="13" ry="7" fill="#FBF6EC" />
-      <ellipse
-        cx="26"
-        cy="22"
-        rx="2.2"
-        ry="3.2"
-        fill="#E8D9B8"
-        transform="rotate(-25 26 22)"
+      <path
+        d="M24 14c0 0 1.5-3 0-5"
+        stroke="#ffffff"
+        strokeOpacity="0.35"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        fill="none"
       />
-      <ellipse
-        cx="32"
-        cy="20"
-        rx="2.2"
-        ry="3.2"
-        fill="#EDE3C8"
-        transform="rotate(8 32 20)"
+      <path
+        d="M32 12c0 0 1.5-3.5 0-6"
+        stroke="#ffffff"
+        strokeOpacity="0.4"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        fill="none"
       />
-      <ellipse
-        cx="38"
-        cy="22"
-        rx="2.2"
-        ry="3.2"
-        fill="#E8D9B8"
-        transform="rotate(22 38 22)"
+      <path
+        d="M40 14c0 0 1.5-3 0-5"
+        stroke="#ffffff"
+        strokeOpacity="0.35"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        fill="none"
       />
-      <ellipse
-        cx="28"
-        cy="27"
-        rx="2"
-        ry="2.8"
-        fill="#E0D0A8"
-        transform="rotate(-10 28 27)"
-      />
-      <ellipse
-        cx="35"
-        cy="26"
-        rx="2"
-        ry="2.8"
-        fill="#E8D9B8"
-        transform="rotate(15 35 26)"
-      />
-      <ellipse cx="31" cy="28" rx="1.8" ry="2.5" fill="#F0E6D0" />
-      <ellipse cx="32" cy="30" rx="18" ry="3.5" fill="#ffffff" opacity="0.1" />
+      <path d="M12 32c1.5 14 9 22 20 22s18.5-8 20-22H12z" fill="#1e4d32" />
+      <path d="M14 32c1.2 12 8 18.5 18 18.5S48.8 44 50 32H14z" fill="#163d28" />
+      <ellipse cx="32" cy="32" rx="21" ry="7" fill="#2a6b45" />
+      <ellipse cx="32" cy="31.5" rx="19" ry="5.5" fill="#348555" />
+      <ellipse cx="32" cy="28" rx="17" ry="11" fill="#F7F0E0" />
+      <ellipse cx="32" cy="25.5" rx="14.5" ry="8.5" fill="#FFFBF3" />
+      <ellipse cx="24" cy="24" rx="2.4" ry="3.4" fill="#E8D9B5" transform="rotate(-30 24 24)" />
+      <ellipse cx="29" cy="21" rx="2.3" ry="3.3" fill="#EDE3C8" transform="rotate(-5 29 21)" />
+      <ellipse cx="35" cy="20.5" rx="2.3" ry="3.3" fill="#E5D6B0" transform="rotate(12 35 20.5)" />
+      <ellipse cx="40" cy="24" rx="2.4" ry="3.4" fill="#E8D9B5" transform="rotate(28 40 24)" />
+      <ellipse cx="26" cy="29" rx="2.1" ry="3" fill="#E0D0A5" transform="rotate(-18 26 29)" />
+      <ellipse cx="32" cy="27" rx="2.2" ry="3.1" fill="#F0E6D0" />
+      <ellipse cx="38" cy="29" rx="2.1" ry="3" fill="#E8D9B5" transform="rotate(20 38 29)" />
+      <ellipse cx="30" cy="31.5" rx="1.9" ry="2.7" fill="#EDE3C8" transform="rotate(-8 30 31.5)" />
+      <ellipse cx="35.5" cy="32" rx="1.9" ry="2.7" fill="#E5D6B0" transform="rotate(10 35.5 32)" />
+      <ellipse cx="32" cy="31" rx="17" ry="2.8" fill="#ffffff" opacity="0.12" />
     </svg>
   );
 }

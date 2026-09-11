@@ -4,7 +4,31 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Home, BookOpen, TrendingUp, Settings2 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { RiceLogo } from "@/components/RiceLogo";
+
+/** Center Log mark — fork + spoon (not the app favicon) */
+function LogUtensils({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.85"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden
+    >
+      {/* fork */}
+      <path d="M6 3v4.5c0 1 .6 1.5 1.4 1.5H8" />
+      <path d="M6 3c0 0 .2 2.2 0 3.2" />
+      <path d="M8.2 3v3.2" />
+      <path d="M10.2 3c0 0-.2 2.2 0 3.2" />
+      <path d="M8.1 9v12" />
+      {/* spoon */}
+      <path d="M16.5 8.5c1.8 0 3.2-1.5 3.2-3.2S18.3 2 16.5 2s-3.2 1.5-3.2 3.3c0 1.2.6 2.2 1.6 2.8v13.9" />
+    </svg>
+  );
+}
 
 const ITEMS = [
   { href: "/dashboard", label: "Home", icon: Home },
@@ -46,11 +70,11 @@ export function BottomNav() {
                   className={cn(
                     "w-11 h-11 -mt-6 rounded-full flex items-center justify-center shadow-lg border transition-transform",
                     active
-                      ? "bg-primary border-primary scale-105"
-                      : "bg-card border-border"
+                      ? "bg-primary border-primary text-primary-foreground scale-105"
+                      : "bg-card border-border text-foreground"
                   )}
                 >
-                  <RiceLogo size={24} />
+                  <LogUtensils className="w-5 h-5" />
                 </span>
               ) : Icon ? (
                 <Icon
