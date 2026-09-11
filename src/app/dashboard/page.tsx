@@ -520,20 +520,6 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <TodayStrip
-          key={restTick}
-          steps={steps}
-          waterMl={waterMl}
-          sleepHours={sleepHoursForDate(selectedDate)}
-          energy={energyLevelForDate(selectedDate)}
-          readOnly={!isViewingToday}
-          onWater={(delta) => {
-            const next = Math.max(0, waterMl + delta);
-            setWaterMl(next, selectedDate);
-            setWaterMlState(next);
-          }}
-        />
-
         {/* Nutrition */}
         <div className="space-y-3 rounded-2xl border border-primary/15 bg-primary/[0.03] p-3">
           <div className="text-[11px] font-semibold uppercase tracking-wide text-primary px-1">Nutrition</div>
@@ -576,33 +562,6 @@ export default function DashboardPage() {
           </p>
         )}
         </div>
-
-        <div className="space-y-3 rounded-2xl border border-orange-500/15 bg-orange-500/[0.04] p-3">
-          <div className="text-[11px] font-semibold uppercase tracking-wide text-orange-600 dark:text-orange-400 px-1">
-            Move
-          </div>
-          <MovementCard
-            date={selectedDate}
-            activities={activities}
-            readOnly={!isViewingToday}
-            onChange={() => {
-              setActivities(getActivities(selectedDate));
-            }}
-          />
-        </div>
-
-        <RestCard
-          date={selectedDate}
-          readOnly={!isViewingToday}
-          onUpdate={() => setRestTick((n) => n + 1)}
-        />
-
-        <WeekConsistency
-          mealFlags={weekMealFlags(loggedDaySet)}
-          moveFlags={weekMoveFlags()}
-        />
-
-        <BodyCard readOnly={!isViewingToday} />
 
         {remaining > 80 && user && (
           <div className="card-soft p-4 space-y-2">
@@ -759,6 +718,48 @@ export default function DashboardPage() {
             </div>
           )}
         </div>
+
+        <TodayStrip
+          key={restTick}
+          steps={steps}
+          waterMl={waterMl}
+          sleepHours={sleepHoursForDate(selectedDate)}
+          energy={energyLevelForDate(selectedDate)}
+          readOnly={!isViewingToday}
+          onWater={(delta) => {
+            const next = Math.max(0, waterMl + delta);
+            setWaterMl(next, selectedDate);
+            setWaterMlState(next);
+          }}
+        />
+
+        <div className="space-y-3 rounded-2xl border border-orange-500/15 bg-orange-500/[0.04] p-3">
+          <div className="text-[11px] font-semibold uppercase tracking-wide text-orange-600 dark:text-orange-400 px-1">
+            Move
+          </div>
+          <MovementCard
+            date={selectedDate}
+            activities={activities}
+            readOnly={!isViewingToday}
+            onChange={() => {
+              setActivities(getActivities(selectedDate));
+            }}
+          />
+        </div>
+
+        <RestCard
+          date={selectedDate}
+          readOnly={!isViewingToday}
+          onUpdate={() => setRestTick((n) => n + 1)}
+        />
+
+        <WeekConsistency
+          mealFlags={weekMealFlags(loggedDaySet)}
+          moveFlags={weekMoveFlags()}
+        />
+
+        <BodyCard readOnly={!isViewingToday} />
+
       </main>
 
       {/* Meal detail / edit sheet */}
