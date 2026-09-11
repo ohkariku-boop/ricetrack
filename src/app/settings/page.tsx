@@ -16,6 +16,7 @@ import {
   notificationPermission,
   registerServiceWorker,
   startReminderScheduler,
+  showMealReminder,
   type ReminderSettings,
 } from "@/lib/reminders";
 
@@ -139,16 +140,35 @@ export default function SettingsPage() {
 
   const testReminder = async () => {
     setReminderMsg(null);
-    await registerServiceWorker();
-    const p = await requestNotificationPermission();
-    setPerm(p);
-    if (p !== "granted") {
-      setReminderMsg("Allow notifications first.");
-      return;
+    try {
+      await registerServiceWorker();
+      const p = await requestNotificationPermission();
+      setPerm(p);
+      if (p === "unsupported") {
+        setReminderMsg("This browser does not support notifications.");
+        return;
+      }
+      if (p !== "granted") {
+        setReminderMsg("Allow notifications when prompted, or enable them in system settings.");
+        return;
+      }
+      const result = await showMealReminder({
+        id: "test",
+        label: "Test",
+        time: "00:00",
+        enabled: true,
+      });
+      if (!result.ok) {
+        setReminderMsg(result.error || "Notification failed.");
+        return;
+      }
+      // In-app confirmation: mobile OS often hides banners while RiceTrack is open
+      setReminderMsg(
+        "Reminder fired. If you did not see a system banner, check the notification shade — many phones hide pop-ups while the app is open."
+      );
+    } catch (e) {
+      setReminderMsg(e instanceof Error ? e.message : "Test failed.");
     }
-    const { showMealReminder } = await import("@/lib/reminders");
-    await showMealReminder({ id: "test", label: "Test", time: "00:00", enabled: true });
-    setReminderMsg("Test notification sent.");
   };
 
   if (loading) {

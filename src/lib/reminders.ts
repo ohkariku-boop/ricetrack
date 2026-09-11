@@ -57,7 +57,11 @@ export async function requestNotificationPermission(): Promise<NotificationPermi
   if (typeof window === "undefined" || !("Notification" in window)) return "unsupported";
   if (Notification.permission === "granted") return "granted";
   if (Notification.permission === "denied") return "denied";
-  return Notification.requestPermission();
+  try {
+    return await Notification.requestPermission();
+  } catch {
+    return Notification.permission;
+  }
 }
 
 export async function registerServiceWorker(): Promise<ServiceWorkerRegistration | null> {
@@ -65,18 +69,22 @@ export async function registerServiceWorker(): Promise<ServiceWorkerRegistration
   try {
     const reg = await navigator.serviceWorker.register("/sw.js", { scope: "/" });
     await navigator.serviceWorker.ready;
+    // Ensure we control this page when possible
+    if (navigator.serviceWorker.controller == null && reg.waiting) {
+      reg.waiting.postMessage({ type: "SKIP_WAITING" });
+    }
     return reg;
-  } catch {
+  } catch (err) {
+    console.warn("SW register failed", err);
     return null;
   }
 }
 
-/** Next Date for HH:MM today or tomorrow in local time */
 export function nextOccurrence(timeHHMM: string, from = new Date()): Date {
   const [h, m] = timeHHMM.split(":").map(Number);
   const d = new Date(from);
   d.setSeconds(0, 0);
-  d.setHours(h, m, 0, 0);
+  d.setHours(h || 0, m || 0, 0, 0);
   if (d.getTime() <= from.getTime() + 15_000) {
     d.setDate(d.getDate() + 1);
   }
@@ -126,42 +134,64 @@ function markFired(key: string) {
   }
 }
 
-export async function showMealReminder(slot: ReminderSlot) {
+export type ShowReminderResult = {
+  ok: boolean;
+  method?: "service-worker" | "notification-api" | "in-app-only";
+  error?: string;
+};
+
+/**
+ * Show a meal reminder. Prefers ServiceWorkerRegistration.showNotification
+ * (most reliable). Falls back to Notification constructor.
+ * Note: many mobile browsers suppress heads-up banners while the tab is focused;
+ * the notification still often appears in the shade.
+ */
+export async function showMealReminder(slot: ReminderSlot): Promise<ShowReminderResult> {
   const title = "RiceTrack";
   const body = `${slot.label}: time to log a meal.`;
-  const tag = `rt-${slot.id}`;
+  const tag = `rt-${slot.id}-${Date.now()}`;
+  const options: NotificationOptions = {
+    body,
+    icon: "/icon-192.png",
+    badge: "/favicon-32.png",
+    tag,
+    renotify: true,
+    requireInteraction: false,
+    data: { url: "/app" },
+  };
 
+  if (!("Notification" in window)) {
+    return { ok: false, error: "Notifications not supported in this browser." };
+  }
+  if (Notification.permission !== "granted") {
+    return { ok: false, error: "Notification permission is not granted." };
+  }
+
+  // 1) Direct SW registration API (best)
   if ("serviceWorker" in navigator) {
     try {
-      const reg = await navigator.serviceWorker.ready;
-      if (reg.active) {
-        reg.active.postMessage({
-          type: "SHOW_REMINDER",
-          title,
-          body,
-          tag,
-          url: "/app",
-        });
-        return;
+      const reg = (await registerServiceWorker()) || (await navigator.serviceWorker.ready);
+      if (reg?.showNotification) {
+        await reg.showNotification(title, options);
+        return { ok: true, method: "service-worker" };
       }
-      await reg.showNotification(title, {
-        body,
-        icon: "/icon-192.png",
-        tag,
-        data: { url: "/app" },
-      });
-      return;
-    } catch {
-      /* fall through */
+    } catch (err) {
+      console.warn("SW showNotification failed", err);
     }
   }
 
-  if ("Notification" in window && Notification.permission === "granted") {
-    new Notification(title, { body, icon: "/icon-192.png", tag });
+  // 2) Page Notification API
+  try {
+    const n = new Notification(title, options);
+    // Some browsers need a reference held briefly
+    window.setTimeout(() => n.close(), 8000);
+    return { ok: true, method: "notification-api" };
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : "Could not show notification.";
+    return { ok: false, error: msg };
   }
 }
 
-/** Call once on app load; returns cleanup */
 export function startReminderScheduler(): () => void {
   let timer: ReturnType<typeof setTimeout> | null = null;
   let stopped = false;

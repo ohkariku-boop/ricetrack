@@ -1,4 +1,4 @@
-/* RiceTrack service worker — local notifications (no push server) */
+/* RiceTrack service worker — local notifications */
 self.addEventListener("install", (event) => {
   self.skipWaiting();
 });
@@ -7,11 +7,19 @@ self.addEventListener("activate", (event) => {
   event.waitUntil(self.clients.claim());
 });
 
+self.addEventListener("message", (event) => {
+  const data = event.data || {};
+  if (data.type === "SKIP_WAITING") {
+    self.skipWaiting();
+  }
+});
+
 self.addEventListener("notificationclick", (event) => {
   event.notification.close();
-  const target = event.notification.data && event.notification.data.url
-    ? event.notification.data.url
-    : "/app";
+  const target =
+    event.notification.data && event.notification.data.url
+      ? event.notification.data.url
+      : "/app";
   event.waitUntil(
     self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((list) => {
       for (const client of list) {
@@ -23,22 +31,4 @@ self.addEventListener("notificationclick", (event) => {
       if (self.clients.openWindow) return self.clients.openWindow(target);
     })
   );
-});
-
-self.addEventListener("message", (event) => {
-  const data = event.data || {};
-  if (data.type === "SHOW_REMINDER") {
-    const title = data.title || "RiceTrack";
-    const body = data.body || "Time to log a meal.";
-    event.waitUntil(
-      self.registration.showNotification(title, {
-        body,
-        icon: "/icon-192.png",
-        badge: "/favicon-32.png",
-        tag: data.tag || "ricetrack-meal",
-        renotify: true,
-        data: { url: data.url || "/app" },
-      })
-    );
-  }
 });
