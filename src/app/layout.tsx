@@ -83,6 +83,18 @@ export default function RootLayout({
         <meta name="mobile-web-app-capable" content="yes" />
       </head>
       <body className="min-h-full flex flex-col antialiased bg-background text-foreground">
+        {/* Instant boot cover — hides any logo flash before React splash */}
+        <div id="rt-boot-splash" aria-hidden="true">
+          <div className="rt-boot-bowl">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo-plate.png" alt="" width={192} height={192} />
+          </div>
+        </div>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var p=location.pathname;if(p==='/'||p.indexOf('/terms')===0||p.indexOf('/privacy')===0||p.indexOf('/disclaimer')===0){var e=document.getElementById('rt-boot-splash');if(e)e.remove();return;}if(sessionStorage.getItem('rt_splash_shown')){var e2=document.getElementById('rt-boot-splash');if(e2)e2.remove();}}catch(err){}})();`,
+          }}
+        />
         <ThemeProvider>
           <LaunchSplash />
           {children}
