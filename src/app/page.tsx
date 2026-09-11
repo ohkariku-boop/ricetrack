@@ -62,10 +62,16 @@ export default function LandingPage() {
     <div className="min-h-screen bg-[#f6f3ee] text-[#1a1814] antialiased">
       <header className="sticky top-0 z-40 border-b border-[#1a1814]/8 bg-[#f6f3ee]/90 backdrop-blur-md">
         <div className="mx-auto max-w-5xl px-4 h-12 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 font-semibold text-[15px] tracking-tight">
-            <RiceLogo size={22} />
-            RiceTrack
+                    <Link href="/" className="flex items-center gap-2.5 min-w-0">
+            <RiceLogo size={26} />
+            <span className="flex flex-col leading-tight min-w-0">
+              <span className="font-semibold text-[15px] tracking-tight">RiceTrack</span>
+              <span className="text-[11px] font-medium text-[#1a1814]/45 tracking-tight">
+                Built for Asian plates first
+              </span>
+            </span>
           </Link>
+
           <nav className="hidden sm:flex items-center gap-5 text-[14px] text-[#1a1814]/55">
             <a href="#how" className="hover:text-[#1a1814]">
               How
