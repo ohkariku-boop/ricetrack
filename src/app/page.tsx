@@ -90,7 +90,7 @@ export default function LandingPage() {
       <section className="px-4 pt-7 pb-5 sm:pt-10 sm:pb-6">
         <div className="mx-auto max-w-5xl grid lg:grid-cols-2 gap-5 lg:gap-8 items-center">
           <div className="space-y-3 order-2 lg:order-1">
-            <p className="text-[11px] tracking-[0.16em] uppercase text-[#1a1814]/45 font-medium">
+            <p className="text-[12px] tracking-[0.16em] uppercase text-[#1a1814]/45 font-medium">
               Asia-first · Photo AI · 1000+ dishes and counting, updated weekly
             </p>
             <h1 className="font-semibold tracking-[-0.035em] leading-[1.02] text-[clamp(2.1rem,5.4vw,3.25rem)]">
@@ -118,7 +118,7 @@ export default function LandingPage() {
               </Link>
             </div>
             <div className="pt-1 max-w-md">
-              <p className="text-[11px] font-semibold text-[#1a1814]/40 uppercase tracking-wide mb-1.5">
+              <p className="text-[12px] font-semibold text-[#1a1814]/40 uppercase tracking-wide mb-1.5">
                 Install on phone
               </p>
               <div className="grid grid-cols-2 gap-1.5 text-[13px] leading-snug text-[#1a1814]/60">
@@ -204,7 +204,7 @@ export default function LandingPage() {
       {/* How */}
       <section id="how" className="px-4 py-8 sm:py-10">
         <div className="mx-auto max-w-5xl">
-          <p className="text-[11px] tracking-[0.16em] uppercase text-[#1a1814]/40 font-medium mb-1.5">
+          <p className="text-[12px] tracking-[0.16em] uppercase text-[#1a1814]/40 font-medium mb-1.5">
             How it works
           </p>
           <h2 className="text-xl sm:text-2xl font-semibold tracking-tight mb-1">
@@ -234,7 +234,7 @@ export default function LandingPage() {
       {/* Why */}
       <section id="why" className="px-4 py-8 sm:py-10 bg-[#ebe6dc]/60 border-y border-[#1a1814]/8">
         <div className="mx-auto max-w-5xl">
-          <p className="text-[11px] tracking-[0.16em] uppercase text-[#1a1814]/40 font-medium mb-1.5">
+          <p className="text-[12px] tracking-[0.16em] uppercase text-[#1a1814]/40 font-medium mb-1.5">
             Why RiceTrack
           </p>
           <h2 className="text-xl sm:text-2xl font-semibold tracking-tight max-w-md mb-4">
@@ -297,7 +297,7 @@ export default function LandingPage() {
             </div>
             <div className="grid grid-cols-2 gap-6 text-[13px]">
               <div className="space-y-1.5">
-                <div className="font-semibold text-[#1a1814]/50 uppercase tracking-wide text-[10px]">
+                <div className="font-semibold text-[#1a1814]/50 uppercase tracking-wide text-[12px]">
                   Product
                 </div>
                 <Link href="/app" className="block hover:text-[#1a1814]">
@@ -311,7 +311,7 @@ export default function LandingPage() {
                 </Link>
               </div>
               <div className="space-y-1.5">
-                <div className="font-semibold text-[#1a1814]/50 uppercase tracking-wide text-[10px]">
+                <div className="font-semibold text-[#1a1814]/50 uppercase tracking-wide text-[12px]">
                   Legal
                 </div>
                 <Link href="/terms" className="block hover:text-[#1a1814]">
@@ -326,7 +326,7 @@ export default function LandingPage() {
               </div>
             </div>
           </div>
-          <div className="flex flex-col sm:flex-row justify-between gap-1 pt-3 border-t border-[#1a1814]/8 text-[11px]">
+          <div className="flex flex-col sm:flex-row justify-between gap-1 pt-3 border-t border-[#1a1814]/8 text-[12px]">
             <span>© {new Date().getFullYear()} RiceTrack</span>
             <span className="text-[#1a1814]/35">Built for Asian plates first</span>
           </div>
