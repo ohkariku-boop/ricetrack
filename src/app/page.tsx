@@ -137,6 +137,29 @@ export default function LandingPage() {
                 Library
               </Link>
             </div>
+            <div className="pt-3 max-w-md space-y-2.5">
+              <p className="text-[11px] font-medium text-[#1a1814]/50 uppercase tracking-wide">
+                Install on your phone
+              </p>
+              <div className="grid sm:grid-cols-2 gap-2 text-[12px] leading-snug text-[#1a1814]/65">
+                <div className="rounded-xl border border-[#1a1814]/10 bg-[#1a1814]/[0.03] px-3 py-2.5">
+                  <div className="font-medium text-[#1a1814] mb-1">iPhone</div>
+                  <ol className="list-decimal list-inside space-y-0.5">
+                    <li>Open in Safari</li>
+                    <li>Tap Share</li>
+                    <li>Add to Home Screen</li>
+                  </ol>
+                </div>
+                <div className="rounded-xl border border-[#1a1814]/10 bg-[#1a1814]/[0.03] px-3 py-2.5">
+                  <div className="font-medium text-[#1a1814] mb-1">Android</div>
+                  <ol className="list-decimal list-inside space-y-0.5">
+                    <li>Open in Chrome</li>
+                    <li>Tap menu ⋮</li>
+                    <li>Install app / Add to Home screen</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div className="relative order-1 lg:order-2">
