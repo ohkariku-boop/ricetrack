@@ -201,61 +201,60 @@ export default function LandingPage() {
 
       <MarqueeStrip />
 
-      {/* How */}
-      <section id="how" className="px-4 py-8 sm:py-10">
-        <div className="mx-auto max-w-5xl">
-          <p className="text-[12px] tracking-[0.16em] uppercase text-[#1a1814]/40 font-medium mb-1.5">
-            How it works
-          </p>
-          <h2 className="text-xl sm:text-2xl font-semibold tracking-tight mb-1">
-            Snap, type, or re-log. Built for how Asia eats.
-          </h2>
-          <p className="text-[14px] text-[#1a1814]/45 mb-4 max-w-lg">
-            Three ways in. One honest macro log out.
-          </p>
-          <div className="grid sm:grid-cols-3 gap-2">
-            {[
-              { t: "Snap", d: "Photo the whole plate. Rice, sides, oil, egg." },
-              { t: "Type", d: "Any language. Nasi lemak, 麻婆豆腐, phở." },
-              { t: "Re-log", d: "Recents and templates for daily plates." },
-            ].map((x) => (
-              <div
-                key={x.t}
-                className="rounded-xl border border-[#1a1814]/8 bg-white/60 px-3.5 py-3"
-              >
-                <div className="text-[15px] font-semibold mb-0.5">{x.t}</div>
-                <p className="text-[13px] text-[#1a1814]/55 leading-snug">{x.d}</p>
-              </div>
-            ))}
+      {/* How + Why — two panels */}
+      <section className="px-4 py-8 sm:py-10 border-y border-[#1a1814]/8">
+        <div className="mx-auto max-w-5xl grid md:grid-cols-2 gap-3 md:gap-4">
+          <div id="how" className="rounded-2xl border border-[#1a1814]/8 bg-white/70 p-4 sm:p-5">
+            <p className="text-[12px] tracking-[0.16em] uppercase text-[#1a1814]/40 font-medium mb-1.5">
+              How it works
+            </p>
+            <h2 className="text-xl sm:text-2xl font-semibold tracking-tight mb-1">
+              Snap, type, or re-log. Built for how Asia eats.
+            </h2>
+            <p className="text-[14px] text-[#1a1814]/45 mb-3">
+              Three ways in. One honest macro log out.
+            </p>
+            <div className="grid gap-2">
+              {[
+                { t: "Snap", d: "Photo the whole plate. Rice, sides, oil, egg." },
+                { t: "Type", d: "Any language. Nasi lemak, 麻婆豆腐, phở." },
+                { t: "Re-log", d: "Recents and templates for daily plates." },
+              ].map((x) => (
+                <div
+                  key={x.t}
+                  className="rounded-xl border border-[#1a1814]/8 bg-[#f6f3ee]/80 px-3.5 py-2.5"
+                >
+                  <div className="text-[15px] font-semibold mb-0.5">{x.t}</div>
+                  <p className="text-[13px] text-[#1a1814]/55 leading-snug">{x.d}</p>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
 
-      {/* Why */}
-      <section id="why" className="px-4 py-8 sm:py-10 bg-[#ebe6dc]/60 border-y border-[#1a1814]/8">
-        <div className="mx-auto max-w-5xl">
-          <p className="text-[12px] tracking-[0.16em] uppercase text-[#1a1814]/40 font-medium mb-1.5">
-            Why RiceTrack
-          </p>
-          <h2 className="text-xl sm:text-2xl font-semibold tracking-tight max-w-md mb-4">
-            Built for Asian plates. Free core loop.
-          </h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
-            {[
-              "Cuisine-aware AI",
-              "Editable macros",
-              "Oil and sauce flags",
-              "Recents and templates",
-              "Daily targets",
-              "1000+ dish library",
-            ].map((t) => (
-              <div
-                key={t}
-                className="rounded-lg border border-[#1a1814]/8 bg-[#f6f3ee] px-3 py-2.5 text-[14px] font-medium"
-              >
-                {t}
-              </div>
-            ))}
+          <div id="why" className="rounded-2xl border border-[#1a1814]/8 bg-[#ebe6dc]/70 p-4 sm:p-5">
+            <p className="text-[12px] tracking-[0.16em] uppercase text-[#1a1814]/40 font-medium mb-1.5">
+              Why RiceTrack
+            </p>
+            <h2 className="text-xl sm:text-2xl font-semibold tracking-tight mb-3">
+              Built for Asian plates. Free core loop.
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+              {[
+                "Cuisine-aware AI",
+                "Editable macros",
+                "Oil and sauce flags",
+                "Recents and templates",
+                "Daily targets",
+                "1000+ dish library",
+              ].map((label) => (
+                <div
+                  key={label}
+                  className="rounded-lg border border-[#1a1814]/8 bg-[#f6f3ee] px-3 py-2.5 text-[14px] font-medium"
+                >
+                  {label}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
