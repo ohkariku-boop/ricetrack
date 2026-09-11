@@ -39,6 +39,7 @@ import { TodayStrip } from "@/components/home/TodayStrip";
 import { RestCard } from "@/components/home/RestCard";
 import { WeekConsistency } from "@/components/home/WeekConsistency";
 import { BodyCard } from "@/components/home/BodyCard";
+import { submitLibrarySuggestion } from "@/lib/library-suggestions";
 import {
   weekStrip,
   getWaterMl,
@@ -104,6 +105,8 @@ export default function DashboardPage() {
   const [steps, setSteps] = useState(0);
   const [stepSource, setStepSource] = useState<"sensor" | "manual" | "estimate">("manual");
   const [restTick, setRestTick] = useState(0);
+  const [suggestMsg, setSuggestMsg] = useState<string | null>(null);
+  const [suggesting, setSuggesting] = useState(false);
   const todayKey = localDateKey();
   const [selectedDate, setSelectedDate] = useState(todayKey);
   const [weekOffset, setWeekOffset] = useState(0);
@@ -426,7 +429,34 @@ export default function DashboardPage() {
     );
   }
 
-  return (
+  
+  const suggestSelectedToLibrary = async () => {
+    if (!selected || !draftItems.length) return;
+    setSuggesting(true);
+    setSuggestMsg(null);
+    try {
+      for (const item of draftItems) {
+        const name = String(item.name || "").trim();
+        if (!name) continue;
+        await submitLibrarySuggestion({
+          name,
+          calories: Number(item.calories) || 0,
+          protein: Number(item.protein) || 0,
+          carbs: Number(item.carbs) || 0,
+          fat: Number(item.fat) || 0,
+          portion: item.portion,
+          meal_id: selected.id,
+        });
+      }
+      setSuggestMsg("Submitted for library review. Not public until approved.");
+    } catch {
+      setSuggestMsg("Could not submit. Try again.");
+    } finally {
+      setSuggesting(false);
+    }
+  };
+
+return (
     <div className="min-h-screen bg-background safe-bottom">
       <header className="sticky top-0 z-40 border-b border-border/60 bg-background/90 backdrop-blur-xl">
         <div className="mx-auto max-w-lg px-4 h-14 flex items-center justify-between">
@@ -457,7 +487,7 @@ export default function DashboardPage() {
       </header>
 
       <main className="mx-auto max-w-lg px-4 py-5 space-y-5 page-enter">
-        {/* Week strip — tap a day to view history */}
+        {/* Week strip, tap a day to view history */}
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <button
@@ -879,24 +909,37 @@ export default function DashboardPage() {
                 ))}
               </div>
 
-              <div className="flex gap-2 pb-4">
+              {suggestMsg && (
+                <p className="text-xs text-muted-foreground pb-1">{suggestMsg}</p>
+              )}
+              <div className="flex flex-col gap-2 pb-4">
                 <button
                   type="button"
-                  onClick={deleteSelectedMeal}
-                  disabled={savingMeal}
-                  className="h-12 px-4 rounded-xl border border-red-500/30 bg-red-500/10 text-red-600 font-semibold text-sm flex items-center gap-1.5 disabled:opacity-50"
+                  onClick={suggestSelectedToLibrary}
+                  disabled={suggesting || !draftItems.length}
+                  className="btn-secondary w-full h-11 text-sm disabled:opacity-50"
                 >
-                  <Trash2 className="w-4 h-4" />
-                  Delete
+                  {suggesting ? "Submitting..." : "Suggest items for library"}
                 </button>
-                <button
-                  type="button"
-                  onClick={saveSelectedMeal}
-                  disabled={savingMeal}
-                  className="btn-primary flex-1 h-12 disabled:opacity-50"
-                >
-                  {savingMeal ? "Saving…" : "Save changes"}
-                </button>
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={deleteSelectedMeal}
+                    disabled={savingMeal}
+                    className="h-12 px-4 rounded-xl border border-red-500/30 bg-red-500/10 text-red-600 font-semibold text-sm flex items-center gap-1.5 disabled:opacity-50"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                    Delete
+                  </button>
+                  <button
+                    type="button"
+                    onClick={saveSelectedMeal}
+                    disabled={savingMeal}
+                    className="btn-primary flex-1 h-12 disabled:opacity-50"
+                  >
+                    {savingMeal ? "Saving..." : "Save changes"}
+                  </button>
+                </div>
               </div>
             </div>
           </div>

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { RiceLogo } from "@/components/RiceLogo";
 
 export const metadata = {
-  title: "Disclaimer — RiceTrack",
+  title: "Disclaimer, RiceTrack",
   description: "Health and accuracy disclaimer for RiceTrack",
 };
 

@@ -279,7 +279,7 @@ export default function TrackerPage() {
   const saveMeal = async () => {
     if (!analysis) return;
 
-    // Guest path — local only, no account needed
+    // Guest path, local only, no account needed
     if (!user) {
       if (!isLocalSession()) {
         enableGuest();
@@ -514,7 +514,7 @@ export default function TrackerPage() {
             <div className="text-center space-y-2 pt-1">
               <h1 className="text-2xl font-bold tracking-tight">Log a meal</h1>
               <p className="text-muted-foreground text-[15px] leading-relaxed max-w-xs mx-auto">
-                Snap a photo or type what you ate — Asian dishes in any language.
+                Snap a photo or type what you ate, Asian dishes in any language.
               </p>
             </div>
 
@@ -623,7 +623,7 @@ export default function TrackerPage() {
               <div className="rounded-2xl bg-red-500/10 text-red-600 px-4 py-3 text-sm">{error}</div>
             )}
 
-            {/* Templates — max visible, no endless scroll */}
+            {/* Templates, max visible, no endless scroll */}
             <div className="pt-1">
               <button
                 type="button"
@@ -656,13 +656,13 @@ export default function TrackerPage() {
             <div className="card-soft p-4 space-y-2 mt-2">
               <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Tips</div>
               <ul className="text-[13px] text-muted-foreground space-y-1.5 leading-snug">
-                <li>· Snap the whole plate — include rice, sides, and sauces.</li>
+                <li>· Snap the whole plate, include rice, sides, and sauces.</li>
                 <li>· Or type “nasi lemak with fried chicken” for a fast estimate.</li>
-                <li>· Edit any item before saving — AI is a starting point.</li>
+                <li>· Edit any item before saving, AI is a starting point.</li>
               </ul>
             </div>
 
-            {/* Recents — 10 max */}
+            {/* Recents, 10 max */}
             {recents.length > 0 && (
               <div className="space-y-2 pt-1">
                 <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
@@ -834,8 +834,8 @@ export default function TrackerPage() {
               {feedback && (
                 <p className="text-[11px] text-muted-foreground">
                   {feedback === "up"
-                    ? "Thanks — this helps improve Asian dish detection."
-                    : "Thanks — use the correction box or edit items so we learn what was wrong."}
+                    ? "Thanks, this helps improve Asian dish detection."
+                    : "Thanks, use the correction box or edit items so we learn what was wrong."}
                 </p>
               )}
             </div>
@@ -881,7 +881,7 @@ export default function TrackerPage() {
                   {item.is_hidden_calorie_risk && (
                     <div className="flex items-center gap-1.5 text-xs text-amber-700 dark:text-amber-400">
                       <AlertTriangle className="w-3.5 h-3.5" />
-                      Oil / sauce may be undercounted — adjust if needed
+                      Oil / sauce may be undercounted, adjust if needed
                     </div>
                   )}
 
@@ -1003,7 +1003,7 @@ export default function TrackerPage() {
                 {reanalyzing ? "Re-analyzing…" : "Re-analyze with my correction"}
               </button>
               <p className="text-[11px] text-muted-foreground leading-snug">
-                Or tap the pencil on any item to rename it and edit macros — your edit is what gets saved.
+                Or tap the pencil on any item to rename it and edit macros, your edit is what gets saved.
               </p>
             </div>
 

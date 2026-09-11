@@ -209,3 +209,35 @@ create policy "Users manage own balance" on public.balance_events
 
 -- Profile: allow manual target flag
 alter table public.profiles add column if not exists targets_manual boolean default false;
+
+-- ========== Library suggestions (user contributions; moderated) ==========
+create table if not exists public.library_suggestions (
+  id uuid primary key default uuid_generate_v4(),
+  user_id uuid references auth.users(id) on delete set null,
+  client_id text,
+  meal_id text,
+  name text not null,
+  calories numeric not null default 0,
+  protein numeric not null default 0,
+  carbs numeric not null default 0,
+  fat numeric not null default 0,
+  portion text,
+  cuisine text,
+  source text default 'user',
+  status text not null default 'pending'
+    check (status in ('pending', 'approved', 'rejected', 'published')),
+  created_at timestamptz default now(),
+  published_at timestamptz
+);
+create index if not exists library_suggestions_status_idx
+  on public.library_suggestions(status, created_at desc);
+
+alter table public.library_suggestions enable row level security;
+
+create policy "Anyone can insert suggestions"
+  on public.library_suggestions for insert
+  with check (true);
+
+create policy "Users read own suggestions"
+  on public.library_suggestions for select
+  using (auth.uid() = user_id or user_id is null);

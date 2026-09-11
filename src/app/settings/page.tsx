@@ -91,7 +91,7 @@ export default function SettingsPage() {
     });
     setSaving(false);
     if (error) setMsg(error.message);
-    else setMsg("Saved — your daily calorie goal is under your control.");
+    else setMsg("Saved, your daily calorie goal is under your control.");
   };
 
   if (loading) {

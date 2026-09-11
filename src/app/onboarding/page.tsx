@@ -64,7 +64,7 @@ export default function OnboardingPage() {
         goalWeeks: String(p.goal_weeks || 10),
       }));
     } else {
-      // Supabase path or no session — still allow form; finish handles both
+      // Supabase path or no session, still allow form; finish handles both
       supabase.auth.getUser().then(({ data: { user } }) => {
         if (!user && !isLocalSession()) router.replace("/login");
       });
@@ -329,7 +329,7 @@ export default function OnboardingPage() {
               <div>
                 <h1 className="text-2xl font-bold tracking-tight">Your goal</h1>
                 <p className="text-muted-foreground text-sm mt-1">
-                  Lose fat, hold steady, or build up — from a food budget.
+                  Lose fat, hold steady, or build up, from a food budget.
                 </p>
               </div>
               <div className="grid grid-cols-3 gap-2">

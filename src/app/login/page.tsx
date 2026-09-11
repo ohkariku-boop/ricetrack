@@ -40,7 +40,7 @@ function LoginContent() {
 
     setLoading(false);
     if (error) setError(error.message);
-    else setMessage("Check your email for the magic link. If nothing arrives in a few minutes, check spam — or continue as Guest / Joe / Mel on this device.");
+    else setMessage("Check your email for the magic link. If nothing arrives in a few minutes, check spam, or continue as Guest / Joe / Mel on this device.");
   };
 
   const pickAccount = (id: "guest" | "joe" | "mel") => {

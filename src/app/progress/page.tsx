@@ -166,7 +166,7 @@ export default function ProgressPage() {
           <div className="card-elevated p-4">
             <div className="text-xs text-muted-foreground">Sleep (7-day avg)</div>
             <div className="text-2xl font-bold tabular-nums mt-1">
-              {sleepAvg != null ? sleepAvg : "—"}
+              {sleepAvg != null ? sleepAvg : ", "}
               {sleepAvg != null && (
                 <span className="text-sm font-medium text-muted-foreground ml-1">h</span>
               )}
@@ -178,14 +178,14 @@ export default function ProgressPage() {
           <div className="card-elevated p-4">
             <div className="text-xs text-muted-foreground">Energy (7-day avg)</div>
             <div className="text-2xl font-bold tabular-nums mt-1">
-              {energyAvg != null ? energyAvg : "—"}
+              {energyAvg != null ? energyAvg : ", "}
               {energyAvg != null && (
                 <span className="text-sm font-medium text-muted-foreground ml-1">/5</span>
               )}
             </div>
             <div className="text-[11px] text-muted-foreground mt-1">
               {energyAvg != null
-                ? ENERGY_LABELS[Math.round(energyAvg) as 1 | 2 | 3 | 4 | 5] || "—"
+                ? ENERGY_LABELS[Math.round(energyAvg) as 1 | 2 | 3 | 4 | 5] || ", "
                 : "Tap 1–5 on Home"}
             </div>
           </div>
@@ -198,7 +198,7 @@ export default function ProgressPage() {
               Latest weight
             </div>
             <div className="text-2xl font-bold tabular-nums mt-1">
-              {lastW ? `${lastW}` : "—"}
+              {lastW ? `${lastW}` : ", "}
               <span className="text-sm font-medium text-muted-foreground ml-1">kg</span>
             </div>
             {bmi > 0 && (
@@ -279,7 +279,7 @@ export default function ProgressPage() {
 
           {goalType === "lose" && goalKg ? (
             <p className="text-xs text-primary leading-relaxed">
-              Consistency beats perfection — Asian plates are trackable one component at a time.
+              Consistency beats perfection, Asian plates are trackable one component at a time.
             </p>
           ) : (
             <p className="text-xs text-muted-foreground leading-relaxed">

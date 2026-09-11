@@ -14,9 +14,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "RiceTrack — Calorie tracking built for Asian food",
+  title: "RiceTrack: calorie tracking built for Asian food",
   description:
-    "Snap a photo of rice bowls, stir-fries, noodles, and shared plates. Cuisine-aware AI with an Asian food library — more honest than Western-first trackers.",
+    "Snap a photo of rice bowls, stir-fries, noodles, and shared plates. Cuisine-aware AI with an Asian food library. 1000+ dishes and counting, updated weekly.",
   applicationName: "RiceTrack",
   keywords: [
     "calorie tracker",
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     "Chinese Japanese Korean Thai food calories",
   ],
   openGraph: {
-    title: "RiceTrack — Calorie tracking built for Asian food",
+    title: "RiceTrack: calorie tracking built for Asian food",
     description:
       "Photo AI that understands wok oil, coconut milk, and shared plates. Plus an Asian dish library.",
     type: "website",

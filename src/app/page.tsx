@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { RiceLogo } from "@/components/RiceLogo";
 
-/** Hero mosaic — distinct set */
+/** Hero mosaic, distinct set */
 const HERO = [
   { src: "/food/ramen.jpg", alt: "Ramen" },
   { src: "/food/pho.jpg", alt: "Pho" },
@@ -11,7 +11,7 @@ const HERO = [
   { src: "/food/friedrice.jpg", alt: "Fried rice" },
 ];
 
-/** Marquee strip — different assets, labelled by cuisine */
+/** Marquee strip, different assets, labelled by cuisine */
 const MARQUEE = [
   { src: "/food/thai.jpg", cuisine: "Thai" },
   { src: "/food/chinese2.jpg", cuisine: "Chinese" },
@@ -50,7 +50,7 @@ function MarqueeStrip() {
               className="absolute inset-0 w-full h-full object-cover"
               loading="lazy"
             />
-            {/* Soft center wash only for label legibility — image stays vivid */}
+            {/* Soft center wash only for label legibility, image stays vivid */}
             <div className="absolute inset-0 bg-[#1a1814]/25" />
             <span className="absolute inset-0 flex items-center justify-center text-[12px] sm:text-[13px] font-semibold tracking-wide text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.55)]">
               {item.cuisine}
@@ -111,7 +111,7 @@ export default function LandingPage() {
         <div className="mx-auto max-w-6xl grid lg:grid-cols-2 gap-6 lg:gap-10 items-center">
           <div className="space-y-4 order-2 lg:order-1">
             <p className="text-[10px] tracking-[0.2em] uppercase text-[#1a1814]/45">
-              Asia-first · Photo AI · 1000+ dishes
+              Asia-first · Photo AI · 1000+ dishes and counting, updated weekly
             </p>
             <h1 className="font-medium tracking-[-0.04em] leading-[0.95] text-[clamp(2rem,5.5vw,3.5rem)]">
               Easy to use.
@@ -121,7 +121,7 @@ export default function LandingPage() {
               <span className="text-[#3d8f5c]">on Asian food.</span>
             </h1>
             <p className="text-[14px] leading-snug text-[#1a1814]/55 max-w-sm">
-              Snap or type. Rice bowls, noodles, curry, hawker sets — not Western defaults.
+              Snap or type. Rice bowls, noodles, curry, hawker sets. Not Western defaults.
             </p>
             <div className="flex flex-wrap gap-2 pt-1">
               <Link
@@ -229,19 +229,19 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Cuisine marquee — different photos + labels */}
+      {/* Cuisine marquee, different photos + labels */}
       <MarqueeStrip />
 
       <section id="easy" className="px-4 sm:px-6 py-12 sm:py-14 border-t border-[#1a1814]/8">
         <div className="mx-auto max-w-6xl">
           <p className="text-[10px] tracking-[0.18em] uppercase text-[#1a1814]/40 mb-3">Easy & fun</p>
           <h2 className="text-2xl sm:text-3xl font-medium tracking-[-0.03em] max-w-lg mb-8">
-            Snap, type, or re-log — built for how Asia eats.
+            Snap, type, or re-log. Built for how Asia eats.
           </h2>
           <div className="grid sm:grid-cols-3 gap-6 sm:gap-8">
             {[
               ["Snap", "Photo AI tuned for wok oil, sauces, shared plates."],
-              ["Type", "半碗米饭 + 麻婆豆腐 — any language."],
+              ["Type", "半碗米饭 + 麻婆豆腐, any language."],
               ["Library", "1,000+ dishes · 10 per page · fast search."],
             ].map(([t, d]) => (
               <div key={t} className="space-y-1">
@@ -257,7 +257,7 @@ export default function LandingPage() {
         <div className="mx-auto max-w-6xl">
           <p className="text-[10px] tracking-[0.18em] uppercase text-[#1a1814]/40 mb-3">Why RiceTrack</p>
           <h2 className="text-2xl sm:text-3xl font-medium tracking-[-0.03em] max-w-xl mb-6">
-            Accuracy for Asian plates — free core loop.
+            Accuracy for Asian plates. Free core loop.
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
             {[
@@ -300,8 +300,18 @@ export default function LandingPage() {
                 RiceTrack
               </div>
               <p className="leading-relaxed">
-                Asia-first calorie tracking. Estimates only — not medical advice.
+                Asia-first calorie tracking. Estimates only, not medical advice. 1000+ dishes and counting, updated weekly.
               </p>
+              <p className="leading-relaxed pt-2">
+                Feedback or support:{" "}
+                <a
+                  href="mailto:chiefsupportofficer@gmail.com"
+                  className="text-[#3d8f5c] font-medium hover:underline"
+                >
+                  chiefsupportofficer@gmail.com
+                </a>
+              </p>
+
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-8 text-[12px]">
               <div className="space-y-2">
