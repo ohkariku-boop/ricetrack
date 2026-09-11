@@ -15,9 +15,6 @@ import {
   Minus,
   Plus,
   Trash2,
-  Droplets,
-  Footprints,
-  Flame,
 } from "lucide-react";
 import { formatCalories, formatMacro } from "@/lib/utils";
 import { ProgressRing } from "@/components/ProgressRing";
@@ -37,8 +34,11 @@ import type { FoodItem } from "@/types";
 import { localDateKey, localDateKeyFromIso, startOfLocalDay } from "@/lib/dates";
 import { BottomNav } from "@/components/BottomNav";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { WellnessCard } from "@/components/WellnessCard";
 import { MovementCard } from "@/components/MovementCard";
+import { TodayStrip } from "@/components/home/TodayStrip";
+import { RestCard } from "@/components/home/RestCard";
+import { WeekConsistency } from "@/components/home/WeekConsistency";
+import { BodyCard } from "@/components/home/BodyCard";
 import {
   weekStrip,
   getWaterMl,
@@ -47,6 +47,12 @@ import {
   type ActivityLog,
 } from "@/lib/activity";
 import { getTodaySteps, getStepsForDate, setTodaySteps, addTodaySteps, startStepListener } from "@/lib/steps";
+import {
+  weekMealFlags,
+  weekMoveFlags,
+  sleepHoursForDate,
+  energyLevelForDate,
+} from "@/lib/consistency";
 
 type MealRow = {
   id: string;
@@ -97,6 +103,7 @@ export default function DashboardPage() {
   const [accountLabel, setAccountLabel] = useState("");
   const [steps, setSteps] = useState(0);
   const [stepSource, setStepSource] = useState<"sensor" | "manual" | "estimate">("manual");
+  const [restTick, setRestTick] = useState(0);
   const todayKey = localDateKey();
   const [selectedDate, setSelectedDate] = useState(todayKey);
   const [weekOffset, setWeekOffset] = useState(0);
@@ -513,69 +520,23 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
-          <div className="card-soft p-4">
-            <div className="text-xs text-muted-foreground flex items-center gap-1">
-              <Footprints className="w-3.5 h-3.5" /> Steps
-            </div>
-            <div className="text-xl font-bold tabular-nums mt-1">
-              {steps.toLocaleString()}
-              <span className="text-xs font-medium text-muted-foreground"> / 8,000</span>
-            </div>
-            <div className="mt-2 h-1.5 rounded-full bg-muted overflow-hidden">
-              <div
-                className="h-full bg-primary rounded-full"
-                style={{ width: `${Math.min(100, (steps / 8000) * 100)}%` }}
-              />
-            </div>
-            <div className="flex gap-2 mt-3">
-              <button
-                type="button"
-                className="text-[10px] px-2 py-1 rounded-full border border-border"
-                onClick={() => {
-                  const n = addTodaySteps(500, "manual");
-                  setSteps(n.steps);
-                  setStepSource(n.source);
-                }}
-              >
-                +500
-              </button>
-              <button
-                type="button"
-                className="text-[10px] px-2 py-1 rounded-full border border-border"
-                onClick={async () => {
-                  try {
-                    const anyDM = DeviceMotionEvent as unknown as {
-                      requestPermission?: () => Promise<string>;
-                    };
-                    if (typeof anyDM.requestPermission === "function") {
-                      await anyDM.requestPermission();
-                    }
-                    setStepSource("estimate");
-                  } catch {
-                    /* ignore */
-                  }
-                }}
-              >
-                Enable motion
-              </button>
-            </div>
-            <div className="text-[10px] text-muted-foreground mt-1 capitalize">{stepSource === "estimate" ? "phone estimate" : stepSource}</div>
-          </div>
-          <div className="card-soft p-4">
-            <div className="text-xs text-muted-foreground flex items-center gap-1">
-              <Flame className="w-3.5 h-3.5 text-orange-500" /> Burned
-            </div>
-            <div className="text-xl font-bold tabular-nums mt-1">
-              {activities.reduce((s, a) => s + a.calories, 0) + Math.round(steps * 0.04)}
-              <span className="text-xs font-medium text-muted-foreground"> kcal</span>
-            </div>
-            <div className="text-[11px] text-muted-foreground mt-1">
-              Activities + step estimate
-            </div>
-          </div>
-        </div>
+        <TodayStrip
+          key={restTick}
+          steps={steps}
+          waterMl={waterMl}
+          sleepHours={sleepHoursForDate(selectedDate)}
+          energy={energyLevelForDate(selectedDate)}
+          readOnly={!isViewingToday}
+          onWater={(delta) => {
+            const next = Math.max(0, waterMl + delta);
+            setWaterMl(next, selectedDate);
+            setWaterMlState(next);
+          }}
+        />
 
+        {/* Nutrition */}
+        <div className="space-y-3 rounded-2xl border border-primary/15 bg-primary/[0.03] p-3">
+          <div className="text-[11px] font-semibold uppercase tracking-wide text-primary px-1">Nutrition</div>
         <div className="card-elevated p-5 flex items-center gap-5">
           <ProgressRing value={totals.cal} max={targets.cal} size={96} stroke={8} label="kcal" unit="" />
           <div className="min-w-0 flex-1">
@@ -606,56 +567,42 @@ export default function DashboardPage() {
             </div>
           ))}
         </div>
-
-        <WellnessCard />
-
-        {/* Water */}
-        <div className="card-soft p-4 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-3 min-w-0">
-            <div className="w-10 h-10 rounded-xl bg-sky-500/10 flex items-center justify-center shrink-0">
-              <Droplets className="w-5 h-5 text-sky-600" />
-            </div>
-            <div className="min-w-0">
-              <div className="text-sm font-medium">Water</div>
-              <div className="text-xs text-muted-foreground tabular-nums">
-                {(waterMl / 250).toFixed(0)} cups · {waterMl} ml
-              </div>
-            </div>
-          </div>
-          <div className="flex gap-2 shrink-0">
-            <button
-              type="button"
-              className="w-9 h-9 rounded-full border border-border flex items-center justify-center"
-              onClick={() => {
-                const next = Math.max(0, waterMl - 250);
-                setWaterMl(next, todayKey);
-                setWaterMlState(next);
-              }}
-            >
-              −
-            </button>
-            <button
-              type="button"
-              className="w-9 h-9 rounded-full border border-border bg-sky-500/10 text-sky-700 flex items-center justify-center font-semibold"
-              onClick={() => {
-                const next = waterMl + 250;
-                setWaterMl(next, todayKey);
-                setWaterMlState(next);
-              }}
-            >
-              +
-            </button>
-          </div>
+        {isViewingToday && meals.length === 0 && (
+          <p className="text-xs text-muted-foreground px-1">No meals yet today.</p>
+        )}
+        {isViewingToday && meals.length > 0 && totals.p < targets.p * 0.5 && totals.cal > 200 && (
+          <p className="text-xs text-muted-foreground px-1">
+            Protein {formatMacro(totals.p)}g / {formatMacro(targets.p)}g
+          </p>
+        )}
         </div>
 
-        <MovementCard
+        <div className="space-y-3 rounded-2xl border border-orange-500/15 bg-orange-500/[0.04] p-3">
+          <div className="text-[11px] font-semibold uppercase tracking-wide text-orange-600 dark:text-orange-400 px-1">
+            Move
+          </div>
+          <MovementCard
+            date={selectedDate}
+            activities={activities}
+            readOnly={!isViewingToday}
+            onChange={() => {
+              setActivities(getActivities(selectedDate));
+            }}
+          />
+        </div>
+
+        <RestCard
           date={selectedDate}
-          activities={activities}
           readOnly={!isViewingToday}
-          onChange={() => {
-            setActivities(getActivities(selectedDate));
-          }}
+          onUpdate={() => setRestTick((n) => n + 1)}
         />
+
+        <WeekConsistency
+          mealFlags={weekMealFlags(loggedDaySet)}
+          moveFlags={weekMoveFlags()}
+        />
+
+        <BodyCard readOnly={!isViewingToday} />
 
         {remaining > 80 && user && (
           <div className="card-soft p-4 space-y-2">
