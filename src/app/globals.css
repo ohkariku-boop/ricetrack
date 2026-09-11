@@ -304,44 +304,4 @@ html.dark .skeleton {
 }
 
 
-/* PWA launch: bowl only spins (2 turns / 2s) */
-@keyframes rt-bowl-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(720deg); }
-}
-.rt-bowl-spin {
-  animation: rt-bowl-spin 2s linear forwards;
-}
-@media (prefers-reduced-motion: reduce) {
-  .rt-bowl-spin { animation: none; }
-}
 
-
-/* Pre-React boot splash (matches LaunchSplash) */
-#rt-boot-splash {
-  position: fixed;
-  inset: 0;
-  z-index: 10000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #e8f5ec;
-  pointer-events: none;
-}
-#rt-boot-splash .rt-boot-bowl {
-  width: 192px;
-  height: 192px;
-  border-radius: 9999px;
-  overflow: hidden;
-  background: #e8f5ec;
-}
-#rt-boot-splash img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  animation: rt-bowl-spin 2s linear forwards;
-}
-/* Hide boot splash once React has mounted its own (LaunchSplash takes over) */
-html.rt-hydrated #rt-boot-splash {
-  display: none !important;
-}
