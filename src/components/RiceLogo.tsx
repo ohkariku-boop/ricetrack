@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 type Props = {
   className?: string;
@@ -7,7 +8,7 @@ type Props = {
   rounded?: boolean;
 };
 
-/** Refined rice bowl mark — full-bleed light green */
+/** RiceTrack mark — plate of rice illustration */
 export function RiceLogo({
   className,
   size = 28,
@@ -15,56 +16,17 @@ export function RiceLogo({
   rounded = true,
 }: Props) {
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 64 64"
+    <Image
+      src="/logo-plate.png"
+      alt={title}
       width={size}
       height={size}
-      className={cn("shrink-0", rounded && "rounded-[22%]", className)}
-      role="img"
-      aria-label={title}
-    >
-      <rect width="64" height="64" fill="#3d8f5c" />
-      <path
-        d="M24 14c0 0 1.5-3 0-5"
-        stroke="#ffffff"
-        strokeOpacity="0.35"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        fill="none"
-      />
-      <path
-        d="M32 12c0 0 1.5-3.5 0-6"
-        stroke="#ffffff"
-        strokeOpacity="0.4"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        fill="none"
-      />
-      <path
-        d="M40 14c0 0 1.5-3 0-5"
-        stroke="#ffffff"
-        strokeOpacity="0.35"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        fill="none"
-      />
-      <path d="M12 32c1.5 14 9 22 20 22s18.5-8 20-22H12z" fill="#1e4d32" />
-      <path d="M14 32c1.2 12 8 18.5 18 18.5S48.8 44 50 32H14z" fill="#163d28" />
-      <ellipse cx="32" cy="32" rx="21" ry="7" fill="#2a6b45" />
-      <ellipse cx="32" cy="31.5" rx="19" ry="5.5" fill="#348555" />
-      <ellipse cx="32" cy="28" rx="17" ry="11" fill="#F7F0E0" />
-      <ellipse cx="32" cy="25.5" rx="14.5" ry="8.5" fill="#FFFBF3" />
-      <ellipse cx="24" cy="24" rx="2.4" ry="3.4" fill="#E8D9B5" transform="rotate(-30 24 24)" />
-      <ellipse cx="29" cy="21" rx="2.3" ry="3.3" fill="#EDE3C8" transform="rotate(-5 29 21)" />
-      <ellipse cx="35" cy="20.5" rx="2.3" ry="3.3" fill="#E5D6B0" transform="rotate(12 35 20.5)" />
-      <ellipse cx="40" cy="24" rx="2.4" ry="3.4" fill="#E8D9B5" transform="rotate(28 40 24)" />
-      <ellipse cx="26" cy="29" rx="2.1" ry="3" fill="#E0D0A5" transform="rotate(-18 26 29)" />
-      <ellipse cx="32" cy="27" rx="2.2" ry="3.1" fill="#F0E6D0" />
-      <ellipse cx="38" cy="29" rx="2.1" ry="3" fill="#E8D9B5" transform="rotate(20 38 29)" />
-      <ellipse cx="30" cy="31.5" rx="1.9" ry="2.7" fill="#EDE3C8" transform="rotate(-8 30 31.5)" />
-      <ellipse cx="35.5" cy="32" rx="1.9" ry="2.7" fill="#E5D6B0" transform="rotate(10 35.5 32)" />
-      <ellipse cx="32" cy="31" rx="17" ry="2.8" fill="#ffffff" opacity="0.12" />
-    </svg>
+      className={cn(
+        "shrink-0 object-contain",
+        rounded && "rounded-[22%]",
+        className
+      )}
+      priority
+    />
   );
 }
