@@ -26,6 +26,7 @@ export type GuestMeal = {
   total_carbs: number;
   total_fat: number;
   cuisine_detected?: string;
+  meal_type?: string;
   notes?: string | null;
   logged_at: string;
 };

@@ -17,6 +17,7 @@ import {
 import { getDishGuide } from "@/lib/dish-guide";
 import { ensureLocalSession, saveGuestMeal, isLocalSession } from "@/lib/guest";
 import { localDateKey, isoFromLocalDateKey } from "@/lib/dates";
+import { MEAL_TYPES, defaultMealType, type MealTypeId } from "@/lib/meal-type";
 import { createClient } from "@/lib/supabase/client";
 
 type Food = {
@@ -93,6 +94,7 @@ export default function LibraryPage() {
   const [logging, setLogging] = useState(false);
   const [logMsg, setLogMsg] = useState<string | null>(null);
   const [logDate, setLogDate] = useState(() => localDateKey());
+  const [mealType, setMealType] = useState<MealTypeId>(() => defaultMealType());
   const router = useRouter();
   const supabase = createClient();
 
@@ -156,6 +158,7 @@ export default function LibraryPage() {
           ...totals,
           cuisine_detected: selected.cuisine,
           notes: `Library · ${selected.portion || "1 serving"}`,
+          meal_type: mealType,
           logged_at: isoFromLocalDateKey(logDate),
         });
         setLogMsg("Logged for today.");
@@ -178,6 +181,7 @@ export default function LibraryPage() {
           ...totals,
           cuisine_detected: selected.cuisine,
           notes: `Library · ${selected.portion || "1 serving"}`,
+          meal_type: mealType,
           logged_at: isoFromLocalDateKey(logDate),
         });
         setLogMsg("Logged on this device.");
@@ -196,6 +200,7 @@ export default function LibraryPage() {
         ...totals,
         cuisine_detected: selected.cuisine,
         notes: `Library · ${selected.portion || "1 serving"}`,
+        meal_type: mealType,
         logged_at: isoFromLocalDateKey(logDate),
       });
       if (error) throw new Error(error.message);
@@ -274,6 +279,7 @@ export default function LibraryPage() {
                   onClick={() => {
                     setLogMsg(null);
                     setLogDate(localDateKey());
+                    setMealType(defaultMealType());
                     setSelected(f);
                   }}
                   className="w-full text-left card-soft p-3.5 flex gap-3 items-start pressable border border-border/50 hover:border-primary/30 transition-colors"
@@ -399,6 +405,29 @@ export default function LibraryPage() {
                   Logging tip
                 </div>
                 <p className="text-sm leading-snug text-foreground/90">{guide.tip}</p>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+                  Meal
+                </label>
+                <div className="flex flex-wrap gap-1.5">
+                  {MEAL_TYPES.map((m) => (
+                    <button
+                      key={m.id}
+                      type="button"
+                      onClick={() => setMealType(m.id)}
+                      className={cn(
+                        "px-3 py-1.5 rounded-full text-xs font-semibold transition-colors",
+                        mealType === m.id
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-muted text-muted-foreground"
+                      )}
+                    >
+                      {m.label}
+                    </button>
+                  ))}
+                </div>
               </div>
 
               <div className="space-y-1.5">

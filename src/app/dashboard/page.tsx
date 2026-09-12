@@ -32,6 +32,7 @@ import {
 } from "@/lib/guest";
 import type { FoodItem } from "@/types";
 import { localDateKey, localDateKeyFromIso, startOfLocalDay } from "@/lib/dates";
+import { mealTypeLabel } from "@/lib/meal-type";
 import { BottomNav } from "@/components/BottomNav";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { MovementCard } from "@/components/MovementCard";
@@ -64,6 +65,7 @@ type MealRow = {
   total_carbs: number;
   total_fat: number;
   logged_at: string;
+  meal_type?: string | null;
   notes?: string | null;
 };
 
@@ -139,6 +141,7 @@ export default function DashboardPage() {
           total_carbs: m.total_carbs,
           total_fat: m.total_fat,
           logged_at: m.logged_at,
+          meal_type: m.meal_type,
           notes: m.notes,
         }))
       );
@@ -217,6 +220,7 @@ export default function DashboardPage() {
         total_carbs: m.total_carbs,
         total_fat: m.total_fat,
         logged_at: m.logged_at,
+        meal_type: (m as any).meal_type,
         notes: m.notes,
       };
       })
@@ -734,6 +738,9 @@ return (
                           </div>
                         )}
                         <div className="text-xs text-muted-foreground mt-0.5">
+                          {mealTypeLabel(m.meal_type)
+                            ? `${mealTypeLabel(m.meal_type)} · `
+                            : ""}
                           {new Date(m.logged_at).toLocaleTimeString([], {
                             hour: "2-digit",
                             minute: "2-digit",

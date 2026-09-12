@@ -29,6 +29,7 @@ import { BottomNav } from "@/components/BottomNav";
 import { scoreMeal, scoreColor } from "@/lib/health-score";
 import { isGuest, enableGuest, ensureLocalSession, saveGuestMeal, getGuestMeals, getSessionAccount, isLocalSession } from "@/lib/guest";
 import { localDateKey, isoFromLocalDateKey } from "@/lib/dates";
+import { MEAL_TYPES, defaultMealType, type MealTypeId } from "@/lib/meal-type";
 
 type RecentMeal = {
   id: string;
@@ -61,6 +62,7 @@ export default function TrackerPage() {
   const [correctionHint, setCorrectionHint] = useState("");
   const [reanalyzing, setReanalyzing] = useState(false);
   const [logDate, setLogDate] = useState(() => localDateKey());
+  const [mealType, setMealType] = useState<MealTypeId>(() => defaultMealType());
   const [feedback, setFeedback] = useState<"up" | "down" | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const galleryInputRef = useRef<HTMLInputElement>(null);
@@ -314,6 +316,7 @@ export default function TrackerPage() {
           total_carbs: analysis.total_carbs,
           total_fat: analysis.total_fat,
           cuisine_detected: analysis.cuisine_detected,
+          meal_type: mealType,
           notes: analysis.notes || null,
           logged_at: isoFromLocalDateKey(logDate),
         });
@@ -358,6 +361,7 @@ export default function TrackerPage() {
         total_carbs: analysis.total_carbs,
         total_fat: analysis.total_fat,
         cuisine_detected: analysis.cuisine_detected,
+        meal_type: mealType,
         notes: analysis.meal_title
           ? `[title] ${analysis.meal_title}${analysis.notes ? " · " + analysis.notes : ""}`
           : analysis.notes || null,
@@ -1019,6 +1023,29 @@ export default function TrackerPage() {
               <p className="text-[11px] text-muted-foreground leading-snug">
                 Or tap the pencil on any item to rename it and edit macros, your edit is what gets saved.
               </p>
+            </div>
+
+            <div className="card-soft p-3 space-y-2">
+              <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+                Meal
+              </label>
+              <div className="flex flex-wrap gap-1.5">
+                {MEAL_TYPES.map((m) => (
+                  <button
+                    key={m.id}
+                    type="button"
+                    onClick={() => setMealType(m.id)}
+                    className={cn(
+                      "px-3 py-1.5 rounded-full text-xs font-semibold transition-colors",
+                      mealType === m.id
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-muted text-muted-foreground"
+                    )}
+                  >
+                    {m.label}
+                  </button>
+                ))}
+              </div>
             </div>
 
             <div className="card-soft p-3 space-y-2">

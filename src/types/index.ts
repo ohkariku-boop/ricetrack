@@ -74,7 +74,7 @@ export interface LoggedMeal {
   total_protein: number;
   total_carbs: number;
   total_fat: number;
-  meal_type?: "breakfast" | "lunch" | "dinner" | "snack";
+  meal_type?: "breakfast" | "lunch" | "tea" | "dinner" | "supper" | "snack";
   notes?: string;
   logged_at: string;
   created_at: string;

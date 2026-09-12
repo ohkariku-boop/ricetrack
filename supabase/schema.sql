@@ -34,7 +34,7 @@ create table if not exists public.meals (
   total_protein numeric not null default 0,
   total_carbs numeric not null default 0,
   total_fat numeric not null default 0,
-  meal_type text check (meal_type in ('breakfast', 'lunch', 'dinner', 'snack')),
+  meal_type text check (meal_type in ('breakfast', 'lunch', 'tea', 'dinner', 'supper', 'snack')),
   notes text,
   cuisine_detected text,
   logged_at timestamptz not null default now(),
@@ -241,3 +241,8 @@ create policy "Anyone can insert suggestions"
 create policy "Users read own suggestions"
   on public.library_suggestions for select
   using (auth.uid() = user_id or user_id is null);
+
+-- Expand meal_type for tea / supper (run on existing projects):
+-- alter table public.meals drop constraint if exists meals_meal_type_check;
+-- alter table public.meals add constraint meals_meal_type_check
+--   check (meal_type is null or meal_type in ('breakfast', 'lunch', 'tea', 'dinner', 'supper', 'snack'));
