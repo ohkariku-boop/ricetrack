@@ -617,16 +617,25 @@ return (
             Log a meal
           </Link>
         ) : (
-          <button
-            type="button"
-            onClick={() => {
-              setWeekOffset(0);
-              setSelectedDate(todayKey);
-            }}
-            className="btn-secondary w-full h-12 text-sm"
-          >
-            Back to today
-          </button>
+          <div className="flex flex-col gap-2">
+            <Link
+              href={`/app?date=${selectedDate}`}
+              className="btn-primary w-full h-12 flex items-center justify-center gap-2 text-sm"
+            >
+              <Camera className="w-4 h-4" />
+              Log for this day
+            </Link>
+            <button
+              type="button"
+              onClick={() => {
+                setWeekOffset(0);
+                setSelectedDate(todayKey);
+              }}
+              className="btn-secondary w-full h-11 text-sm"
+            >
+              Back to today
+            </button>
+          </div>
         )}
 
         <div>

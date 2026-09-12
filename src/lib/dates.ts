@@ -31,3 +31,18 @@ export function localDateKeyDaysAgo(days: number): string {
   d.setDate(d.getDate() - days);
   return localDateKey(d);
 }
+
+/**
+ * Build an ISO timestamp for a local calendar day.
+ * Uses noon local time so the day does not shift across timezones.
+ */
+export function isoFromLocalDateKey(dateKey: string, at: Date = new Date()): string {
+  const key = localDateKeyFromIso(dateKey);
+  const [y, m, d] = key.split("-").map(Number);
+  const x = new Date(y, (m || 1) - 1, d || 1, 12, 0, 0, 0);
+  // preserve current clock time-of-day when logging "today"
+  if (key === localDateKey(at)) {
+    x.setHours(at.getHours(), at.getMinutes(), at.getSeconds(), 0);
+  }
+  return x.toISOString();
+}

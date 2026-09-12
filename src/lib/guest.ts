@@ -187,11 +187,13 @@ export function getGuestMeals(): GuestMeal[] {
   }
 }
 
-export function saveGuestMeal(meal: Omit<GuestMeal, "id" | "logged_at">): GuestMeal {
+export function saveGuestMeal(
+  meal: Omit<GuestMeal, "id" | "logged_at"> & { logged_at?: string }
+): GuestMeal {
   const full: GuestMeal = {
     ...meal,
     id: `local_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
-    logged_at: new Date().toISOString(),
+    logged_at: meal.logged_at || new Date().toISOString(),
   };
   const id = activeId();
   const meals = getGuestMeals();

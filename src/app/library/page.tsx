@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { getDishGuide } from "@/lib/dish-guide";
 import { ensureLocalSession, saveGuestMeal, isLocalSession } from "@/lib/guest";
+import { localDateKey, isoFromLocalDateKey } from "@/lib/dates";
 import { createClient } from "@/lib/supabase/client";
 
 type Food = {
@@ -91,6 +92,7 @@ export default function LibraryPage() {
   const [selected, setSelected] = useState<Food | null>(null);
   const [logging, setLogging] = useState(false);
   const [logMsg, setLogMsg] = useState<string | null>(null);
+  const [logDate, setLogDate] = useState(() => localDateKey());
   const router = useRouter();
   const supabase = createClient();
 
@@ -154,6 +156,7 @@ export default function LibraryPage() {
           ...totals,
           cuisine_detected: selected.cuisine,
           notes: `Library · ${selected.portion || "1 serving"}`,
+          logged_at: isoFromLocalDateKey(logDate),
         });
         setLogMsg("Logged for today.");
         setLogging(false);
@@ -175,6 +178,7 @@ export default function LibraryPage() {
           ...totals,
           cuisine_detected: selected.cuisine,
           notes: `Library · ${selected.portion || "1 serving"}`,
+          logged_at: isoFromLocalDateKey(logDate),
         });
         setLogMsg("Logged on this device.");
         setLogging(false);
@@ -192,7 +196,7 @@ export default function LibraryPage() {
         ...totals,
         cuisine_detected: selected.cuisine,
         notes: `Library · ${selected.portion || "1 serving"}`,
-        logged_at: new Date().toISOString(),
+        logged_at: isoFromLocalDateKey(logDate),
       });
       if (error) throw new Error(error.message);
       setLogMsg("Logged for today.");
@@ -269,6 +273,7 @@ export default function LibraryPage() {
                   type="button"
                   onClick={() => {
                     setLogMsg(null);
+                    setLogDate(localDateKey());
                     setSelected(f);
                   }}
                   className="w-full text-left card-soft p-3.5 flex gap-3 items-start pressable border border-border/50 hover:border-primary/30 transition-colors"
@@ -396,6 +401,33 @@ export default function LibraryPage() {
                 <p className="text-sm leading-snug text-foreground/90">{guide.tip}</p>
               </div>
 
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+                  Log for day
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    type="date"
+                    max={localDateKey()}
+                    value={logDate}
+                    onChange={(e) => {
+                      const v = e.target.value;
+                      if (v && v <= localDateKey()) setLogDate(v);
+                    }}
+                    className="input-modern flex-1 px-3 py-2.5 text-sm"
+                  />
+                  {logDate !== localDateKey() && (
+                    <button
+                      type="button"
+                      className="btn-secondary h-10 px-3 text-xs"
+                      onClick={() => setLogDate(localDateKey())}
+                    >
+                      Today
+                    </button>
+                  )}
+                </div>
+              </div>
+
               {logMsg && (
                 <p className="text-sm text-center text-primary font-medium">{logMsg}</p>
               )}
@@ -416,7 +448,7 @@ export default function LibraryPage() {
                 )}
               </button>
               <p className="text-[11px] text-center text-muted-foreground pb-4">
-                Adds one serving to today. You can edit on Home after.
+                Adds one serving to the selected day. Edit later on Home (pick that day on the calendar).
               </p>
             </div>
           </div>

@@ -28,6 +28,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { BottomNav } from "@/components/BottomNav";
 import { scoreMeal, scoreColor } from "@/lib/health-score";
 import { isGuest, enableGuest, ensureLocalSession, saveGuestMeal, getGuestMeals, getSessionAccount, isLocalSession } from "@/lib/guest";
+import { localDateKey, isoFromLocalDateKey } from "@/lib/dates";
 
 type RecentMeal = {
   id: string;
@@ -59,11 +60,21 @@ export default function TrackerPage() {
   const [showTemplates, setShowTemplates] = useState(true);
   const [correctionHint, setCorrectionHint] = useState("");
   const [reanalyzing, setReanalyzing] = useState(false);
+  const [logDate, setLogDate] = useState(() => localDateKey());
   const [feedback, setFeedback] = useState<"up" | "down" | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const galleryInputRef = useRef<HTMLInputElement>(null);
   const supabase = createClient();
   const router = useRouter();
+
+  useEffect(() => {
+    try {
+      const d = new URLSearchParams(window.location.search).get("date");
+      if (d && /^\d{4}-\d{2}-\d{2}$/.test(d) && d <= localDateKey()) {
+        setLogDate(d);
+      }
+    } catch { /* ignore */ }
+  }, []);
 
   useEffect(() => {
     // Frictionless: if no account yet, start guest so saves always work
@@ -304,6 +315,7 @@ export default function TrackerPage() {
           total_fat: analysis.total_fat,
           cuisine_detected: analysis.cuisine_detected,
           notes: analysis.notes || null,
+          logged_at: isoFromLocalDateKey(logDate),
         });
         const meals = getGuestMeals().slice(0, 10).map((m) => ({
           id: m.id,
@@ -315,12 +327,13 @@ export default function TrackerPage() {
         }));
         setRecents(meals);
         const acc = getSessionAccount();
+        const dayLabel = logDate === localDateKey() ? "today" : logDate;
         setSuccess(
           acc?.paid
-            ? `Saved to ${acc.name}'s diary`
+            ? `Saved to ${acc.name}'s diary (${dayLabel})`
             : acc
-              ? `Saved on this device (${acc.name})`
-              : "Saved on this device (guest)"
+              ? `Saved on this device (${acc.name}, ${dayLabel})`
+              : `Saved on this device (${dayLabel})`
         );
         setTimeout(() => {
           reset();
@@ -348,6 +361,7 @@ export default function TrackerPage() {
         notes: analysis.meal_title
           ? `[title] ${analysis.meal_title}${analysis.notes ? " · " + analysis.notes : ""}`
           : analysis.notes || null,
+        logged_at: isoFromLocalDateKey(logDate),
       });
       if (insertError) throw insertError;
 
@@ -1007,6 +1021,38 @@ export default function TrackerPage() {
               </p>
             </div>
 
+            <div className="card-soft p-3 space-y-2">
+              <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+                Log for day
+              </label>
+              <div className="flex items-center gap-2">
+                <input
+                  type="date"
+                  max={localDateKey()}
+                  value={logDate}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    if (v && v <= localDateKey()) setLogDate(v);
+                  }}
+                  className="input-modern flex-1 px-3 py-2.5 text-sm"
+                />
+                {logDate !== localDateKey() && (
+                  <button
+                    type="button"
+                    className="btn-secondary h-10 px-3 text-xs shrink-0"
+                    onClick={() => setLogDate(localDateKey())}
+                  >
+                    Today
+                  </button>
+                )}
+              </div>
+              <p className="text-[11px] text-muted-foreground">
+                {logDate === localDateKey()
+                  ? "Saving to today. Change the date if you forgot to log earlier."
+                  : `This meal will appear on ${logDate}, not today.`}
+              </p>
+            </div>
+
             <div className="flex gap-2 sticky bottom-4 pt-1 pb-2 bg-background">
               <button type="button" onClick={reset} className="btn-secondary flex-1 h-12">
                 Cancel
@@ -1019,11 +1065,13 @@ export default function TrackerPage() {
               >
                 {saving
                   ? "Saving…"
-                  : user
-                    ? "Save meal"
-                    : localName && localName !== "Guest"
-                      ? `Save · ${localName}`
-                      : "Save meal"}
+                  : logDate !== localDateKey()
+                    ? `Save · ${logDate}`
+                    : user
+                      ? "Save meal"
+                      : localName && localName !== "Guest"
+                        ? `Save · ${localName}`
+                        : "Save meal"}
               </button>
             </div>
           </div>
