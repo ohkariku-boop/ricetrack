@@ -155,7 +155,6 @@ export async function showMealReminder(slot: ReminderSlot): Promise<ShowReminder
     icon: "/icon-192.png",
     badge: "/favicon-32.png",
     tag,
-    renotify: true,
     requireInteraction: false,
     data: { url: "/app" },
   };
