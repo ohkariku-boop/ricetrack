@@ -1,11 +1,22 @@
 "use client";
 
 import { BottomNav } from "@/components/BottomNav";
-
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { formatCalories, formatMacro, cn } from "@/lib/utils";
-import { Search, ArrowLeft, Loader2, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  Search,
+  ArrowLeft,
+  Loader2,
+  ChevronLeft,
+  ChevronRight,
+  X,
+  Plus,
+} from "lucide-react";
+import { getDishGuide } from "@/lib/dish-guide";
+import { ensureLocalSession, saveGuestMeal, isLocalSession } from "@/lib/guest";
+import { createClient } from "@/lib/supabase/client";
 
 type Food = {
   id: string;
@@ -22,7 +33,6 @@ type Food = {
 };
 
 const PAGE_SIZE = 10;
-
 
 const CUISINE_AVATAR: Record<string, string> = {
   chinese: "bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-300",
@@ -78,6 +88,11 @@ export default function LibraryPage() {
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [selected, setSelected] = useState<Food | null>(null);
+  const [logging, setLogging] = useState(false);
+  const [logMsg, setLogMsg] = useState<string | null>(null);
+  const router = useRouter();
+  const supabase = createClient();
 
   useEffect(() => {
     setPage(1);
@@ -107,6 +122,90 @@ export default function LibraryPage() {
   }, [query, cuisine, page]);
 
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  const guide = selected ? getDishGuide(selected) : null;
+
+  const logDish = async () => {
+    if (!selected) return;
+    setLogging(true);
+    setLogMsg(null);
+    const item = {
+      name: selected.name,
+      name_original: selected.name_original || undefined,
+      calories: Number(selected.calories) || 0,
+      protein: Number(selected.protein) || 0,
+      carbs: Number(selected.carbs) || 0,
+      fat: Number(selected.fat) || 0,
+      portion: selected.portion || "1 serving",
+      confidence: 0.95,
+    };
+    const totals = {
+      total_calories: item.calories,
+      total_protein: item.protein,
+      total_carbs: item.carbs,
+      total_fat: item.fat,
+    };
+
+    try {
+      ensureLocalSession();
+      if (isLocalSession()) {
+        saveGuestMeal({
+          meal_title: selected.name,
+          items: [item],
+          ...totals,
+          cuisine_detected: selected.cuisine,
+          notes: `Library · ${selected.portion || "1 serving"}`,
+        });
+        setLogMsg("Logged for today.");
+        setLogging(false);
+        setTimeout(() => {
+          setSelected(null);
+          router.push("/dashboard");
+        }, 600);
+        return;
+      }
+
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) {
+        ensureLocalSession();
+        saveGuestMeal({
+          meal_title: selected.name,
+          items: [item],
+          ...totals,
+          cuisine_detected: selected.cuisine,
+          notes: `Library · ${selected.portion || "1 serving"}`,
+        });
+        setLogMsg("Logged on this device.");
+        setLogging(false);
+        setTimeout(() => {
+          setSelected(null);
+          router.push("/dashboard");
+        }, 600);
+        return;
+      }
+
+      const { error } = await supabase.from("meals").insert({
+        user_id: user.id,
+        meal_title: selected.name,
+        items: [item],
+        ...totals,
+        cuisine_detected: selected.cuisine,
+        notes: `Library · ${selected.portion || "1 serving"}`,
+        logged_at: new Date().toISOString(),
+      });
+      if (error) throw new Error(error.message);
+      setLogMsg("Logged for today.");
+      setLogging(false);
+      setTimeout(() => {
+        setSelected(null);
+        router.push("/dashboard");
+      }, 600);
+    } catch (e) {
+      setLogging(false);
+      setLogMsg(e instanceof Error ? e.message : "Could not log dish.");
+    }
+  };
 
   return (
     <div className="min-h-screen safe-bottom bg-background flex flex-col">
@@ -118,7 +217,7 @@ export default function LibraryPage() {
           <div className="flex-1 min-w-0">
             <h1 className="font-semibold tracking-tight">Food library</h1>
             <p className="text-[11px] text-muted-foreground truncate">
-              Asia-first · {total > 0 ? `${total.toLocaleString()} dishes` : "search"}
+              Asia-first · {total > 0 ? `${total.toLocaleString()} dishes` : "search"} · tap for details
             </p>
           </div>
         </div>
@@ -145,7 +244,7 @@ export default function LibraryPage() {
                 "shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-colors",
                 cuisine === c
                   ? "bg-primary text-primary-foreground"
-                  : "bg-muted text-muted-foreground hover:text-foreground"
+                  : "bg-muted text-muted-foreground"
               )}
             >
               {LABELS[c] || c}
@@ -158,19 +257,24 @@ export default function LibraryPage() {
             <Loader2 className="w-6 h-6 animate-spin text-primary" />
           </div>
         ) : items.length === 0 ? (
-          <div className="card-soft p-10 text-center text-sm text-muted-foreground">
+          <div className="card-soft p-8 text-center text-sm text-muted-foreground">
             No dishes match. Try another search or cuisine.
           </div>
         ) : (
           <>
             <div className="space-y-2">
               {items.map((f) => (
-                <div
+                <button
                   key={f.id}
-                  className="card-soft p-3 flex items-start justify-between gap-3 pressable"
+                  type="button"
+                  onClick={() => {
+                    setLogMsg(null);
+                    setSelected(f);
+                  }}
+                  className="w-full text-left card-soft p-3.5 flex gap-3 items-start pressable border border-border/50 hover:border-primary/30 transition-colors"
                 >
                   <div
-                    className={`w-11 h-11 rounded-xl shrink-0 flex items-center justify-center text-xs font-bold uppercase ${
+                    className={`w-10 h-10 rounded-xl flex items-center justify-center text-[11px] font-bold uppercase shrink-0 ${
                       CUISINE_AVATAR[f.cuisine] || "bg-muted text-muted-foreground"
                     }`}
                     aria-hidden
@@ -194,11 +298,10 @@ export default function LibraryPage() {
                       P{formatMacro(f.protein)} C{formatMacro(f.carbs)} F{formatMacro(f.fat)}
                     </div>
                   </div>
-                </div>
+                </button>
               ))}
             </div>
 
-            {/* Pagination, no endless scroll */}
             <div className="flex items-center justify-between pt-2 pb-4">
               <button
                 type="button"
@@ -225,6 +328,101 @@ export default function LibraryPage() {
           </>
         )}
       </main>
+
+      {/* Dish detail sheet */}
+      {selected && guide && (
+        <div className="fixed inset-0 z-[80] flex flex-col justify-end">
+          <button
+            type="button"
+            className="absolute inset-0 bg-black/40"
+            aria-label="Close"
+            onClick={() => setSelected(null)}
+          />
+          <div className="relative mx-auto w-full max-w-lg rounded-t-3xl bg-background border-t border-border shadow-2xl max-h-[88vh] overflow-y-auto animate-in slide-in-from-bottom">
+            <div className="sticky top-0 bg-background/95 backdrop-blur border-b border-border/60 px-5 py-4 flex items-start gap-3 z-10">
+              <div className="min-w-0 flex-1">
+                <h2 className="text-lg font-semibold leading-tight">{selected.name}</h2>
+                {selected.name_original && (
+                  <p className="text-sm text-muted-foreground mt-0.5">{selected.name_original}</p>
+                )}
+                <p className="text-[11px] text-muted-foreground mt-1 capitalize">
+                  {selected.cuisine?.replace("_", " ")}
+                  {selected.portion ? ` · ${selected.portion}` : ""}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setSelected(null)}
+                className="p-2 rounded-xl hover:bg-muted shrink-0"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="px-5 py-4 space-y-4">
+              <div className="grid grid-cols-4 gap-2">
+                {[
+                  ["kcal", formatCalories(selected.calories)],
+                  ["Protein", `${formatMacro(selected.protein)}g`],
+                  ["Carbs", `${formatMacro(selected.carbs)}g`],
+                  ["Fat", `${formatMacro(selected.fat)}g`],
+                ].map(([k, v]) => (
+                  <div key={k} className="card-soft p-2.5 text-center">
+                    <div className="text-[10px] uppercase text-muted-foreground">{k}</div>
+                    <div className="text-sm font-bold tabular-nums mt-0.5">{v}</div>
+                  </div>
+                ))}
+              </div>
+
+              <div>
+                <h3 className="text-sm font-semibold mb-2">Typical components</h3>
+                <ul className="space-y-1.5">
+                  {guide.components.map((c) => (
+                    <li
+                      key={c}
+                      className="text-sm text-foreground/90 flex gap-2 leading-snug"
+                    >
+                      <span className="text-primary mt-1.5 w-1 h-1 rounded-full bg-primary shrink-0" />
+                      {c}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="rounded-xl bg-muted/60 px-3.5 py-3">
+                <div className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground mb-1">
+                  Logging tip
+                </div>
+                <p className="text-sm leading-snug text-foreground/90">{guide.tip}</p>
+              </div>
+
+              {logMsg && (
+                <p className="text-sm text-center text-primary font-medium">{logMsg}</p>
+              )}
+
+              <button
+                type="button"
+                onClick={logDish}
+                disabled={logging}
+                className="btn-primary w-full h-12 flex items-center justify-center gap-2 disabled:opacity-50"
+              >
+                {logging ? (
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                ) : (
+                  <>
+                    <Plus className="w-5 h-5" />
+                    Log this
+                  </>
+                )}
+              </button>
+              <p className="text-[11px] text-center text-muted-foreground pb-4">
+                Adds one serving to today. You can edit on Home after.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
       <BottomNav />
     </div>
   );
