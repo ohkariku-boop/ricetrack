@@ -82,6 +82,9 @@ export default function LandingPage() {
             <Link href="/library" className="hover:text-[#1a1814]">
               Library
             </Link>
+            <Link href="/pricing" className="hover:text-[#1a1814]">
+              Pricing
+            </Link>
           </nav>
           <Link
             href="/app"

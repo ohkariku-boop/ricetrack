@@ -29,6 +29,7 @@ import { BottomNav } from "@/components/BottomNav";
 import { scoreMeal, scoreColor } from "@/lib/health-score";
 import { isGuest, enableGuest, ensureLocalSession, saveGuestMeal, getGuestMeals, getSessionAccount, isLocalSession } from "@/lib/guest";
 import { localDateKey, isoFromLocalDateKey } from "@/lib/dates";
+import { canUseAiScan, recordAiScan, getAiScansRemaining, isPro } from "@/lib/entitlements";
 import { MEAL_TYPES, defaultMealType, type MealTypeId } from "@/lib/meal-type";
 
 type RecentMeal = {
@@ -63,11 +64,19 @@ export default function TrackerPage() {
   const [reanalyzing, setReanalyzing] = useState(false);
   const [logDate, setLogDate] = useState(() => localDateKey());
   const [mealType, setMealType] = useState<MealTypeId>(() => defaultMealType());
+  const [aiLeft, setAiLeft] = useState<number | "unlimited">(5);
   const [feedback, setFeedback] = useState<"up" | "down" | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const galleryInputRef = useRef<HTMLInputElement>(null);
   const supabase = createClient();
   const router = useRouter();
+
+  useEffect(() => {
+    setAiLeft(getAiScansRemaining());
+    const onPlan = () => setAiLeft(getAiScansRemaining());
+    window.addEventListener("rt-plan-changed", onPlan);
+    return () => window.removeEventListener("rt-plan-changed", onPlan);
+  }, []);
 
   useEffect(() => {
     try {
@@ -170,6 +179,11 @@ export default function TrackerPage() {
   const analyze = async () => {
     if (mode === "photo" && !imageBase64) return;
     if (mode === "text" && !textDescription.trim()) return;
+    const gate = canUseAiScan();
+    if (!gate.ok) {
+      setError(gate.reason || "AI limit reached.");
+      return;
+    }
     setLoading(true);
     setError(null);
     try {
@@ -184,6 +198,8 @@ export default function TrackerPage() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Analysis failed");
+      recordAiScan();
+      setAiLeft(getAiScansRemaining());
       setAnalysis(data);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Something went wrong";
@@ -199,6 +215,11 @@ export default function TrackerPage() {
 
   const reanalyzeWithCorrection = async () => {
     if (!analysis) return;
+    const gate = canUseAiScan();
+    if (!gate.ok) {
+      setError(gate.reason || "AI limit reached.");
+      return;
+    }
     setReanalyzing(true);
     setError(null);
     try {
@@ -225,6 +246,8 @@ export default function TrackerPage() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Re-analysis failed");
+      recordAiScan();
+      setAiLeft(getAiScansRemaining());
       setAnalysis(data);
       setCorrectionHint("");
       setEditingIdx(null);
@@ -526,6 +549,19 @@ export default function TrackerPage() {
       </header>
 
       <main className="flex-1 mx-auto w-full max-w-lg px-5 py-4 space-y-4">
+        <div className="flex items-center justify-between gap-2 text-xs mb-1">
+          <span className="text-muted-foreground">
+            {aiLeft === "unlimited" || isPro()
+              ? "Pro · unlimited AI scans"
+              : `Free · ${aiLeft} AI scan${aiLeft === 1 ? "" : "s"} left this week`}
+          </span>
+          {!(aiLeft === "unlimited" || isPro()) && (
+            <Link href="/pricing" className="font-semibold text-primary shrink-0">
+              Upgrade
+            </Link>
+          )}
+        </div>
+
         {/* Empty state */}
         {!imagePreview && !analysis && (
           <div className="space-y-5">

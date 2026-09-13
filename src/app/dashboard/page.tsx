@@ -32,6 +32,7 @@ import {
 } from "@/lib/guest";
 import type { FoodItem } from "@/types";
 import { localDateKey, localDateKeyFromIso, startOfLocalDay } from "@/lib/dates";
+import { isPro } from "@/lib/entitlements";
 import { mealTypeLabel } from "@/lib/meal-type";
 import { BottomNav } from "@/components/BottomNav";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -166,7 +167,7 @@ export default function DashboardPage() {
       setLoggedDaySet(days);
       const acc = getSessionAccount();
       setAccountLabel(
-        acc ? `${acc.name}${acc.paid ? " · Paid" : ""}` : ""
+        acc ? `${acc.name}${acc.paid || isPro() ? " · Pro" : ""}` : ""
       );
       setLoading(false);
       return;

@@ -6,8 +6,9 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { BottomNav } from "@/components/BottomNav";
-import { ArrowLeft, Loader2, Bell } from "lucide-react";
+import { ArrowLeft, Loader2, Bell, Sparkles } from "lucide-react";
 import { isLocalSession, getGuestProfile, setGuestProfile, ensureLocalSession } from "@/lib/guest";
+import { isPro, getAiScansRemaining, FREE_AI_SCANS_PER_WEEK } from "@/lib/entitlements";
 import {
   DEFAULT_REMINDERS,
   getReminderSettings,
@@ -35,12 +36,17 @@ export default function SettingsPage() {
   const [reminders, setReminders] = useState<ReminderSettings>(DEFAULT_REMINDERS);
   const [perm, setPerm] = useState<NotificationPermission | "unsupported">("default");
   const [reminderMsg, setReminderMsg] = useState<string | null>(null);
+  const [pro, setPro] = useState(false);
+  const [scansLeft, setScansLeft] = useState<number | "unlimited">(FREE_AI_SCANS_PER_WEEK);
   const router = useRouter();
   const supabase = createClient();
 
   useEffect(() => {
     setReminders(getReminderSettings());
     setPerm(notificationPermission());
+    setPro(isPro());
+    setScansLeft(getAiScansRemaining());
+
     (async () => {
       ensureLocalSession();
       const {
@@ -197,6 +203,28 @@ export default function SettingsPage() {
             <div className="text-xs text-muted-foreground">Light or dark background</div>
           </div>
           <ThemeToggle />
+        </div>
+
+        <div className="card-soft p-4 space-y-3">
+          <div className="flex items-start gap-3">
+            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+              <Sparkles className="w-5 h-5 text-primary" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <div className="text-sm font-medium">{pro ? "Pro plan" : "Free plan"}</div>
+              <div className="text-xs text-muted-foreground mt-0.5">
+                {pro
+                  ? "Unlimited AI photo and text analysis"
+                  : `${scansLeft === "unlimited" ? FREE_AI_SCANS_PER_WEEK : scansLeft} AI scans left this week · library and manual log stay free`}
+              </div>
+            </div>
+          </div>
+          <Link
+            href="/pricing"
+            className={pro ? "btn-secondary w-full h-11 text-sm flex items-center justify-center" : "btn-primary w-full h-11 text-sm flex items-center justify-center"}
+          >
+            {pro ? "Manage plan" : "Upgrade to Pro"}
+          </Link>
         </div>
 
         {/* Meal reminders */}
