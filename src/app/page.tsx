@@ -345,12 +345,12 @@ export default function LandingPage() {
                 Pro
               </div>
               <div className="mt-1 flex items-baseline gap-1.5 flex-wrap">
-                <span className="text-[2rem] font-semibold tracking-tight">$29</span>
+                <span className="text-[2rem] font-semibold tracking-tight">$35</span>
                 <span className="text-[13px] text-[#1a1814]/45">/ year</span>
-                <span className="text-[12px] text-[#1a1814]/40">or $3 / month</span>
+                <span className="text-[12px] text-[#1a1814]/40">or $3.99 / month</span>
               </div>
               <p className="text-[13px] text-[#1a1814]/55 mt-1.5 leading-snug">
-                ≈ $2.42/mo billed yearly. Unlimited AI for daily Asian plates.
+                ≈ $2.92/mo billed yearly. Unlimited AI for daily Asian plates.
               </p>
               <ul className="mt-4 space-y-2 text-[13px] text-[#1a1814]/70 flex-1">
                 <li className="flex gap-2">

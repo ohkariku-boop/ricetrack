@@ -138,5 +138,5 @@ export const PLAN_FEATURES: FeatureRow[] = [
   { name: "Support", free: "Standard", pro: "Priority email" },
 ];
 
-export const PRO_PRICE_MONTHLY = 3;
-export const PRO_PRICE_YEARLY = 29;
+export const PRO_PRICE_MONTHLY = 3.99;
+export const PRO_PRICE_YEARLY = 35;
