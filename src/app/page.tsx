@@ -358,6 +358,9 @@ export default function LandingPage() {
               <p className="text-[13px] text-[#1a1814]/55 mt-1.5 leading-snug">
                 Unlimited AI for daily Asian plates.
               </p>
+              <p className="text-[12px] font-medium text-[#3d8f5c] mt-1">
+                Yearly saves $12.88 (27%) vs $3.99 × 12
+              </p>
               <ul className="mt-4 space-y-2 text-[13px] text-[#1a1814]/70 flex-1">
                 <li className="flex gap-2">
                   <span className="text-[#3d8f5c] font-bold shrink-0">✓</span>

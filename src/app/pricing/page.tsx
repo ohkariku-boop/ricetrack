@@ -171,7 +171,9 @@ export default function PricingPage() {
             </p>
             <p className="text-xs text-muted-foreground mt-1">
               {billing === "yearly"
-                ? `≈ $${(PRO_PRICE_YEARLY / 12).toFixed(2)}/mo · unlimited AI`
+                ? `Save $${(PRO_PRICE_MONTHLY * 12 - PRO_PRICE_YEARLY).toFixed(2)}/yr (${Math.round(
+                    (1 - PRO_PRICE_YEARLY / (PRO_PRICE_MONTHLY * 12)) * 100
+                  )}% off) vs monthly`
                 : "Unlimited AI photo & text analysis"}
             </p>
 
