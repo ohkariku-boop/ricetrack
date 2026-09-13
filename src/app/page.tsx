@@ -82,9 +82,9 @@ export default function LandingPage() {
             <Link href="/library" className="hover:text-[#1a1814]">
               Library
             </Link>
-            <Link href="/pricing" className="hover:text-[#1a1814]">
+            <a href="#pricing" className="hover:text-[#1a1814]">
               Pricing
-            </Link>
+            </a>
           </nav>
           <Link
             href="/app"
@@ -281,6 +281,113 @@ export default function LandingPage() {
         </Link>
       </section>
 
+
+      {/* Pricing */}
+      <section id="pricing" className="px-4 py-8 sm:py-10 border-t border-[#1a1814]/8 scroll-mt-14">
+        <div className="mx-auto max-w-5xl">
+          <div className="text-center max-w-lg mx-auto mb-6">
+            <p className="text-[12px] tracking-[0.16em] uppercase text-[#1a1814]/45 font-medium mb-1.5">
+              Pricing
+            </p>
+            <h2 className="text-[1.55rem] sm:text-[1.75rem] font-semibold tracking-tight">
+              Start free. Go Pro when you need more scans.
+            </h2>
+            <p className="text-[14px] text-[#1a1814]/55 mt-2 leading-snug">
+              Full Asian library on every plan. Pro unlocks unlimited AI photo analysis.
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 gap-3 sm:gap-4 max-w-3xl mx-auto">
+            {/* Free */}
+            <div className="rounded-2xl border border-[#1a1814]/10 bg-white/60 p-5 flex flex-col">
+              <div className="text-[12px] font-semibold uppercase tracking-wide text-[#1a1814]/45">
+                Free
+              </div>
+              <div className="mt-1 flex items-baseline gap-1">
+                <span className="text-[2rem] font-semibold tracking-tight">$0</span>
+                <span className="text-[13px] text-[#1a1814]/45">forever</span>
+              </div>
+              <p className="text-[13px] text-[#1a1814]/55 mt-1.5 leading-snug">
+                Enough to try photo logging and use the full dish library.
+              </p>
+              <ul className="mt-4 space-y-2 text-[13px] text-[#1a1814]/70 flex-1">
+                <li className="flex gap-2">
+                  <span className="text-[#3d8f5c] font-bold shrink-0">✓</span>
+                  5 AI photo / text scans per week
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-[#3d8f5c] font-bold shrink-0">✓</span>
+                  Unlimited manual &amp; library logging
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-[#3d8f5c] font-bold shrink-0">✓</span>
+                  Full Asian food library
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-[#3d8f5c] font-bold shrink-0">✓</span>
+                  Progress, history &amp; meal reminders
+                </li>
+              </ul>
+              <Link
+                href="/app"
+                className="mt-5 inline-flex h-10 items-center justify-center rounded-full border border-[#1a1814]/12 text-[13px] font-semibold hover:border-[#1a1814]/30 transition-colors"
+              >
+                Try free
+              </Link>
+            </div>
+
+            {/* Pro */}
+            <div className="rounded-2xl border-2 border-[#3d8f5c] bg-white p-5 flex flex-col relative shadow-[0_8px_30px_-12px_rgba(61,143,92,0.35)]">
+              <div className="absolute -top-2.5 right-4 rounded-full bg-[#3d8f5c] text-white text-[10px] font-semibold uppercase tracking-wide px-2.5 py-0.5">
+                Popular
+              </div>
+              <div className="text-[12px] font-semibold uppercase tracking-wide text-[#3d8f5c]">
+                Pro
+              </div>
+              <div className="mt-1 flex items-baseline gap-1.5 flex-wrap">
+                <span className="text-[2rem] font-semibold tracking-tight">$29</span>
+                <span className="text-[13px] text-[#1a1814]/45">/ year</span>
+                <span className="text-[12px] text-[#1a1814]/40">or $3 / month</span>
+              </div>
+              <p className="text-[13px] text-[#1a1814]/55 mt-1.5 leading-snug">
+                ≈ $2.42/mo billed yearly. Unlimited AI for daily Asian plates.
+              </p>
+              <ul className="mt-4 space-y-2 text-[13px] text-[#1a1814]/70 flex-1">
+                <li className="flex gap-2">
+                  <span className="text-[#3d8f5c] font-bold shrink-0">✓</span>
+                  Unlimited AI photo &amp; text analysis
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-[#3d8f5c] font-bold shrink-0">✓</span>
+                  Everything in Free
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-[#3d8f5c] font-bold shrink-0">✓</span>
+                  Priority dish suggestions to the library
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-[#3d8f5c] font-bold shrink-0">✓</span>
+                  Priority email support
+                </li>
+              </ul>
+              <Link
+                href="/pricing"
+                className="mt-5 inline-flex h-10 items-center justify-center rounded-full bg-[#1a1814] text-[#f6f3ee] text-[13px] font-semibold hover:bg-[#3d8f5c] transition-colors"
+              >
+                Get Pro
+              </Link>
+            </div>
+          </div>
+
+          <p className="text-center text-[12px] text-[#1a1814]/40 mt-4">
+            Estimates only, not medical advice.{" "}
+            <Link href="/pricing" className="text-[#3d8f5c] font-medium hover:underline">
+              Full plan comparison
+            </Link>
+          </p>
+        </div>
+      </section>
+
       <footer className="px-4 py-7 border-t border-[#1a1814]/8 text-[12px] text-[#1a1814]/45">
         <div className="mx-auto max-w-5xl flex flex-col gap-5">
           <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-5">
@@ -313,6 +420,9 @@ export default function LandingPage() {
                 </Link>
                 <Link href="/library" className="block hover:text-[#1a1814]">
                   Food library
+                </Link>
+                <Link href="/pricing" className="block hover:text-[#1a1814]">
+                  Pricing
                 </Link>
                 <Link href="/login" className="block hover:text-[#1a1814]">
                   Sign in
