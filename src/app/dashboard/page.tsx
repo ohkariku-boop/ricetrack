@@ -41,6 +41,7 @@ import { TodayStrip } from "@/components/home/TodayStrip";
 import { RestCard } from "@/components/home/RestCard";
 import { WeekConsistency } from "@/components/home/WeekConsistency";
 import { BodyCard } from "@/components/home/BodyCard";
+import { DailySummaryCard } from "@/components/home/DailySummaryCard";
 import { submitLibrarySuggestion } from "@/lib/library-suggestions";
 import {
   weekStrip,
@@ -765,6 +766,28 @@ return (
             </div>
           )}
         </div>
+
+        <DailySummaryCard
+          title={
+            isViewingToday
+              ? "Daily summary"
+              : new Date(selectedDate + "T12:00:00").toLocaleDateString(undefined, {
+                  weekday: "short",
+                  day: "numeric",
+                  month: "short",
+                }) + " summary"
+          }
+          calories={totals.cal}
+          calorieTarget={targets.cal}
+          protein={totals.p}
+          proteinTarget={targets.p}
+          waterMl={waterMl}
+          weightKg={Number(profile?.weight_kg) || undefined}
+          sleepHours={sleepHoursForDate(selectedDate)}
+          energy={energyLevelForDate(selectedDate)}
+          steps={steps}
+          mealCount={meals.length}
+        />
 
         <TodayStrip
           key={restTick}
