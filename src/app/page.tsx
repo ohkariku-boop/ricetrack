@@ -142,7 +142,7 @@ export default function LandingPage() {
               </Link>
               <Link
                 href="/library"
-                className="inline-flex h-10 px-6 items-center rounded-full border border-[#1a1814]/12 text-[13px] font-medium hover:border-[#1a1814]/30 transition-colors"
+                className="inline-flex h-10 px-6 items-center rounded-full bg-[#3d8f5c] text-white text-[13px] font-semibold hover:bg-[#4aa56c] transition-colors"
               >
                 Library
               </Link>
@@ -373,7 +373,7 @@ export default function LandingPage() {
               </ul>
               <Link
                 href="/app"
-                className="mt-6 inline-flex h-11 items-center justify-center rounded-full border border-[#1a1814]/10 text-[13px] font-semibold hover:border-[#1a1814]/25 transition-colors"
+                className="mt-6 inline-flex h-11 items-center justify-center rounded-full bg-[#3d8f5c] text-white text-[13px] font-semibold hover:bg-[#4aa56c] transition-colors"
               >
                 Try free
               </Link>
