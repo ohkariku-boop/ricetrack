@@ -17,38 +17,59 @@ type FoodRow = {
   fat: number;
   portion?: string | null;
   tags?: string[] | null;
+  source?: string | null;
 };
 
-function filterSeed(q: string, cuisine: string, country: string): FoodRow[] {
+function filterRows(rows: FoodRow[], q: string, cuisine: string, country: string): FoodRow[] {
   const query = q.toLowerCase();
-  let rows = seed as FoodRow[];
+  let out = rows;
   if (cuisine && cuisine !== "all") {
-    rows = rows.filter((r) => r.cuisine === cuisine);
+    out = out.filter((r) => r.cuisine === cuisine);
   }
   if (country && country !== "all") {
-    rows = rows.filter((r) => r.country === country);
+    out = out.filter((r) => (r.country || "") === country);
   }
   if (query) {
-    rows = rows.filter(
+    out = out.filter(
       (r) =>
         r.name.toLowerCase().includes(query) ||
         (r.name_original || "").toLowerCase().includes(query) ||
         (r.category || "").toLowerCase().includes(query) ||
-        (r.country || "").toLowerCase().includes(query)
+        (r.country || "").toLowerCase().includes(query) ||
+        (r.tags || []).some((t) => String(t).toLowerCase().includes(query))
     );
-  }
-  // Prefer name prefix matches
-  if (query) {
-    rows = [...rows].sort((a, b) => {
+    out = [...out].sort((a, b) => {
       const an = a.name.toLowerCase();
       const bn = b.name.toLowerCase();
       const aP = an.startsWith(query) ? 0 : 1;
       const bP = bn.startsWith(query) ? 0 : 1;
       if (aP !== bP) return aP - bP;
+      // Prefer user-published when names tie on prefix
+      const aU = String(a.id).startsWith("usr-") ? 0 : 1;
+      const bU = String(b.id).startsWith("usr-") ? 0 : 1;
+      if (aU !== bU) return aU - bU;
       return an.localeCompare(bn);
     });
   }
-  return rows;
+  return out;
+}
+
+function normalizeCloud(row: Record<string, unknown>): FoodRow {
+  return {
+    id: String(row.id),
+    name: String(row.name || ""),
+    name_original: (row.name_original as string) || null,
+    cuisine: String(row.cuisine || "other"),
+    country: (row.country as string) || null,
+    category: (row.category as string) || null,
+    calories: Number(row.calories) || 0,
+    protein: Number(row.protein) || 0,
+    carbs: Number(row.carbs) || 0,
+    fat: Number(row.fat) || 0,
+    portion: (row.portion as string) || null,
+    tags: (row.tags as string[]) || [],
+    source: (row.source as string) || "supabase",
+  };
 }
 
 export async function GET(req: NextRequest) {
@@ -62,38 +83,44 @@ export async function GET(req: NextRequest) {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
+  let cloud: FoodRow[] = [];
   if (url && key) {
     try {
       const supabase = createClient(url, key);
-      let query = supabase.from("food_library").select("*", { count: "exact" });
+      // Pull a generous slice; merge with seed then filter (catalog still modest)
+      let query = supabase.from("food_library").select("*").limit(3000);
       if (cuisine !== "all") query = query.eq("cuisine", cuisine);
       if (country !== "all") query = query.eq("country", country);
-      if (q) {
-        query = query.or(
-          `name.ilike.%${q}%,name_original.ilike.%${q}%,category.ilike.%${q}%`
-        );
-      }
-      query = query.order("name").range(offset, offset + limit - 1);
-      const { data, error, count } = await query;
-      if (!error && data && data.length > 0) {
-        return NextResponse.json({
-          source: "supabase",
-          count: data.length,
-          total_seed: count ?? data.length,
-          items: data,
-        });
+      const { data, error } = await query;
+      if (!error && data?.length) {
+        cloud = data.map((r) => normalizeCloud(r as Record<string, unknown>));
       }
     } catch {
-      // fall through
+      /* seed only */
     }
   }
 
-  const filtered = filterSeed(q, cuisine, country);
-  const items = filtered.slice(offset, offset + limit);
+  // Merge: cloud overrides seed on same id; also drop seed rows with same name as usr-* cloud
+  const byId = new Map<string, FoodRow>();
+  for (const r of seed as FoodRow[]) byId.set(r.id, { ...r, source: r.source || "seed" });
+  const cloudNames = new Set(
+    cloud.filter((c) => String(c.id).startsWith("usr-")).map((c) => c.name.toLowerCase())
+  );
+  for (const [id, row] of [...byId.entries()]) {
+    if (cloudNames.has(row.name.toLowerCase()) && !String(id).startsWith("usr-")) {
+      byId.delete(id);
+    }
+  }
+  for (const r of cloud) byId.set(r.id, r);
+
+  const merged = filterRows([...byId.values()], q, cuisine, country);
+  const items = merged.slice(offset, offset + limit);
+
   return NextResponse.json({
-    source: "seed",
+    source: cloud.length ? "merged" : "seed",
+    cloud_rows: cloud.length,
     count: items.length,
-    total_seed: filtered.length,
+    total_seed: merged.length,
     items,
   });
 }

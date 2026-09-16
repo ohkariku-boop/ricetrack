@@ -469,7 +469,7 @@ export default function DashboardPage() {
           meal_id: selected.id,
         });
       }
-      setSuggestMsg("Submitted for library review. Not public until approved.");
+      setSuggestMsg("Thanks — queued for admin review. Not public until approved.");
     } catch {
       setSuggestMsg("Could not submit. Try again.");
     } finally {

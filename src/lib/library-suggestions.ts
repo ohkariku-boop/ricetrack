@@ -66,7 +66,7 @@ export async function submitLibrarySuggestion(input: {
   portion?: string;
   cuisine?: string;
   meal_id?: string;
-}): Promise<{ ok: boolean; local: LibrarySuggestion }> {
+}): Promise<{ ok: boolean; local: LibrarySuggestion; stored?: boolean; reason?: string }> {
   const name = input.name.trim();
   if (!name) throw new Error("Name required");
   const local = addLocalSuggestion({
@@ -80,13 +80,24 @@ export async function submitLibrarySuggestion(input: {
     meal_id: input.meal_id,
   });
   try {
-    await fetch("/api/library/suggest", {
+    const res = await fetch("/api/library/suggest", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(local),
+      body: JSON.stringify({
+        ...local,
+        id: local.id,
+        meal_id: input.meal_id,
+      }),
     });
+    const data = await res.json().catch(() => ({}));
+    return {
+      ok: true,
+      local,
+      stored: Boolean(data?.stored),
+      reason: data?.reason,
+    };
   } catch {
     // local queue is enough for guests
   }
-  return { ok: true, local };
+  return { ok: true, local, stored: false, reason: "offline" };
 }

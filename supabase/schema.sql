@@ -317,6 +317,8 @@ create policy "Users read own suggestions"
   on public.library_suggestions for select
   using (auth.uid() = user_id or user_id is null);
 
+-- Service role bypasses RLS. Anon cannot update statuses (admin uses service role).
+
 -- Expand meal_type for tea / supper (run on existing projects):
 -- alter table public.meals drop constraint if exists meals_meal_type_check;
 -- alter table public.meals add constraint meals_meal_type_check
