@@ -2,7 +2,17 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { Loader2, Check, X, Upload, RefreshCw, LogOut, Shield } from "lucide-react";
+import {
+  Loader2,
+  Check,
+  X,
+  Upload,
+  RefreshCw,
+  LogOut,
+  Shield,
+  Pencil,
+  Save,
+} from "lucide-react";
 import { RiceLogo } from "@/components/RiceLogo";
 
 type Suggestion = {
@@ -22,6 +32,28 @@ type Suggestion = {
 
 type Tab = "pending" | "approved" | "rejected" | "published" | "all";
 
+type Draft = {
+  name: string;
+  cuisine: string;
+  portion: string;
+  calories: string;
+  protein: string;
+  carbs: string;
+  fat: string;
+};
+
+function toDraft(s: Suggestion): Draft {
+  return {
+    name: s.name || "",
+    cuisine: s.cuisine || "",
+    portion: s.portion || "",
+    calories: String(s.calories ?? 0),
+    protein: String(s.protein ?? 0),
+    carbs: String(s.carbs ?? 0),
+    fat: String(s.fat ?? 0),
+  };
+}
+
 export default function AdminLibraryPage() {
   const [authed, setAuthed] = useState(false);
   const [password, setPassword] = useState("");
@@ -32,6 +64,8 @@ export default function AdminLibraryPage() {
   const [counts, setCounts] = useState({ pending: 0, approved: 0 });
   const [loading, setLoading] = useState(false);
   const [busyId, setBusyId] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [draft, setDraft] = useState<Draft | null>(null);
   const [msg, setMsg] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -64,7 +98,6 @@ export default function AdminLibraryPage() {
   }, []);
 
   useEffect(() => {
-    // Probe auth via pending list
     load("pending");
   }, [load]);
 
@@ -107,16 +140,51 @@ export default function AdminLibraryPage() {
     setBusyId(null);
     if (!res.ok) {
       setError(data.error || "Action failed");
-      return;
+      return false;
     }
     if (action === "publish_approved") {
       setMsg(`Published ${data.inserted || 0} of ${data.approved || 0} approved`);
     } else if (action === "approve_all_pending") {
       setMsg(`Approved ${data.approved || 0} pending`);
+    } else if (action === "update") {
+      setMsg("Macros saved");
+      setEditingId(null);
+      setDraft(null);
     } else {
       setMsg("Saved");
     }
     await load(tab);
+    return true;
+  };
+
+  const startEdit = (s: Suggestion) => {
+    setEditingId(s.id);
+    setDraft(toDraft(s));
+    setMsg(null);
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setDraft(null);
+  };
+
+  const saveEdit = async (id: string) => {
+    if (!draft) return;
+    const name = draft.name.trim();
+    if (!name) {
+      setError("Name is required");
+      return;
+    }
+    await act("update", {
+      id,
+      name,
+      cuisine: draft.cuisine.trim() || null,
+      portion: draft.portion.trim() || null,
+      calories: Number(draft.calories) || 0,
+      protein: Number(draft.protein) || 0,
+      carbs: Number(draft.carbs) || 0,
+      fat: Number(draft.fat) || 0,
+    });
   };
 
   const logout = async () => {
@@ -143,7 +211,7 @@ export default function AdminLibraryPage() {
               Library admin
             </h1>
             <p className="text-sm text-muted-foreground">
-              Approve user dish suggestions before they enter the public library.
+              Approve and edit user dish suggestions before they go public.
             </p>
           </div>
           <form onSubmit={login} className="space-y-3">
@@ -160,13 +228,12 @@ export default function AdminLibraryPage() {
               {loggingIn ? <Loader2 className="w-4 h-4 animate-spin mx-auto" /> : "Enter"}
             </button>
           </form>
-          {loginError && (
-            <p className="text-sm text-red-600 text-center">{loginError}</p>
-          )}
+          {loginError && <p className="text-sm text-red-600 text-center">{loginError}</p>}
           <p className="text-[11px] text-muted-foreground text-center leading-relaxed">
             Set <code className="text-xs">ADMIN_SECRET</code> or{" "}
-            <code className="text-xs">CRON_SECRET</code> on Vercel. Needs{" "}
-            <code className="text-xs">SUPABASE_SERVICE_ROLE_KEY</code>.
+            <code className="text-xs">CRON_SECRET</code>. Needs{" "}
+            <code className="text-xs">SUPABASE_SERVICE_ROLE_KEY</code>. Optional email:{" "}
+            <code className="text-xs">RESEND_API_KEY</code>.
           </p>
           <p className="text-center text-xs">
             <Link href="/" className="text-muted-foreground hover:text-foreground">
@@ -186,6 +253,9 @@ export default function AdminLibraryPage() {
     { id: "all", label: "All" },
   ];
 
+  const fieldClass =
+    "w-full rounded-lg border border-border bg-background px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30";
+
   return (
     <div className="min-h-screen bg-background">
       <header className="sticky top-0 z-30 border-b border-border bg-background/95 backdrop-blur">
@@ -194,7 +264,9 @@ export default function AdminLibraryPage() {
             <RiceLogo size={24} />
             <div className="leading-tight min-w-0">
               <div className="font-semibold text-sm truncate">Library admin</div>
-              <div className="text-[11px] text-muted-foreground">Suggestions → approve → publish</div>
+              <div className="text-[11px] text-muted-foreground">
+                Edit macros · approve · publish
+              </div>
             </div>
           </div>
           <div className="flex items-center gap-1">
@@ -224,7 +296,10 @@ export default function AdminLibraryPage() {
             <button
               key={t.id}
               type="button"
-              onClick={() => setTab(t.id)}
+              onClick={() => {
+                setTab(t.id);
+                cancelEdit();
+              }}
               className={`text-xs font-medium px-3 py-1.5 rounded-full border transition-colors ${
                 tab === t.id
                   ? "bg-primary text-primary-foreground border-primary"
@@ -273,86 +348,189 @@ export default function AdminLibraryPage() {
           </p>
         ) : (
           <ul className="space-y-3">
-            {items.map((s) => (
-              <li
-                key={s.id}
-                className="rounded-2xl border border-border bg-card p-4 space-y-2"
-              >
-                <div className="flex items-start justify-between gap-3">
-                  <div className="min-w-0">
-                    <div className="font-semibold text-[15px] truncate">{s.name}</div>
-                    <div className="text-[12px] text-muted-foreground mt-0.5">
-                      {s.cuisine || "cuisine?"} · {s.portion || "1 serving"} ·{" "}
-                      <span className="uppercase tracking-wide">{s.status}</span>
+            {items.map((s) => {
+              const isEditing = editingId === s.id && draft;
+              return (
+                <li
+                  key={s.id}
+                  className="rounded-2xl border border-border bg-card p-4 space-y-3"
+                >
+                  {isEditing ? (
+                    <div className="space-y-2.5">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <label className="block space-y-1 sm:col-span-2">
+                          <span className="text-[11px] font-medium text-muted-foreground">
+                            Name
+                          </span>
+                          <input
+                            className={fieldClass}
+                            value={draft.name}
+                            onChange={(e) =>
+                              setDraft({ ...draft, name: e.target.value })
+                            }
+                          />
+                        </label>
+                        <label className="block space-y-1">
+                          <span className="text-[11px] font-medium text-muted-foreground">
+                            Cuisine
+                          </span>
+                          <input
+                            className={fieldClass}
+                            value={draft.cuisine}
+                            onChange={(e) =>
+                              setDraft({ ...draft, cuisine: e.target.value })
+                            }
+                            placeholder="e.g. malay"
+                          />
+                        </label>
+                        <label className="block space-y-1">
+                          <span className="text-[11px] font-medium text-muted-foreground">
+                            Portion
+                          </span>
+                          <input
+                            className={fieldClass}
+                            value={draft.portion}
+                            onChange={(e) =>
+                              setDraft({ ...draft, portion: e.target.value })
+                            }
+                            placeholder="1 serving"
+                          />
+                        </label>
+                      </div>
+                      <div className="grid grid-cols-4 gap-2">
+                        {(
+                          [
+                            ["calories", "kcal"],
+                            ["protein", "P"],
+                            ["carbs", "C"],
+                            ["fat", "F"],
+                          ] as const
+                        ).map(([key, label]) => (
+                          <label key={key} className="block space-y-1">
+                            <span className="text-[11px] font-medium text-muted-foreground">
+                              {label}
+                            </span>
+                            <input
+                              type="number"
+                              inputMode="decimal"
+                              className={fieldClass}
+                              value={draft[key]}
+                              onChange={(e) =>
+                                setDraft({ ...draft, [key]: e.target.value })
+                              }
+                            />
+                          </label>
+                        ))}
+                      </div>
+                      <div className="flex flex-wrap gap-2 pt-1">
+                        <button
+                          type="button"
+                          disabled={busyId === s.id}
+                          onClick={() => saveEdit(s.id)}
+                          className="inline-flex items-center gap-1 h-8 px-3 rounded-full bg-primary text-primary-foreground text-xs font-medium"
+                        >
+                          <Save className="w-3.5 h-3.5" />
+                          Save macros
+                        </button>
+                        <button
+                          type="button"
+                          onClick={cancelEdit}
+                          className="h-8 px-3 rounded-full border border-border text-xs font-medium"
+                        >
+                          Cancel
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                  <div className="text-right text-[12px] tabular-nums text-muted-foreground shrink-0">
-                    <div>{Math.round(s.calories)} kcal</div>
-                    <div>
-                      P{Number(s.protein).toFixed(0)} C{Number(s.carbs).toFixed(0)} F
-                      {Number(s.fat).toFixed(0)}
-                    </div>
-                  </div>
-                </div>
-                {s.created_at && (
-                  <div className="text-[11px] text-muted-foreground">
-                    {new Date(s.created_at).toLocaleString()}
-                  </div>
-                )}
-                <div className="flex flex-wrap gap-2 pt-1">
-                  {s.status === "pending" && (
+                  ) : (
                     <>
-                      <button
-                        type="button"
-                        disabled={busyId === s.id}
-                        onClick={() => act("approve", { id: s.id })}
-                        className="inline-flex items-center gap-1 h-8 px-3 rounded-full bg-emerald-600 text-white text-xs font-medium"
-                      >
-                        <Check className="w-3.5 h-3.5" />
-                        Approve
-                      </button>
-                      <button
-                        type="button"
-                        disabled={busyId === s.id}
-                        onClick={() => act("reject", { id: s.id })}
-                        className="inline-flex items-center gap-1 h-8 px-3 rounded-full border border-border text-xs font-medium"
-                      >
-                        <X className="w-3.5 h-3.5" />
-                        Reject
-                      </button>
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="min-w-0">
+                          <div className="font-semibold text-[15px] truncate">{s.name}</div>
+                          <div className="text-[12px] text-muted-foreground mt-0.5">
+                            {s.cuisine || "cuisine?"} · {s.portion || "1 serving"} ·{" "}
+                            <span className="uppercase tracking-wide">{s.status}</span>
+                          </div>
+                        </div>
+                        <div className="text-right text-[12px] tabular-nums text-muted-foreground shrink-0">
+                          <div>{Math.round(Number(s.calories))} kcal</div>
+                          <div>
+                            P{Number(s.protein).toFixed(0)} C{Number(s.carbs).toFixed(0)} F
+                            {Number(s.fat).toFixed(0)}
+                          </div>
+                        </div>
+                      </div>
+                      {s.created_at && (
+                        <div className="text-[11px] text-muted-foreground">
+                          {new Date(s.created_at).toLocaleString()}
+                        </div>
+                      )}
+                      <div className="flex flex-wrap gap-2 pt-1">
+                        {s.status !== "published" && (
+                          <button
+                            type="button"
+                            onClick={() => startEdit(s)}
+                            className="inline-flex items-center gap-1 h-8 px-3 rounded-full border border-border text-xs font-medium"
+                          >
+                            <Pencil className="w-3.5 h-3.5" />
+                            Edit
+                          </button>
+                        )}
+                        {s.status === "pending" && (
+                          <>
+                            <button
+                              type="button"
+                              disabled={busyId === s.id}
+                              onClick={() => act("approve", { id: s.id })}
+                              className="inline-flex items-center gap-1 h-8 px-3 rounded-full bg-emerald-600 text-white text-xs font-medium"
+                            >
+                              <Check className="w-3.5 h-3.5" />
+                              Approve
+                            </button>
+                            <button
+                              type="button"
+                              disabled={busyId === s.id}
+                              onClick={() => act("reject", { id: s.id })}
+                              className="inline-flex items-center gap-1 h-8 px-3 rounded-full border border-border text-xs font-medium"
+                            >
+                              <X className="w-3.5 h-3.5" />
+                              Reject
+                            </button>
+                          </>
+                        )}
+                        {s.status === "approved" && (
+                          <button
+                            type="button"
+                            disabled={busyId === s.id}
+                            onClick={() => act("publish_approved")}
+                            className="inline-flex items-center gap-1 h-8 px-3 rounded-full bg-primary text-primary-foreground text-xs font-medium"
+                          >
+                            <Upload className="w-3.5 h-3.5" />
+                            Publish batch
+                          </button>
+                        )}
+                        {s.status === "rejected" && (
+                          <button
+                            type="button"
+                            disabled={busyId === s.id}
+                            onClick={() => act("approve", { id: s.id })}
+                            className="text-xs text-primary font-medium"
+                          >
+                            Restore to approved
+                          </button>
+                        )}
+                      </div>
                     </>
                   )}
-                  {s.status === "approved" && (
-                    <button
-                      type="button"
-                      disabled={busyId === s.id}
-                      onClick={() => act("publish_approved")}
-                      className="inline-flex items-center gap-1 h-8 px-3 rounded-full bg-primary text-primary-foreground text-xs font-medium"
-                    >
-                      <Upload className="w-3.5 h-3.5" />
-                      Publish batch
-                    </button>
-                  )}
-                  {s.status === "rejected" && (
-                    <button
-                      type="button"
-                      disabled={busyId === s.id}
-                      onClick={() => act("approve", { id: s.id })}
-                      className="text-xs text-primary font-medium"
-                    >
-                      Restore to approved
-                    </button>
-                  )}
-                </div>
-              </li>
-            ))}
+                </li>
+              );
+            })}
           </ul>
         )}
 
         <p className="text-[11px] text-muted-foreground text-center pt-4 leading-relaxed">
-          Users suggest from a meal → pending here → you approve → publish adds to{" "}
-          <code className="text-[10px]">food_library</code>. Weekly cron can also publish
-          approved items.
+          Edit name and macros before approve. Publish writes to{" "}
+          <code className="text-[10px]">food_library</code>. New suggestions can email you if{" "}
+          <code className="text-[10px]">RESEND_API_KEY</code> is set.
         </p>
       </main>
     </div>

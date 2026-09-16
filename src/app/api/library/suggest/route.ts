@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { notifyNewLibrarySuggestion } from "@/lib/notify";
 
 export async function POST(req: Request) {
   try {
@@ -16,7 +17,7 @@ export async function POST(req: Request) {
       fat: Number(body.fat) || 0,
       portion: body.portion ? String(body.portion).slice(0, 80) : null,
       cuisine: body.cuisine ? String(body.cuisine).slice(0, 40) : null,
-      status: "pending",
+      status: "pending" as const,
       source: "user",
       client_id: body.id ? String(body.id).slice(0, 64) : null,
       meal_id: body.meal_id ? String(body.meal_id).slice(0, 64) : null,
@@ -31,10 +32,18 @@ export async function POST(req: Request) {
 
     const { error } = await supabase.from("library_suggestions").insert(payload);
     if (error) {
-      // Table may not exist yet; still OK for local queue
       return NextResponse.json({ ok: true, stored: false, reason: error.message });
     }
-    return NextResponse.json({ ok: true, stored: true });
+
+    // Best-effort email to admin (optional Resend)
+    const notify = await notifyNewLibrarySuggestion(row);
+
+    return NextResponse.json({
+      ok: true,
+      stored: true,
+      notified: notify.sent,
+      notify_reason: notify.reason,
+    });
   } catch (e) {
     return NextResponse.json(
       { error: e instanceof Error ? e.message : "Failed" },
