@@ -20530,5 +20530,2181 @@
     "tags": [
       "rice"
     ]
+  },
+  {
+    "id": "tw-n001",
+    "name": "Braised Pork Rice",
+    "name_original": "滷肉飯",
+    "cuisine": "taiwanese",
+    "country": "taiwan",
+    "category": "main",
+    "calories": 520,
+    "protein": 22.0,
+    "carbs": 48.0,
+    "fat": 26.0,
+    "portion": "1 bowl",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "tw-n005",
+    "name": "Bubble Tea Full Sugar",
+    "name_original": "珍珠奶茶",
+    "cuisine": "taiwanese",
+    "country": "taiwan",
+    "category": "drink",
+    "calories": 350,
+    "protein": 4.0,
+    "carbs": 72.0,
+    "fat": 6.0,
+    "portion": "1 cup 500ml",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "tw-n008",
+    "name": "Taiwanese Fried Chicken Cutlet",
+    "name_original": "雞排",
+    "cuisine": "taiwanese",
+    "country": "taiwan",
+    "category": "main",
+    "calories": 540,
+    "protein": 28.0,
+    "carbs": 35.0,
+    "fat": 32.0,
+    "portion": "1 piece",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "lk-n001",
+    "name": "Chicken Kottu Roti",
+    "name_original": null,
+    "cuisine": "sri_lankan",
+    "country": "sri_lanka",
+    "category": "main",
+    "calories": 580,
+    "protein": 28.0,
+    "carbs": 62.0,
+    "fat": 22.0,
+    "portion": "1 plate",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "lk-n003",
+    "name": "Pol Sambol with Rice",
+    "name_original": null,
+    "cuisine": "sri_lankan",
+    "country": "sri_lanka",
+    "category": "main",
+    "calories": 420,
+    "protein": 8.0,
+    "carbs": 58.0,
+    "fat": 16.0,
+    "portion": "1 plate",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "lk-n008",
+    "name": "Parippu Curry",
+    "name_original": null,
+    "cuisine": "sri_lankan",
+    "country": "sri_lanka",
+    "category": "side",
+    "calories": 180,
+    "protein": 10.0,
+    "carbs": 22.0,
+    "fat": 6.0,
+    "portion": "1 bowl",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "mm-n005",
+    "name": "Burmese Paratha with Curry",
+    "name_original": null,
+    "cuisine": "myanmar",
+    "country": "myanmar",
+    "category": "main",
+    "calories": 480,
+    "protein": 14.0,
+    "carbs": 52.0,
+    "fat": 22.0,
+    "portion": "1 set",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "la-n001",
+    "name": "Lao Larb Gai",
+    "name_original": null,
+    "cuisine": "lao",
+    "country": "laos",
+    "category": "main",
+    "calories": 280,
+    "protein": 30.0,
+    "carbs": 8.0,
+    "fat": 14.0,
+    "portion": "1 plate",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "la-n003",
+    "name": "Tam Mak Hoong Lao",
+    "name_original": null,
+    "cuisine": "lao",
+    "country": "laos",
+    "category": "salad",
+    "calories": 120,
+    "protein": 3.0,
+    "carbs": 18.0,
+    "fat": 4.0,
+    "portion": "1 plate",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "my-n008",
+    "name": "Bubur Lambuk",
+    "name_original": null,
+    "cuisine": "malay",
+    "country": "malaysia",
+    "category": "main",
+    "calories": 280,
+    "protein": 12.0,
+    "carbs": 42.0,
+    "fat": 6.0,
+    "portion": "1 bowl",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "id-n007",
+    "name": "Es Cendol",
+    "name_original": null,
+    "cuisine": "indonesian",
+    "country": "indonesia",
+    "category": "drink",
+    "calories": 240,
+    "protein": 2.0,
+    "carbs": 48.0,
+    "fat": 6.0,
+    "portion": "1 glass",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "id-n008",
+    "name": "Bakso Malang",
+    "name_original": null,
+    "cuisine": "indonesian",
+    "country": "indonesia",
+    "category": "main",
+    "calories": 410,
+    "protein": 22.0,
+    "carbs": 38.0,
+    "fat": 16.0,
+    "portion": "1 bowl",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "th-n005",
+    "name": "Som Tum Thai",
+    "name_original": null,
+    "cuisine": "thai",
+    "country": "thailand",
+    "category": "salad",
+    "calories": 140,
+    "protein": 4.0,
+    "carbs": 20.0,
+    "fat": 4.0,
+    "portion": "1 plate",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "th-n008",
+    "name": "Massaman Curry with Chicken",
+    "name_original": null,
+    "cuisine": "thai",
+    "country": "thailand",
+    "category": "main",
+    "calories": 480,
+    "protein": 28.0,
+    "carbs": 28.0,
+    "fat": 28.0,
+    "portion": "1 plate with rice",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "vn-n003",
+    "name": "Ban Xeo",
+    "name_original": null,
+    "cuisine": "vietnamese",
+    "country": "vietnam",
+    "category": "main",
+    "calories": 420,
+    "protein": 16.0,
+    "carbs": 40.0,
+    "fat": 20.0,
+    "portion": "1 pancake",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "vn-n006",
+    "name": "Hu Tieu Nam Vang",
+    "name_original": null,
+    "cuisine": "vietnamese",
+    "country": "vietnam",
+    "category": "main",
+    "calories": 400,
+    "protein": 20.0,
+    "carbs": 48.0,
+    "fat": 10.0,
+    "portion": "1 bowl",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ph-n005",
+    "name": "Kare-Kare",
+    "name_original": null,
+    "cuisine": "filipino",
+    "country": "philippines",
+    "category": "main",
+    "calories": 520,
+    "protein": 30.0,
+    "carbs": 22.0,
+    "fat": 32.0,
+    "portion": "1 plate",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ph-n007",
+    "name": "Lumpia Shanghai",
+    "name_original": null,
+    "cuisine": "filipino",
+    "country": "philippines",
+    "category": "snack",
+    "calories": 280,
+    "protein": 12.0,
+    "carbs": 22.0,
+    "fat": 16.0,
+    "portion": "4 pieces",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "kr-n005",
+    "name": "Gimbap",
+    "name_original": null,
+    "cuisine": "korean",
+    "country": "korea",
+    "category": "main",
+    "calories": 420,
+    "protein": 14.0,
+    "carbs": 58.0,
+    "fat": 12.0,
+    "portion": "1 roll cut",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "jp-n005",
+    "name": "Chirashi Sushi",
+    "name_original": null,
+    "cuisine": "japanese",
+    "country": "japan",
+    "category": "main",
+    "calories": 520,
+    "protein": 28.0,
+    "carbs": 68.0,
+    "fat": 10.0,
+    "portion": "1 bowl",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "jp-n007",
+    "name": "Miso Soup with Tofu",
+    "name_original": null,
+    "cuisine": "japanese",
+    "country": "japan",
+    "category": "side",
+    "calories": 70,
+    "protein": 5.0,
+    "carbs": 6.0,
+    "fat": 3.0,
+    "portion": "1 bowl",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "in-n001",
+    "name": "Butter Chicken with Naan",
+    "name_original": null,
+    "cuisine": "indian",
+    "country": "india",
+    "category": "main",
+    "calories": 720,
+    "protein": 36.0,
+    "carbs": 58.0,
+    "fat": 34.0,
+    "portion": "1 set",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "in-n005",
+    "name": "Palak Paneer with Roti",
+    "name_original": null,
+    "cuisine": "indian",
+    "country": "india",
+    "category": "main",
+    "calories": 480,
+    "protein": 22.0,
+    "carbs": 42.0,
+    "fat": 24.0,
+    "portion": "1 set",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "cn-n005",
+    "name": "Peking Duck Wrap",
+    "name_original": null,
+    "cuisine": "chinese",
+    "country": "china",
+    "category": "main",
+    "calories": 420,
+    "protein": 24.0,
+    "carbs": 28.0,
+    "fat": 22.0,
+    "portion": "2 wraps",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "cn-n006",
+    "name": "Congee with Century Egg",
+    "name_original": null,
+    "cuisine": "chinese",
+    "country": "china",
+    "category": "main",
+    "calories": 280,
+    "protein": 14.0,
+    "carbs": 38.0,
+    "fat": 6.0,
+    "portion": "1 bowl",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "sg-n002",
+    "name": "Chilli Crab with Mantou",
+    "name_original": null,
+    "cuisine": "singaporean",
+    "country": "singapore",
+    "category": "main",
+    "calories": 680,
+    "protein": 36.0,
+    "carbs": 48.0,
+    "fat": 32.0,
+    "portion": "shared portion",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "sg-n003",
+    "name": "Hokkien Mee Singapore",
+    "name_original": null,
+    "cuisine": "singaporean",
+    "country": "singapore",
+    "category": "main",
+    "calories": 560,
+    "protein": 22.0,
+    "carbs": 58.0,
+    "fat": 24.0,
+    "portion": "1 plate",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "oa-n001",
+    "name": "Afghan Kabuli Pulao",
+    "name_original": null,
+    "cuisine": "other_asian",
+    "country": "afghanistan",
+    "category": "main",
+    "calories": 620,
+    "protein": 28.0,
+    "carbs": 72.0,
+    "fat": 22.0,
+    "portion": "1 plate",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "oa-n002",
+    "name": "Uzbek Plov",
+    "name_original": null,
+    "cuisine": "other_asian",
+    "country": "uzbekistan",
+    "category": "main",
+    "calories": 580,
+    "protein": 24.0,
+    "carbs": 65.0,
+    "fat": 22.0,
+    "portion": "1 plate",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "oa-n003",
+    "name": "Nepali Momo",
+    "name_original": null,
+    "cuisine": "other_asian",
+    "country": "nepal",
+    "category": "main",
+    "calories": 360,
+    "protein": 16.0,
+    "carbs": 38.0,
+    "fat": 14.0,
+    "portion": "8 pieces",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "oa-n004",
+    "name": "Tibetan Thukpa",
+    "name_original": null,
+    "cuisine": "other_asian",
+    "country": "tibet",
+    "category": "main",
+    "calories": 380,
+    "protein": 18.0,
+    "carbs": 48.0,
+    "fat": 10.0,
+    "portion": "1 bowl",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "bn-n001",
+    "name": "Dhaka Kacchi Biryani",
+    "name_original": null,
+    "cuisine": "other_asian",
+    "country": "bangladesh",
+    "category": "main",
+    "calories": 650,
+    "protein": 30.0,
+    "carbs": 70.0,
+    "fat": 24.0,
+    "portion": "1 plate",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "bn-n002",
+    "name": "Hilsa Fish Curry",
+    "name_original": null,
+    "cuisine": "other_asian",
+    "country": "bangladesh",
+    "category": "main",
+    "calories": 340,
+    "protein": 32.0,
+    "carbs": 6.0,
+    "fat": 20.0,
+    "portion": "1 serving",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "mn-n001",
+    "name": "Mongolian Buuz",
+    "name_original": null,
+    "cuisine": "other_asian",
+    "country": "mongolia",
+    "category": "main",
+    "calories": 400,
+    "protein": 22.0,
+    "carbs": 32.0,
+    "fat": 18.0,
+    "portion": "4 pieces",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "hk-n001",
+    "name": "Hong Kong French Toast",
+    "name_original": null,
+    "cuisine": "chinese",
+    "country": "hong_kong",
+    "category": "breakfast",
+    "calories": 520,
+    "protein": 12.0,
+    "carbs": 48.0,
+    "fat": 28.0,
+    "portion": "1 serving",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "hk-n003",
+    "name": "Pineapple Bun with Butter",
+    "name_original": null,
+    "cuisine": "chinese",
+    "country": "hong_kong",
+    "category": "snack",
+    "calories": 380,
+    "protein": 6.0,
+    "carbs": 48.0,
+    "fat": 18.0,
+    "portion": "1 bun",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-001",
+    "name": "Lu Rou Fan Taipei Style",
+    "name_original": null,
+    "cuisine": "taiwanese",
+    "country": "taiwan",
+    "category": "main",
+    "calories": 530,
+    "protein": 22.0,
+    "carbs": 50.0,
+    "fat": 26.0,
+    "portion": "1 bowl",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-002",
+    "name": "Night Market Chicken Cutlet",
+    "name_original": null,
+    "cuisine": "taiwanese",
+    "country": "taiwan",
+    "category": "main",
+    "calories": 560,
+    "protein": 30.0,
+    "carbs": 36.0,
+    "fat": 32.0,
+    "portion": "1 piece",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-003",
+    "name": "Three-Cup Chicken Taiwan",
+    "name_original": null,
+    "cuisine": "taiwanese",
+    "country": "taiwan",
+    "category": "main",
+    "calories": 420,
+    "protein": 34.0,
+    "carbs": 12.0,
+    "fat": 24.0,
+    "portion": "1 plate",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-004",
+    "name": "Oyster Mee Sua",
+    "name_original": null,
+    "cuisine": "taiwanese",
+    "country": "taiwan",
+    "category": "main",
+    "calories": 380,
+    "protein": 16.0,
+    "carbs": 48.0,
+    "fat": 12.0,
+    "portion": "1 bowl",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-005",
+    "name": "Aiyu Jelly Drink",
+    "name_original": null,
+    "cuisine": "taiwanese",
+    "country": "taiwan",
+    "category": "drink",
+    "calories": 90,
+    "protein": 0.0,
+    "carbs": 22.0,
+    "fat": 0.0,
+    "portion": "1 cup",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-006",
+    "name": "Wheel Cake Custard",
+    "name_original": null,
+    "cuisine": "taiwanese",
+    "country": "taiwan",
+    "category": "dessert",
+    "calories": 240,
+    "protein": 5.0,
+    "carbs": 32.0,
+    "fat": 10.0,
+    "portion": "1 piece",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-007",
+    "name": "Taiwanese Sesame Cold Noodles",
+    "name_original": null,
+    "cuisine": "taiwanese",
+    "country": "taiwan",
+    "category": "main",
+    "calories": 460,
+    "protein": 14.0,
+    "carbs": 58.0,
+    "fat": 18.0,
+    "portion": "1 plate",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-008",
+    "name": "Intestine and Oyster Vermicelli",
+    "name_original": null,
+    "cuisine": "taiwanese",
+    "country": "taiwan",
+    "category": "main",
+    "calories": 410,
+    "protein": 18.0,
+    "carbs": 42.0,
+    "fat": 16.0,
+    "portion": "1 bowl",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-009",
+    "name": "Pepper Buns Fuzhou Style",
+    "name_original": null,
+    "cuisine": "taiwanese",
+    "country": "taiwan",
+    "category": "snack",
+    "calories": 320,
+    "protein": 12.0,
+    "carbs": 38.0,
+    "fat": 12.0,
+    "portion": "2 buns",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-010",
+    "name": "Brown Sugar Boba Milk",
+    "name_original": null,
+    "cuisine": "taiwanese",
+    "country": "taiwan",
+    "category": "drink",
+    "calories": 380,
+    "protein": 5.0,
+    "carbs": 68.0,
+    "fat": 8.0,
+    "portion": "1 large",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-011",
+    "name": "Jaffna Crab Curry",
+    "name_original": null,
+    "cuisine": "sri_lankan",
+    "country": "sri_lanka",
+    "category": "main",
+    "calories": 340,
+    "protein": 28.0,
+    "carbs": 8.0,
+    "fat": 20.0,
+    "portion": "1 serving",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-012",
+    "name": "Sri Lankan Egg Hopper Pair",
+    "name_original": null,
+    "cuisine": "sri_lankan",
+    "country": "sri_lanka",
+    "category": "main",
+    "calories": 270,
+    "protein": 11.0,
+    "carbs": 34.0,
+    "fat": 10.0,
+    "portion": "2 hoppers",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-013",
+    "name": "Kottu with Mutton",
+    "name_original": null,
+    "cuisine": "sri_lankan",
+    "country": "sri_lanka",
+    "category": "main",
+    "calories": 620,
+    "protein": 32.0,
+    "carbs": 60.0,
+    "fat": 26.0,
+    "portion": "1 plate",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-014",
+    "name": "Pol Roti Breakfast Plate",
+    "name_original": null,
+    "cuisine": "sri_lankan",
+    "country": "sri_lanka",
+    "category": "breakfast",
+    "calories": 380,
+    "protein": 10.0,
+    "carbs": 48.0,
+    "fat": 14.0,
+    "portion": "2 roti",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-015",
+    "name": "Kiribath with Lunu Miris",
+    "name_original": null,
+    "cuisine": "sri_lankan",
+    "country": "sri_lanka",
+    "category": "breakfast",
+    "calories": 320,
+    "protein": 6.0,
+    "carbs": 58.0,
+    "fat": 6.0,
+    "portion": "1 plate",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-016",
+    "name": "Sri Lankan Fish Curry Rice",
+    "name_original": null,
+    "cuisine": "sri_lankan",
+    "country": "sri_lanka",
+    "category": "main",
+    "calories": 480,
+    "protein": 28.0,
+    "carbs": 55.0,
+    "fat": 14.0,
+    "portion": "1 plate",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-017",
+    "name": "Coconut Sambol Rice Packet",
+    "name_original": null,
+    "cuisine": "sri_lankan",
+    "country": "sri_lanka",
+    "category": "main",
+    "calories": 440,
+    "protein": 9.0,
+    "carbs": 60.0,
+    "fat": 16.0,
+    "portion": "1 packet",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-018",
+    "name": "Watalappan Cup",
+    "name_original": null,
+    "cuisine": "sri_lankan",
+    "country": "sri_lanka",
+    "category": "dessert",
+    "calories": 260,
+    "protein": 5.0,
+    "carbs": 30.0,
+    "fat": 12.0,
+    "portion": "1 cup",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-019",
+    "name": "Yangon Mohinga Bowl",
+    "name_original": null,
+    "cuisine": "myanmar",
+    "country": "myanmar",
+    "category": "main",
+    "calories": 430,
+    "protein": 19.0,
+    "carbs": 58.0,
+    "fat": 12.0,
+    "portion": "1 bowl",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-020",
+    "name": "Lahpet Thoke Plate",
+    "name_original": null,
+    "cuisine": "myanmar",
+    "country": "myanmar",
+    "category": "salad",
+    "calories": 230,
+    "protein": 9.0,
+    "carbs": 15.0,
+    "fat": 14.0,
+    "portion": "1 plate",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-021",
+    "name": "Mandalay Shan Noodle Soup",
+    "name_original": null,
+    "cuisine": "myanmar",
+    "country": "myanmar",
+    "category": "main",
+    "calories": 460,
+    "protein": 18.0,
+    "carbs": 60.0,
+    "fat": 14.0,
+    "portion": "1 bowl",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-022",
+    "name": "Burmese Chicken Coconut Noodle",
+    "name_original": null,
+    "cuisine": "myanmar",
+    "country": "myanmar",
+    "category": "main",
+    "calories": 520,
+    "protein": 20.0,
+    "carbs": 54.0,
+    "fat": 24.0,
+    "portion": "1 bowl",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-023",
+    "name": "Myanmar Tea Shop Paratha",
+    "name_original": null,
+    "cuisine": "myanmar",
+    "country": "myanmar",
+    "category": "breakfast",
+    "calories": 400,
+    "protein": 12.0,
+    "carbs": 48.0,
+    "fat": 18.0,
+    "portion": "1 set",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-024",
+    "name": "Nan Gyi Thoke (Library)",
+    "name_original": null,
+    "cuisine": "myanmar",
+    "country": "myanmar",
+    "category": "main",
+    "calories": 480,
+    "protein": 16.0,
+    "carbs": 55.0,
+    "fat": 20.0,
+    "portion": "1 plate",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-025",
+    "name": "Phnom Penh Noodle Soup",
+    "name_original": null,
+    "cuisine": "cambodian",
+    "country": "cambodia",
+    "category": "main",
+    "calories": 370,
+    "protein": 19.0,
+    "carbs": 44.0,
+    "fat": 10.0,
+    "portion": "1 bowl",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-026",
+    "name": "Khmer Fish Amok Coconut",
+    "name_original": null,
+    "cuisine": "cambodian",
+    "country": "cambodia",
+    "category": "main",
+    "calories": 390,
+    "protein": 29.0,
+    "carbs": 14.0,
+    "fat": 24.0,
+    "portion": "1 ramekin",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-027",
+    "name": "Pork and Rice Cambodian Breakfast",
+    "name_original": null,
+    "cuisine": "cambodian",
+    "country": "cambodia",
+    "category": "breakfast",
+    "calories": 530,
+    "protein": 25.0,
+    "carbs": 56.0,
+    "fat": 18.0,
+    "portion": "1 plate",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-028",
+    "name": "Kampot Pepper Crab",
+    "name_original": null,
+    "cuisine": "cambodian",
+    "country": "cambodia",
+    "category": "main",
+    "calories": 360,
+    "protein": 30.0,
+    "carbs": 6.0,
+    "fat": 22.0,
+    "portion": "1 serving",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-029",
+    "name": "Nom Banh Chok Breakfast Set",
+    "name_original": null,
+    "cuisine": "cambodian",
+    "country": "cambodia",
+    "category": "main",
+    "calories": 400,
+    "protein": 14.0,
+    "carbs": 60.0,
+    "fat": 10.0,
+    "portion": "1 bowl",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-030",
+    "name": "Lok Lak Beef Pepper Plate",
+    "name_original": null,
+    "cuisine": "cambodian",
+    "country": "cambodia",
+    "category": "main",
+    "calories": 500,
+    "protein": 34.0,
+    "carbs": 30.0,
+    "fat": 24.0,
+    "portion": "1 plate",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-031",
+    "name": "Vientiane Larb Moo",
+    "name_original": null,
+    "cuisine": "lao",
+    "country": "laos",
+    "category": "main",
+    "calories": 300,
+    "protein": 32.0,
+    "carbs": 6.0,
+    "fat": 16.0,
+    "portion": "1 plate",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-032",
+    "name": "Lao Sticky Rice Basket Meal",
+    "name_original": null,
+    "cuisine": "lao",
+    "country": "laos",
+    "category": "main",
+    "calories": 360,
+    "protein": 7.0,
+    "carbs": 74.0,
+    "fat": 3.0,
+    "portion": "1 set",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-033",
+    "name": "Thum Mak Hoong Extra Spicy",
+    "name_original": null,
+    "cuisine": "lao",
+    "country": "laos",
+    "category": "salad",
+    "calories": 130,
+    "protein": 3.0,
+    "carbs": 20.0,
+    "fat": 4.0,
+    "portion": "1 plate",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-034",
+    "name": "Lao Chicken Noodle Khao Piak",
+    "name_original": null,
+    "cuisine": "lao",
+    "country": "laos",
+    "category": "main",
+    "calories": 420,
+    "protein": 18.0,
+    "carbs": 52.0,
+    "fat": 12.0,
+    "portion": "1 bowl",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-035",
+    "name": "Luang Prabang Or Lam Stew",
+    "name_original": null,
+    "cuisine": "lao",
+    "country": "laos",
+    "category": "main",
+    "calories": 330,
+    "protein": 23.0,
+    "carbs": 20.0,
+    "fat": 16.0,
+    "portion": "1 bowl",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-036",
+    "name": "Ping Gai Grilled Chicken Lao",
+    "name_original": null,
+    "cuisine": "lao",
+    "country": "laos",
+    "category": "main",
+    "calories": 380,
+    "protein": 36.0,
+    "carbs": 4.0,
+    "fat": 22.0,
+    "portion": "1 serving",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-037",
+    "name": "Kelantan Nasi Kerabu Blue Rice",
+    "name_original": null,
+    "cuisine": "malay",
+    "country": "malaysia",
+    "category": "main",
+    "calories": 570,
+    "protein": 27.0,
+    "carbs": 58.0,
+    "fat": 22.0,
+    "portion": "1 plate",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-038",
+    "name": "Johor Laksa Mee",
+    "name_original": null,
+    "cuisine": "malay",
+    "country": "malaysia",
+    "category": "main",
+    "calories": 510,
+    "protein": 22.0,
+    "carbs": 58.0,
+    "fat": 18.0,
+    "portion": "1 bowl",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-039",
+    "name": "Penang Char Kway Teow Hawker",
+    "name_original": null,
+    "cuisine": "malay",
+    "country": "malaysia",
+    "category": "main",
+    "calories": 620,
+    "protein": 20.0,
+    "carbs": 68.0,
+    "fat": 28.0,
+    "portion": "1 plate",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-040",
+    "name": "Melaka Chicken Rice Balls",
+    "name_original": null,
+    "cuisine": "malay",
+    "country": "malaysia",
+    "category": "main",
+    "calories": 540,
+    "protein": 28.0,
+    "carbs": 62.0,
+    "fat": 16.0,
+    "portion": "1 set",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-041",
+    "name": "Sambal Petai Prawns",
+    "name_original": null,
+    "cuisine": "malay",
+    "country": "malaysia",
+    "category": "main",
+    "calories": 320,
+    "protein": 26.0,
+    "carbs": 12.0,
+    "fat": 18.0,
+    "portion": "1 plate",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-042",
+    "name": "Nasi Dagang Terengganu",
+    "name_original": null,
+    "cuisine": "malay",
+    "country": "malaysia",
+    "category": "main",
+    "calories": 580,
+    "protein": 24.0,
+    "carbs": 60.0,
+    "fat": 24.0,
+    "portion": "1 plate",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-043",
+    "name": "Kuih Lapis Layer Cake",
+    "name_original": null,
+    "cuisine": "malay",
+    "country": "malaysia",
+    "category": "dessert",
+    "calories": 210,
+    "protein": 3.0,
+    "carbs": 36.0,
+    "fat": 6.0,
+    "portion": "2 pieces",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-044",
+    "name": "Roti Canai Sardine",
+    "name_original": null,
+    "cuisine": "malay",
+    "country": "malaysia",
+    "category": "main",
+    "calories": 480,
+    "protein": 16.0,
+    "carbs": 52.0,
+    "fat": 22.0,
+    "portion": "1 set",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-045",
+    "name": "Jakarta Soto Betawi Rich",
+    "name_original": null,
+    "cuisine": "indonesian",
+    "country": "indonesia",
+    "category": "main",
+    "calories": 510,
+    "protein": 25.0,
+    "carbs": 30.0,
+    "fat": 30.0,
+    "portion": "1 bowl",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-046",
+    "name": "Surabaya Rawon Black Soup",
+    "name_original": null,
+    "cuisine": "indonesian",
+    "country": "indonesia",
+    "category": "main",
+    "calories": 430,
+    "protein": 29.0,
+    "carbs": 22.0,
+    "fat": 22.0,
+    "portion": "1 bowl",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-047",
+    "name": "Yogyakarta Gudeg Complete",
+    "name_original": null,
+    "cuisine": "indonesian",
+    "country": "indonesia",
+    "category": "main",
+    "calories": 470,
+    "protein": 17.0,
+    "carbs": 58.0,
+    "fat": 16.0,
+    "portion": "1 plate",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-048",
+    "name": "Bali Lawar Mixed Plate",
+    "name_original": null,
+    "cuisine": "indonesian",
+    "country": "indonesia",
+    "category": "main",
+    "calories": 360,
+    "protein": 20.0,
+    "carbs": 18.0,
+    "fat": 22.0,
+    "portion": "1 plate",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-049",
+    "name": "Padang Rendang Cup Rice",
+    "name_original": null,
+    "cuisine": "indonesian",
+    "country": "indonesia",
+    "category": "main",
+    "calories": 590,
+    "protein": 30.0,
+    "carbs": 55.0,
+    "fat": 28.0,
+    "portion": "1 plate",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-050",
+    "name": "Bandung Batagor Plate",
+    "name_original": null,
+    "cuisine": "indonesian",
+    "country": "indonesia",
+    "category": "snack",
+    "calories": 420,
+    "protein": 18.0,
+    "carbs": 40.0,
+    "fat": 20.0,
+    "portion": "1 portion",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-051",
+    "name": "Solo Serabi Solo Sweet",
+    "name_original": null,
+    "cuisine": "indonesian",
+    "country": "indonesia",
+    "category": "dessert",
+    "calories": 240,
+    "protein": 5.0,
+    "carbs": 38.0,
+    "fat": 8.0,
+    "portion": "2 pieces",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-052",
+    "name": "Makassar Coto Makassar",
+    "name_original": null,
+    "cuisine": "indonesian",
+    "country": "indonesia",
+    "category": "main",
+    "calories": 400,
+    "protein": 26.0,
+    "carbs": 20.0,
+    "fat": 22.0,
+    "portion": "1 bowl",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-053",
+    "name": "Chiang Mai Khao Soi Chicken",
+    "name_original": null,
+    "cuisine": "thai",
+    "country": "thailand",
+    "category": "main",
+    "calories": 570,
+    "protein": 25.0,
+    "carbs": 48.0,
+    "fat": 28.0,
+    "portion": "1 bowl",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-054",
+    "name": "Bangkok Boat Noodle Dual Bowl",
+    "name_original": null,
+    "cuisine": "thai",
+    "country": "thailand",
+    "category": "main",
+    "calories": 300,
+    "protein": 17.0,
+    "carbs": 34.0,
+    "fat": 9.0,
+    "portion": "2 small bowls",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-055",
+    "name": "Isaan Som Tum with Grilled Chicken",
+    "name_original": null,
+    "cuisine": "thai",
+    "country": "thailand",
+    "category": "main",
+    "calories": 380,
+    "protein": 32.0,
+    "carbs": 22.0,
+    "fat": 16.0,
+    "portion": "1 set",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-056",
+    "name": "Thai Basil Pork Over Rice",
+    "name_original": null,
+    "cuisine": "thai",
+    "country": "thailand",
+    "category": "main",
+    "calories": 550,
+    "protein": 28.0,
+    "carbs": 58.0,
+    "fat": 20.0,
+    "portion": "1 plate",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-057",
+    "name": "Northern Thai Sai Ua Sausage",
+    "name_original": null,
+    "cuisine": "thai",
+    "country": "thailand",
+    "category": "main",
+    "calories": 320,
+    "protein": 18.0,
+    "carbs": 6.0,
+    "fat": 24.0,
+    "portion": "1 serving",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-058",
+    "name": "Thai Coconut Pancake Khanom Krok",
+    "name_original": null,
+    "cuisine": "thai",
+    "country": "thailand",
+    "category": "dessert",
+    "calories": 220,
+    "protein": 3.0,
+    "carbs": 28.0,
+    "fat": 10.0,
+    "portion": "6 pieces",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-059",
+    "name": "Phuket Hokkien Mee Local",
+    "name_original": null,
+    "cuisine": "thai",
+    "country": "thailand",
+    "category": "main",
+    "calories": 540,
+    "protein": 22.0,
+    "carbs": 60.0,
+    "fat": 22.0,
+    "portion": "1 plate",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-060",
+    "name": "Thai Milk Tea Cha Yen",
+    "name_original": null,
+    "cuisine": "thai",
+    "country": "thailand",
+    "category": "drink",
+    "calories": 280,
+    "protein": 3.0,
+    "carbs": 48.0,
+    "fat": 8.0,
+    "portion": "1 glass",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-061",
+    "name": "Hue Bun Bo Spicy Beef",
+    "name_original": null,
+    "cuisine": "vietnamese",
+    "country": "vietnam",
+    "category": "main",
+    "calories": 490,
+    "protein": 29.0,
+    "carbs": 52.0,
+    "fat": 15.0,
+    "portion": "1 bowl",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-062",
+    "name": "Saigon Broken Rice Pork Chop",
+    "name_original": null,
+    "cuisine": "vietnamese",
+    "country": "vietnam",
+    "category": "main",
+    "calories": 640,
+    "protein": 34.0,
+    "carbs": 68.0,
+    "fat": 22.0,
+    "portion": "1 plate",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-063",
+    "name": "Vietnamese Sizzling Crepe Full",
+    "name_original": null,
+    "cuisine": "vietnamese",
+    "country": "vietnam",
+    "category": "main",
+    "calories": 440,
+    "protein": 17.0,
+    "carbs": 42.0,
+    "fat": 22.0,
+    "portion": "1 crepe",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-064",
+    "name": "Hoi An Cao Lau Traditional",
+    "name_original": null,
+    "cuisine": "vietnamese",
+    "country": "vietnam",
+    "category": "main",
+    "calories": 460,
+    "protein": 23.0,
+    "carbs": 56.0,
+    "fat": 12.0,
+    "portion": "1 bowl",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-065",
+    "name": "Vietnamese Three Color Dessert",
+    "name_original": null,
+    "cuisine": "vietnamese",
+    "country": "vietnam",
+    "category": "dessert",
+    "calories": 270,
+    "protein": 6.0,
+    "carbs": 50.0,
+    "fat": 4.0,
+    "portion": "1 glass",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-066",
+    "name": "Mi Quang Turmeric Noodles",
+    "name_original": null,
+    "cuisine": "vietnamese",
+    "country": "vietnam",
+    "category": "main",
+    "calories": 430,
+    "protein": 20.0,
+    "carbs": 50.0,
+    "fat": 14.0,
+    "portion": "1 bowl",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-067",
+    "name": "Vietnamese Egg Coffee",
+    "name_original": null,
+    "cuisine": "vietnamese",
+    "country": "vietnam",
+    "category": "drink",
+    "calories": 220,
+    "protein": 6.0,
+    "carbs": 24.0,
+    "fat": 10.0,
+    "portion": "1 cup",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-068",
+    "name": "Banh Mi Op La Breakfast",
+    "name_original": null,
+    "cuisine": "vietnamese",
+    "country": "vietnam",
+    "category": "breakfast",
+    "calories": 480,
+    "protein": 20.0,
+    "carbs": 48.0,
+    "fat": 22.0,
+    "portion": "1 sandwich",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-069",
+    "name": "Kapampangan Sisig Sizzling",
+    "name_original": null,
+    "cuisine": "filipino",
+    "country": "philippines",
+    "category": "main",
+    "calories": 500,
+    "protein": 30.0,
+    "carbs": 8.0,
+    "fat": 38.0,
+    "portion": "1 plate",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-070",
+    "name": "Ilonggo Chicken Inasal Rice",
+    "name_original": null,
+    "cuisine": "filipino",
+    "country": "philippines",
+    "category": "main",
+    "calories": 520,
+    "protein": 38.0,
+    "carbs": 55.0,
+    "fat": 16.0,
+    "portion": "1 plate",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-071",
+    "name": "Pinoy Beef Kare Kare Peanut",
+    "name_original": null,
+    "cuisine": "filipino",
+    "country": "philippines",
+    "category": "main",
+    "calories": 540,
+    "protein": 32.0,
+    "carbs": 24.0,
+    "fat": 34.0,
+    "portion": "1 plate",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-072",
+    "name": "Tapsilog Breakfast Manila",
+    "name_original": null,
+    "cuisine": "filipino",
+    "country": "philippines",
+    "category": "breakfast",
+    "calories": 600,
+    "protein": 34.0,
+    "carbs": 56.0,
+    "fat": 26.0,
+    "portion": "1 set",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-073",
+    "name": "Fresh Lumpia Ubod",
+    "name_original": null,
+    "cuisine": "filipino",
+    "country": "philippines",
+    "category": "snack",
+    "calories": 220,
+    "protein": 8.0,
+    "carbs": 28.0,
+    "fat": 8.0,
+    "portion": "2 pieces",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-074",
+    "name": "La Paz Batchoy Bowl",
+    "name_original": null,
+    "cuisine": "filipino",
+    "country": "philippines",
+    "category": "main",
+    "calories": 420,
+    "protein": 24.0,
+    "carbs": 32.0,
+    "fat": 18.0,
+    "portion": "1 bowl",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-075",
+    "name": "Bicol Express Spicy Pork",
+    "name_original": null,
+    "cuisine": "filipino",
+    "country": "philippines",
+    "category": "main",
+    "calories": 480,
+    "protein": 28.0,
+    "carbs": 12.0,
+    "fat": 36.0,
+    "portion": "1 plate",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-076",
+    "name": "Turon Banana Spring Roll",
+    "name_original": null,
+    "cuisine": "filipino",
+    "country": "philippines",
+    "category": "dessert",
+    "calories": 260,
+    "protein": 2.0,
+    "carbs": 40.0,
+    "fat": 10.0,
+    "portion": "2 pieces",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-077",
+    "name": "Busan Spicy Tteokbokki Street",
+    "name_original": null,
+    "cuisine": "korean",
+    "country": "korea",
+    "category": "snack",
+    "calories": 380,
+    "protein": 9.0,
+    "carbs": 70.0,
+    "fat": 7.0,
+    "portion": "1 plate",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-078",
+    "name": "Korean BBQ Samgyeopsal Lettuce Wrap",
+    "name_original": null,
+    "cuisine": "korean",
+    "country": "korea",
+    "category": "main",
+    "calories": 650,
+    "protein": 38.0,
+    "carbs": 22.0,
+    "fat": 46.0,
+    "portion": "1 serving",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-079",
+    "name": "Seoul Jjajangmyeon Black Bean",
+    "name_original": null,
+    "cuisine": "korean",
+    "country": "korea",
+    "category": "main",
+    "calories": 740,
+    "protein": 19.0,
+    "carbs": 98.0,
+    "fat": 28.0,
+    "portion": "1 bowl",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-080",
+    "name": "Soft Tofu Stew Seafood",
+    "name_original": null,
+    "cuisine": "korean",
+    "country": "korea",
+    "category": "main",
+    "calories": 340,
+    "protein": 22.0,
+    "carbs": 14.0,
+    "fat": 18.0,
+    "portion": "1 pot",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-081",
+    "name": "Mayak Gimbap Mini Rolls",
+    "name_original": null,
+    "cuisine": "korean",
+    "country": "korea",
+    "category": "snack",
+    "calories": 280,
+    "protein": 8.0,
+    "carbs": 40.0,
+    "fat": 8.0,
+    "portion": "1 pack",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-082",
+    "name": "Korean Corn Cheese Hotteok",
+    "name_original": null,
+    "cuisine": "korean",
+    "country": "korea",
+    "category": "dessert",
+    "calories": 300,
+    "protein": 5.0,
+    "carbs": 44.0,
+    "fat": 12.0,
+    "portion": "1 piece",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-083",
+    "name": "Jokbal Braised Pigs Trotters",
+    "name_original": null,
+    "cuisine": "korean",
+    "country": "korea",
+    "category": "main",
+    "calories": 520,
+    "protein": 36.0,
+    "carbs": 10.0,
+    "fat": 38.0,
+    "portion": "1 serving",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-084",
+    "name": "Budae Jjigae Army Stew",
+    "name_original": null,
+    "cuisine": "korean",
+    "country": "korea",
+    "category": "main",
+    "calories": 480,
+    "protein": 26.0,
+    "carbs": 28.0,
+    "fat": 28.0,
+    "portion": "1 pot share",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-085",
+    "name": "Hakata Tonkotsu Ramen Full",
+    "name_original": null,
+    "cuisine": "japanese",
+    "country": "japan",
+    "category": "main",
+    "calories": 640,
+    "protein": 30.0,
+    "carbs": 66.0,
+    "fat": 28.0,
+    "portion": "1 bowl",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-086",
+    "name": "Unadon Premium Eel Bowl",
+    "name_original": null,
+    "cuisine": "japanese",
+    "country": "japan",
+    "category": "main",
+    "calories": 600,
+    "protein": 34.0,
+    "carbs": 64.0,
+    "fat": 18.0,
+    "portion": "1 bowl",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-087",
+    "name": "Osaka Okonomiyaki Mixed",
+    "name_original": null,
+    "cuisine": "japanese",
+    "country": "japan",
+    "category": "main",
+    "calories": 500,
+    "protein": 19.0,
+    "carbs": 54.0,
+    "fat": 24.0,
+    "portion": "1 piece",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-088",
+    "name": "Street Takoyaki Six Piece",
+    "name_original": null,
+    "cuisine": "japanese",
+    "country": "japan",
+    "category": "snack",
+    "calories": 330,
+    "protein": 13.0,
+    "carbs": 36.0,
+    "fat": 14.0,
+    "portion": "6 pieces",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-089",
+    "name": "Sushi Chirashi Deluxe Bowl",
+    "name_original": null,
+    "cuisine": "japanese",
+    "country": "japan",
+    "category": "main",
+    "calories": 540,
+    "protein": 30.0,
+    "carbs": 70.0,
+    "fat": 10.0,
+    "portion": "1 bowl",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-090",
+    "name": "Tokyo Oyakodon Home Style",
+    "name_original": null,
+    "cuisine": "japanese",
+    "country": "japan",
+    "category": "main",
+    "calories": 550,
+    "protein": 31.0,
+    "carbs": 58.0,
+    "fat": 16.0,
+    "portion": "1 bowl",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-091",
+    "name": "Agedashi Tofu Side",
+    "name_original": null,
+    "cuisine": "japanese",
+    "country": "japan",
+    "category": "side",
+    "calories": 180,
+    "protein": 10.0,
+    "carbs": 12.0,
+    "fat": 10.0,
+    "portion": "1 plate",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-092",
+    "name": "Onigiri Salmon Trio",
+    "name_original": null,
+    "cuisine": "japanese",
+    "country": "japan",
+    "category": "snack",
+    "calories": 320,
+    "protein": 12.0,
+    "carbs": 58.0,
+    "fat": 4.0,
+    "portion": "3 pieces",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-093",
+    "name": "Punjabi Butter Chicken Naan Combo",
+    "name_original": null,
+    "cuisine": "indian",
+    "country": "india",
+    "category": "main",
+    "calories": 740,
+    "protein": 38.0,
+    "carbs": 60.0,
+    "fat": 36.0,
+    "portion": "1 set",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-094",
+    "name": "Mysore Masala Dosa Large",
+    "name_original": null,
+    "cuisine": "indian",
+    "country": "india",
+    "category": "main",
+    "calories": 420,
+    "protein": 12.0,
+    "carbs": 64.0,
+    "fat": 12.0,
+    "portion": "1 dosa",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-095",
+    "name": "Amritsari Chole Bhature Plate",
+    "name_original": null,
+    "cuisine": "indian",
+    "country": "india",
+    "category": "main",
+    "calories": 680,
+    "protein": 19.0,
+    "carbs": 82.0,
+    "fat": 30.0,
+    "portion": "1 set",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-096",
+    "name": "Dum Biryani Hyderabad Bone-In",
+    "name_original": null,
+    "cuisine": "indian",
+    "country": "india",
+    "category": "main",
+    "calories": 700,
+    "protein": 34.0,
+    "carbs": 74.0,
+    "fat": 28.0,
+    "portion": "1 plate",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-097",
+    "name": "Dhaba Palak Paneer Thali",
+    "name_original": null,
+    "cuisine": "indian",
+    "country": "india",
+    "category": "main",
+    "calories": 520,
+    "protein": 24.0,
+    "carbs": 48.0,
+    "fat": 24.0,
+    "portion": "1 set",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-098",
+    "name": "South Indian Idli Sambar Chutney",
+    "name_original": null,
+    "cuisine": "indian",
+    "country": "india",
+    "category": "breakfast",
+    "calories": 300,
+    "protein": 11.0,
+    "carbs": 52.0,
+    "fat": 4.0,
+    "portion": "4 idli",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-099",
+    "name": "Mumbai Pani Puri Six",
+    "name_original": null,
+    "cuisine": "indian",
+    "country": "india",
+    "category": "snack",
+    "calories": 230,
+    "protein": 4.0,
+    "carbs": 40.0,
+    "fat": 6.0,
+    "portion": "6 pieces",
+    "tags": [
+      "expansion-2026"
+    ]
+  },
+  {
+    "id": "ex-100",
+    "name": "Rasgulla Syrup Sweet Two",
+    "name_original": null,
+    "cuisine": "indian",
+    "country": "india",
+    "category": "dessert",
+    "calories": 220,
+    "protein": 4.0,
+    "carbs": 42.0,
+    "fat": 2.0,
+    "portion": "2 pieces",
+    "tags": [
+      "expansion-2026"
+    ]
   }
 ]
