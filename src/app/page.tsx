@@ -109,7 +109,7 @@ export default function LandingPage() {
           </nav>
           <Link
             href="/app"
-            className="text-[13px] font-semibold rounded-full bg-[#1a1814] text-[#f7f2ea] px-4 py-2 hover:bg-[#3d8f5c] transition-colors"
+            className="text-[13px] font-semibold rounded-full bg-[#3d8f5c] text-white px-4 py-2 hover:bg-[#4aa56c] transition-colors"
           >
             Open app
           </Link>
@@ -136,7 +136,7 @@ export default function LandingPage() {
             <div className="flex flex-wrap gap-2 pt-0.5">
               <Link
                 href="/app"
-                className="inline-flex h-10 px-6 items-center rounded-full bg-[#1a1814] text-[#f7f2ea] text-[13px] font-semibold hover:bg-[#3d8f5c] transition-colors"
+                className="inline-flex h-10 px-6 items-center rounded-full bg-[#3d8f5c] text-white text-[13px] font-semibold hover:bg-[#4aa56c] transition-colors"
               >
                 Try free
               </Link>
@@ -274,15 +274,15 @@ export default function LandingPage() {
 
           <div
             id="why"
-            className="rounded-3xl border border-[#1a1814]/[0.06] bg-[#1a1814] text-[#f7f2ea] p-6 sm:p-8 shadow-[0_20px_50px_-30px_rgba(26,24,20,0.4)]"
+            className="rounded-3xl border border-[#3d8f5c]/25 bg-[#2f7a52] text-white p-6 sm:p-8 shadow-[0_20px_50px_-28px_rgba(47,122,82,0.45)]"
           >
-            <p className="text-[12px] sm:text-[13px] font-semibold tracking-[0.14em] uppercase text-[#7ecf9a]">
+            <p className="text-[12px] sm:text-[13px] font-semibold tracking-[0.14em] uppercase text-white/80">
               Why RiceTrack
             </p>
             <h2 className="mt-2 text-[1.65rem] sm:text-[1.85rem] font-semibold tracking-tight leading-snug">
               Western defaults miss the gravy.
             </h2>
-            <ul className="mt-6 space-y-4 text-[14px] leading-relaxed text-[#f7f2ea]/75">
+            <ul className="mt-6 space-y-4 text-[14px] leading-relaxed text-white/85">
               {[
                 "Cuisine-aware prompts for wok oil, coconut milk, sambal, and shared plates.",
                 "Library built around Asian dishes first — not an afterthought tag.",
@@ -290,14 +290,14 @@ export default function LandingPage() {
                 "Daily summary: calories, water, rest, energy — with plain recommendations.",
               ].map((line) => (
                 <li key={line} className="flex gap-3">
-                  <span className="text-[#7ecf9a] font-bold shrink-0">✓</span>
+                  <span className="text-white font-bold shrink-0">✓</span>
                   <span>{line}</span>
                 </li>
               ))}
             </ul>
             <Link
               href="/library"
-              className="mt-8 inline-flex h-11 items-center rounded-full bg-[#3d8f5c] px-5 text-[13px] font-semibold text-white hover:bg-[#4aa56c] transition-colors"
+              className="mt-8 inline-flex h-11 items-center rounded-full bg-white px-5 text-[13px] font-semibold text-[#2f7a52] hover:bg-[#f0faf4] transition-colors"
             >
               Browse the library
             </Link>
@@ -418,7 +418,7 @@ export default function LandingPage() {
               </ul>
               <Link
                 href="/pricing"
-                className="mt-6 inline-flex h-11 items-center justify-center rounded-full bg-[#1a1814] text-[#f7f2ea] text-[13px] font-semibold hover:bg-[#3d8f5c] transition-colors"
+                className="mt-6 inline-flex h-11 items-center justify-center rounded-full bg-[#3d8f5c] text-white text-[13px] font-semibold hover:bg-[#4aa56c] transition-colors"
               >
                 Get Pro
               </Link>
@@ -460,7 +460,7 @@ export default function LandingPage() {
 
       {/* Final CTA */}
       <section className="px-4 pb-16">
-        <div className="mx-auto max-w-5xl rounded-[2rem] bg-[#1a1814] text-[#f7f2ea] px-6 py-12 sm:py-14 text-center relative overflow-hidden">
+        <div className="mx-auto max-w-5xl rounded-[2rem] bg-[#2f7a52] text-white px-6 py-12 sm:py-14 text-center relative overflow-hidden">
           <div
             className="pointer-events-none absolute -top-16 right-0 h-48 w-48 rounded-full bg-[#3d8f5c]/25 blur-3xl"
             aria-hidden
@@ -468,12 +468,12 @@ export default function LandingPage() {
           <h2 className="relative text-[1.75rem] sm:text-[2.1rem] font-semibold tracking-tight">
             Ready when the next meal is.
           </h2>
-          <p className="relative mt-3 text-[15px] text-[#f7f2ea]/55 max-w-md mx-auto">
+          <p className="relative mt-3 text-[15px] text-white/75 max-w-md mx-auto">
             Snap, type, or re-log. Built for how Asia eats.
           </p>
           <Link
             href="/app"
-            className="relative mt-7 inline-flex h-12 px-8 items-center rounded-full bg-[#3d8f5c] text-white text-[14px] font-semibold hover:bg-[#4aa56c] transition-colors"
+            className="relative mt-7 inline-flex h-12 px-8 items-center rounded-full bg-white text-[#2f7a52] text-[14px] font-semibold hover:bg-[#f0faf4] transition-colors"
           >
             Open RiceTrack
           </Link>
