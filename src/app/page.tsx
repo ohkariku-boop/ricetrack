@@ -124,11 +124,11 @@ export default function LandingPage() {
               Asia-first · Photo AI · 1000+ dishes and counting, updated weekly
             </p>
             <h1 className="font-semibold tracking-[-0.035em] leading-[1.02] text-[clamp(2.1rem,5.4vw,3.25rem)]">
-              Easy to use.
+              Snap the plate.
               <br />
-              Hard to fool
+              Get macros that
               <br />
-              <span className="text-[#3d8f5c]">on Asian food.</span>
+              <span className="text-[#3d8f5c]">actually get Asia.</span>
             </h1>
             <p className="text-[15px] leading-snug text-[#1a1814]/55 max-w-sm">
               Snap or type rice bowls, noodles, curry, hawker sets. Not Western defaults.
