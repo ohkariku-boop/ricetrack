@@ -1,15 +1,6 @@
 import Link from "next/link";
 import { RiceLogo } from "@/components/RiceLogo";
 
-const HERO = [
-  { src: "/food/ramen.jpg", alt: "Ramen" },
-  { src: "/food/pho.jpg", alt: "Pho" },
-  { src: "/food/noodles2.jpg", alt: "Noodles" },
-  { src: "/food/indian-curry.jpg", alt: "Indian curry" },
-  { src: "/food/rice.jpg", alt: "Rice meal" },
-  { src: "/food/friedrice.jpg", alt: "Fried rice" },
-];
-
 const MARQUEE = [
   { src: "/food/thai.jpg", cuisine: "Thai" },
   { src: "/food/chinese2.jpg", cuisine: "Chinese" },
@@ -21,74 +12,95 @@ const MARQUEE = [
   { src: "/food/filipino.jpg", cuisine: "Filipino" },
   { src: "/food/srilanka.jpg", cuisine: "Sri Lankan" },
   { src: "/food/singapore.jpg", cuisine: "Singaporean" },
-  { src: "/food/japanese2.jpg", cuisine: "Japanese" },
+  { src: "/food/malay.jpg", cuisine: "Malay" },
   { src: "/food/taiwan.jpg", cuisine: "Taiwanese" },
   { src: "/food/pho.jpg", cuisine: "Vietnamese" },
-  { src: "/food/indian-curry.jpg", cuisine: "Indian" },
+  { src: "/food/ramen.jpg", cuisine: "Japanese" },
 ];
 
 function MarqueeStrip() {
   const items = [...MARQUEE, ...MARQUEE];
   return (
-    <section className="relative overflow-hidden border-y border-[#1a1814]/8" aria-label="Cuisines across Asia">
+    <section
+      className="relative overflow-hidden border-y border-[#1a1814]/[0.06]"
+      aria-label="Cuisines across Asia"
+    >
       <div className="marquee-track flex w-max gap-0">
         {items.map((item, i) => (
           <div
             key={`${item.cuisine}-${i}`}
-            className="relative shrink-0 w-[132px] sm:w-[156px] h-[84px] sm:h-[96px] overflow-hidden"
+            className="relative shrink-0 w-[140px] sm:w-[168px] h-[92px] sm:h-[108px] overflow-hidden"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={item.src}
               alt={item.cuisine}
-              className="absolute inset-0 w-full h-full object-cover"
+              className="absolute inset-0 w-full h-full object-cover scale-105"
               loading="lazy"
             />
-            <div className="absolute inset-0 bg-[#1a1814]/30" />
-            <span className="absolute inset-0 flex items-center justify-center text-[12px] sm:text-[13px] font-semibold tracking-wide text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]">
+            <div className="absolute inset-0 bg-gradient-to-t from-[#1a1814]/55 via-[#1a1814]/15 to-transparent" />
+            <span className="absolute inset-x-0 bottom-2.5 text-center text-[12px] sm:text-[13px] font-semibold tracking-wide text-white drop-shadow">
               {item.cuisine}
             </span>
           </div>
         ))}
       </div>
-      <div className="pointer-events-none absolute inset-y-0 left-0 w-10 bg-gradient-to-r from-[#f6f3ee] to-transparent z-10" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-[#f6f3ee] to-transparent z-10" />
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-[#f7f2ea] to-transparent z-10" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-[#f7f2ea] to-transparent z-10" />
     </section>
+  );
+}
+
+function SectionLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="text-[12px] sm:text-[13px] font-semibold tracking-[0.14em] uppercase text-[#3d8f5c]">
+      {children}
+    </p>
   );
 }
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-[#f6f3ee] text-[#1a1814] antialiased">
-      <header className="sticky top-0 z-40 border-b border-[#1a1814]/8 bg-[#f6f3ee]/90 backdrop-blur-md">
-        <div className="mx-auto max-w-5xl px-4 h-12 flex items-center justify-between">
-                    <Link href="/" className="flex items-center gap-2.5 min-w-0">
-            <RiceLogo size={26} />
+    <div className="min-h-screen bg-[#f7f2ea] text-[#1a1814] antialiased selection:bg-[#3d8f5c]/20">
+      {/* Soft decorative blobs */}
+      <div
+        className="pointer-events-none fixed inset-0 overflow-hidden -z-10"
+        aria-hidden
+      >
+        <div className="absolute -top-24 -right-20 h-72 w-72 rounded-full bg-[#3d8f5c]/[0.07] blur-3xl" />
+        <div className="absolute top-[40%] -left-24 h-80 w-80 rounded-full bg-[#e8a87c]/[0.12] blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 h-64 w-64 rounded-full bg-[#3d8f5c]/[0.05] blur-3xl" />
+      </div>
+
+      <header className="sticky top-0 z-40 border-b border-[#1a1814]/[0.06] bg-[#f7f2ea]/85 backdrop-blur-xl">
+        <div className="mx-auto max-w-5xl px-4 h-14 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2.5 min-w-0 group">
+            <RiceLogo size={28} className="transition-transform group-hover:scale-105" />
             <span className="flex flex-col leading-tight min-w-0">
               <span className="font-semibold text-[15px] tracking-tight">RiceTrack</span>
-              <span className="text-[11px] font-medium text-[#1a1814]/45 tracking-tight">
+              <span className="text-[11px] font-medium text-[#1a1814]/40 tracking-tight">
                 Built for Asian plates first
               </span>
             </span>
           </Link>
 
-          <nav className="hidden sm:flex items-center gap-5 text-[14px] text-[#1a1814]/55">
-            <a href="#how" className="hover:text-[#1a1814]">
+          <nav className="hidden sm:flex items-center gap-6 text-[14px] text-[#1a1814]/50">
+            <a href="#how" className="hover:text-[#1a1814] transition-colors">
               How
             </a>
-            <a href="#why" className="hover:text-[#1a1814]">
+            <a href="#why" className="hover:text-[#1a1814] transition-colors">
               Why
             </a>
-            <Link href="/library" className="hover:text-[#1a1814]">
-              Library
-            </Link>
-            <a href="#pricing" className="hover:text-[#1a1814]">
+            <a href="#pricing" className="hover:text-[#1a1814] transition-colors">
               Pricing
             </a>
+            <Link href="/library" className="hover:text-[#1a1814] transition-colors">
+              Library
+            </Link>
           </nav>
           <Link
             href="/app"
-            className="text-[13px] font-semibold text-[#3d8f5c] hover:text-[#2d6b45]"
+            className="text-[13px] font-semibold rounded-full bg-[#1a1814] text-[#f7f2ea] px-4 py-2 hover:bg-[#3d8f5c] transition-colors"
           >
             Open app
           </Link>
@@ -96,311 +108,344 @@ export default function LandingPage() {
       </header>
 
       {/* Hero */}
-      <section className="px-4 pt-7 pb-5 sm:pt-10 sm:pb-6">
-        <div className="mx-auto max-w-5xl grid lg:grid-cols-2 gap-5 lg:gap-8 items-center">
-          <div className="space-y-3 order-2 lg:order-1">
-            <p className="text-[12px] tracking-[0.16em] uppercase text-[#1a1814]/45 font-medium">
-              Asia-first · Photo AI · 1000+ dishes and counting, updated weekly
-            </p>
-            <h1 className="font-semibold tracking-[-0.035em] leading-[1.02] text-[clamp(2.1rem,5.4vw,3.25rem)]">
-              Easy to use.
+      <section className="relative px-4 pt-12 pb-10 sm:pt-16 sm:pb-14">
+        <div className="mx-auto max-w-5xl">
+          <div className="max-w-2xl mx-auto text-center space-y-5">
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#1a1814]/[0.08] bg-white/60 px-3 py-1 text-[12px] font-medium text-[#1a1814]/55 backdrop-blur-sm">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#3d8f5c] animate-pulse" />
+              Asia-first · 1000+ dishes · updated weekly
+            </div>
+
+            <h1 className="font-semibold tracking-[-0.04em] leading-[1.05] text-[clamp(2.4rem,6.5vw,3.75rem)]">
+              Snap the plate.
               <br />
-              Hard to fool
+              Get macros that
               <br />
-              <span className="text-[#3d8f5c]">on Asian food.</span>
+              <span className="text-[#3d8f5c]">actually get Asia.</span>
             </h1>
-            <p className="text-[15px] leading-snug text-[#1a1814]/55 max-w-sm">
-              Snap or type rice bowls, noodles, curry, hawker sets. Not Western defaults.
+
+            <p className="text-[16px] sm:text-[17px] leading-relaxed text-[#1a1814]/55 max-w-md mx-auto">
+              Rice bowls, hawker sets, curry, noodles, shared plates. Built for how Asia eats —
+              not Western food defaults.
             </p>
-            <div className="flex flex-wrap gap-2 pt-0.5">
+
+            <div className="flex flex-wrap items-center justify-center gap-3 pt-1">
               <Link
                 href="/app"
-                className="inline-flex h-10 px-6 items-center rounded-full bg-[#1a1814] text-[#f6f3ee] text-[13px] font-semibold hover:bg-[#3d8f5c] transition-colors"
+                className="inline-flex h-12 px-7 items-center rounded-full bg-[#1a1814] text-[#f7f2ea] text-[14px] font-semibold hover:bg-[#3d8f5c] transition-colors shadow-[0_8px_24px_-8px_rgba(26,24,20,0.45)]"
               >
                 Try free
               </Link>
-              <Link
-                href="/library"
-                className="inline-flex h-10 px-6 items-center rounded-full border border-[#1a1814]/12 text-[13px] font-medium hover:border-[#1a1814]/30 transition-colors"
+              <a
+                href="#how"
+                className="inline-flex h-12 px-7 items-center rounded-full border border-[#1a1814]/12 bg-white/50 text-[14px] font-medium hover:border-[#1a1814]/25 transition-colors"
               >
-                Library
-              </Link>
+                See how it works
+              </a>
             </div>
-            <div className="pt-1 max-w-md">
-              <p className="text-[12px] font-semibold text-[#1a1814]/40 uppercase tracking-wide mb-1.5">
-                Install on phone
-              </p>
-              <div className="grid grid-cols-2 gap-1.5 text-[13px] leading-snug text-[#1a1814]/60">
-                <div className="rounded-lg border border-[#1a1814]/8 bg-white/50 px-2.5 py-2">
-                  <div className="font-semibold text-[#1a1814] text-[12px] mb-0.5">iPhone</div>
-                  <p>Safari → Share → Add to Home Screen</p>
-                </div>
-                <div className="rounded-lg border border-[#1a1814]/8 bg-white/50 px-2.5 py-2">
-                  <div className="font-semibold text-[#1a1814] text-[12px] mb-0.5">Android</div>
-                  <p>Chrome → Menu ⋮ → Install app</p>
+
+            {/* Fun micro-dialogue */}
+            <div className="pt-6 max-w-sm mx-auto text-left space-y-2">
+              <div className="flex justify-end">
+                <div className="rounded-2xl rounded-br-md bg-white/80 border border-[#1a1814]/[0.06] px-3.5 py-2 text-[13px] text-[#1a1814]/70 shadow-sm">
+                  Is this… nasi lemak or just rice + stuff?
                 </div>
               </div>
+              <div className="flex justify-start">
+                <div className="rounded-2xl rounded-bl-md bg-[#3d8f5c] text-white px-3.5 py-2 text-[13px] shadow-sm">
+                  Nasi lemak — coconut rice, sambal, egg, anchovies. Macros broken down.
+                </div>
+              </div>
+              <p className="text-center text-[11px] text-[#1a1814]/35 pt-1">
+                Cuisine-aware AI · editable in one tap
+              </p>
             </div>
           </div>
 
-          <div className="relative order-1 lg:order-2">
-            <div className="grid grid-cols-3 gap-1 sm:gap-1.5">
-              <div className="col-span-1 row-span-2 rounded-lg overflow-hidden shadow-sm">
+          {/* Hero collage */}
+          <div className="mt-10 sm:mt-12 grid grid-cols-3 sm:grid-cols-6 gap-2 sm:gap-2.5 max-w-3xl mx-auto">
+            {[
+              "/food/ramen.jpg",
+              "/food/pho.jpg",
+              "/food/indian-curry.jpg",
+              "/food/friedrice.jpg",
+              "/food/korean.jpg",
+              "/food/singapore.jpg",
+            ].map((src, i) => (
+              <div
+                key={src}
+                className={`relative aspect-[4/5] overflow-hidden rounded-2xl shadow-sm ring-1 ring-[#1a1814]/[0.04] ${
+                  i % 2 === 1 ? "translate-y-3 sm:translate-y-4" : ""
+                }`}
+              >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={HERO[0].src}
-                  alt={HERO[0].alt}
-                  className="w-full h-full object-cover aspect-[3/5]"
-                  width={360}
-                  height={600}
+                  src={src}
+                  alt=""
+                  className="absolute inset-0 h-full w-full object-cover"
+                  loading={i < 3 ? "eager" : "lazy"}
                 />
               </div>
-              <div className="rounded-lg overflow-hidden shadow-sm">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={HERO[1].src}
-                  alt={HERO[1].alt}
-                  className="w-full object-cover aspect-square"
-                  width={280}
-                  height={280}
-                />
-              </div>
-              <div className="rounded-lg overflow-hidden shadow-sm">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={HERO[2].src}
-                  alt={HERO[2].alt}
-                  className="w-full object-cover aspect-square"
-                  width={280}
-                  height={280}
-                />
-              </div>
-              <div className="col-span-2 rounded-lg overflow-hidden shadow-sm">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={HERO[3].src}
-                  alt={HERO[3].alt}
-                  className="w-full object-cover aspect-[2/1]"
-                  width={560}
-                  height={280}
-                />
-              </div>
-            </div>
-            <div className="mt-1 grid grid-cols-2 gap-1 sm:gap-1.5">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={HERO[4].src}
-                alt={HERO[4].alt}
-                className="w-full object-cover aspect-[2/1] rounded-lg shadow-sm"
-                width={280}
-                height={140}
-              />
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={HERO[5].src}
-                alt={HERO[5].alt}
-                className="w-full object-cover aspect-[2/1] rounded-lg shadow-sm"
-                width={280}
-                height={140}
-              />
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
       <MarqueeStrip />
 
-      {/* How + Why — two panels */}
-      <section className="px-4 py-8 sm:py-10 border-y border-[#1a1814]/8">
-        <div className="mx-auto max-w-5xl grid md:grid-cols-2 gap-3 md:gap-4">
-          <div id="how" className="rounded-2xl border border-[#1a1814]/8 bg-white/70 p-4 sm:p-5">
-            <p className="text-[12px] tracking-[0.16em] uppercase text-[#1a1814]/40 font-medium mb-1.5">
-              How it works
-            </p>
-            <h2 className="text-xl sm:text-2xl font-semibold tracking-tight mb-1">
-              Snap, type, or re-log. Built for how Asia eats.
+      {/* How + Why */}
+      <section className="px-4 py-14 sm:py-16" id="how">
+        <div className="mx-auto max-w-5xl grid lg:grid-cols-2 gap-8 lg:gap-10">
+          <div className="rounded-3xl border border-[#1a1814]/[0.06] bg-white/70 backdrop-blur-sm p-6 sm:p-8 shadow-[0_20px_50px_-30px_rgba(26,24,20,0.25)]">
+            <SectionLabel>How it works</SectionLabel>
+            <h2 className="mt-2 text-[1.65rem] sm:text-[1.85rem] font-semibold tracking-tight leading-snug">
+              Three steps. No spreadsheet energy.
             </h2>
-            <p className="text-[14px] text-[#1a1814]/45 mb-3">
-              Three ways in. One honest macro log out.
-            </p>
-            <div className="grid gap-2">
+            <ol className="mt-6 space-y-5">
               {[
-                { t: "Snap", d: "Photo the whole plate. Rice, sides, oil, egg." },
-                { t: "Type", d: "Any language. Nasi lemak, 麻婆豆腐, phở." },
-                { t: "Re-log", d: "Recents and templates for daily plates." },
-              ].map((x) => (
-                <div
-                  key={x.t}
-                  className="rounded-xl border border-[#1a1814]/8 bg-[#f6f3ee]/80 px-3.5 py-2.5"
-                >
-                  <div className="text-[15px] font-semibold mb-0.5">{x.t}</div>
-                  <p className="text-[13px] text-[#1a1814]/55 leading-snug">{x.d}</p>
-                </div>
+                {
+                  n: "01",
+                  t: "Snap or type",
+                  d: "Photo a plate, search the library, or re-log a favourite. Hawker sets and home cooking welcome.",
+                },
+                {
+                  n: "02",
+                  t: "Review the breakdown",
+                  d: "See the dish title, components, and macros. Fix a name or portion — the AI learns your correction.",
+                },
+                {
+                  n: "03",
+                  t: "Track the day",
+                  d: "Calories, water, rest, energy, and a daily summary that tells you if you’re on track.",
+                },
+              ].map((step) => (
+                <li key={step.n} className="flex gap-4">
+                  <span className="text-[13px] font-semibold tabular-nums text-[#3d8f5c] pt-0.5 shrink-0">
+                    {step.n}
+                  </span>
+                  <div>
+                    <div className="font-semibold text-[15px]">{step.t}</div>
+                    <p className="text-[14px] text-[#1a1814]/55 leading-relaxed mt-0.5">
+                      {step.d}
+                    </p>
+                  </div>
+                </li>
               ))}
-            </div>
+            </ol>
           </div>
 
-          <div id="why" className="rounded-2xl border border-[#1a1814]/8 bg-[#ebe6dc]/70 p-4 sm:p-5">
-            <p className="text-[12px] tracking-[0.16em] uppercase text-[#1a1814]/40 font-medium mb-1.5">
+          <div
+            id="why"
+            className="rounded-3xl border border-[#1a1814]/[0.06] bg-[#1a1814] text-[#f7f2ea] p-6 sm:p-8 shadow-[0_20px_50px_-30px_rgba(26,24,20,0.4)]"
+          >
+            <p className="text-[12px] sm:text-[13px] font-semibold tracking-[0.14em] uppercase text-[#7ecf9a]">
               Why RiceTrack
             </p>
-            <h2 className="text-xl sm:text-2xl font-semibold tracking-tight mb-3">
-              Built for Asian plates. Free core loop.
+            <h2 className="mt-2 text-[1.65rem] sm:text-[1.85rem] font-semibold tracking-tight leading-snug">
+              Western defaults miss the gravy.
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+            <ul className="mt-6 space-y-4 text-[14px] leading-relaxed text-[#f7f2ea]/75">
               {[
-                "Cuisine-aware AI",
-                "Editable macros",
-                "Oil and sauce flags",
-                "Recents and templates",
-                "Daily targets",
-                "1000+ dish library",
-              ].map((label) => (
-                <div
-                  key={label}
-                  className="rounded-lg border border-[#1a1814]/8 bg-[#f6f3ee] px-3 py-2.5 text-[14px] font-medium"
-                >
-                  {label}
-                </div>
+                "Cuisine-aware prompts for wok oil, coconut milk, sambal, and shared plates.",
+                "Library built around Asian dishes first — not an afterthought tag.",
+                "Edit anything. Teach the model when it almost gets it right.",
+                "Daily summary: calories, water, rest, energy — with plain recommendations.",
+              ].map((line) => (
+                <li key={line} className="flex gap-3">
+                  <span className="text-[#7ecf9a] font-bold shrink-0">✓</span>
+                  <span>{line}</span>
+                </li>
               ))}
-            </div>
+            </ul>
+            <Link
+              href="/library"
+              className="mt-8 inline-flex h-11 items-center rounded-full bg-[#3d8f5c] px-5 text-[13px] font-semibold text-white hover:bg-[#4aa56c] transition-colors"
+            >
+              Browse the library
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="px-4 py-10 sm:py-12 text-center">
-        <h2 className="text-xl sm:text-2xl font-semibold tracking-tight">
-          Start with the meal in front of you.
-        </h2>
-        <Link
-          href="/app"
-          className="mt-4 inline-flex h-10 px-8 items-center rounded-full bg-[#1a1814] text-[#f6f3ee] text-[13px] font-semibold hover:bg-[#3d8f5c] transition-colors"
-        >
-          Open RiceTrack
-        </Link>
+      {/* Feature strip */}
+      <section className="px-4 pb-6">
+        <div className="mx-auto max-w-5xl grid sm:grid-cols-3 gap-3">
+          {[
+            {
+              title: "Photo AI",
+              body: "Point at the plate. Get a dish title and macros you can trust enough to edit.",
+            },
+            {
+              title: "Asian library",
+              body: "1000+ dishes and counting — from thali to tom yum to Taiwanese bentos.",
+            },
+            {
+              title: "Daily picture",
+              body: "Not only calories. Water, sleep, energy, and a short “how’d today go?”",
+            },
+          ].map((f) => (
+            <div
+              key={f.title}
+              className="rounded-2xl border border-[#1a1814]/[0.06] bg-white/50 px-5 py-5 hover:bg-white/80 transition-colors"
+            >
+              <h3 className="font-semibold text-[15px] tracking-tight">{f.title}</h3>
+              <p className="mt-1.5 text-[13px] leading-relaxed text-[#1a1814]/55">{f.body}</p>
+            </div>
+          ))}
+        </div>
       </section>
 
-
       {/* Pricing */}
-      <section id="pricing" className="px-4 py-8 sm:py-10 border-t border-[#1a1814]/8 scroll-mt-14">
+      <section id="pricing" className="px-4 py-14 sm:py-16 scroll-mt-16">
         <div className="mx-auto max-w-5xl">
-          <div className="text-center max-w-lg mx-auto mb-6">
-            <p className="text-[12px] tracking-[0.16em] uppercase text-[#1a1814]/45 font-medium mb-1.5">
-              Pricing
-            </p>
-            <h2 className="text-[1.55rem] sm:text-[1.75rem] font-semibold tracking-tight">
-              Start free. Go Pro when you need more scans.
+          <div className="text-center max-w-lg mx-auto mb-8">
+            <SectionLabel>Pricing</SectionLabel>
+            <h2 className="mt-2 text-[1.65rem] sm:text-[1.9rem] font-semibold tracking-tight">
+              Start free. Go Pro when the plate gets daily.
             </h2>
-            <p className="text-[14px] text-[#1a1814]/55 mt-2 leading-snug">
-              Full Asian library on every plan. Pro unlocks unlimited AI photo analysis.
+            <p className="text-[15px] text-[#1a1814]/50 mt-2 leading-snug">
+              Full Asian library on every plan. Pro unlocks unlimited AI scans.
             </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 gap-3 sm:gap-4 max-w-3xl mx-auto">
-            {/* Free */}
-            <div className="rounded-2xl border border-[#1a1814]/10 bg-white/60 p-5 flex flex-col">
-              <div className="text-[12px] font-semibold uppercase tracking-wide text-[#1a1814]/45">
+          <div className="grid sm:grid-cols-2 gap-4 max-w-3xl mx-auto">
+            <div className="rounded-3xl border border-[#1a1814]/[0.08] bg-white/60 p-6 flex flex-col">
+              <div className="text-[12px] font-semibold uppercase tracking-wide text-[#1a1814]/40">
                 Free
               </div>
-              <div className="mt-1 flex items-baseline gap-1">
-                <span className="text-[2rem] font-semibold tracking-tight">$0</span>
-                <span className="text-[13px] text-[#1a1814]/45">forever</span>
+              <div className="mt-2 flex items-baseline gap-1">
+                <span className="text-[2.25rem] font-semibold tracking-tight">$0</span>
+                <span className="text-[13px] text-[#1a1814]/40">forever</span>
               </div>
-              <p className="text-[13px] text-[#1a1814]/55 mt-1.5 leading-snug">
-                Enough to try photo logging and use the full dish library.
+              <p className="text-[13px] text-[#1a1814]/50 mt-2 leading-snug">
+                Try photo logging and the full dish library without a card.
               </p>
-              <ul className="mt-4 space-y-2 text-[13px] text-[#1a1814]/70 flex-1">
-                <li className="flex gap-2">
-                  <span className="text-[#3d8f5c] font-bold shrink-0">✓</span>
-                  5 AI photo / text scans per week
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-[#3d8f5c] font-bold shrink-0">✓</span>
-                  Unlimited manual &amp; library logging
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-[#3d8f5c] font-bold shrink-0">✓</span>
-                  Full Asian food library
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-[#3d8f5c] font-bold shrink-0">✓</span>
-                  Progress, history &amp; meal reminders
-                </li>
+              <ul className="mt-5 space-y-2.5 text-[13px] text-[#1a1814]/70 flex-1">
+                {[
+                  "5 AI photo / text scans per week",
+                  "Unlimited manual & library logging",
+                  "Full Asian food library",
+                  "Progress, history & meal reminders",
+                ].map((x) => (
+                  <li key={x} className="flex gap-2">
+                    <span className="text-[#3d8f5c] font-bold shrink-0">✓</span>
+                    {x}
+                  </li>
+                ))}
               </ul>
               <Link
                 href="/app"
-                className="mt-5 inline-flex h-10 items-center justify-center rounded-full border border-[#1a1814]/12 text-[13px] font-semibold hover:border-[#1a1814]/30 transition-colors"
+                className="mt-6 inline-flex h-11 items-center justify-center rounded-full border border-[#1a1814]/10 text-[13px] font-semibold hover:border-[#1a1814]/25 transition-colors"
               >
                 Try free
               </Link>
             </div>
 
-            {/* Pro */}
-            <div className="rounded-2xl border-2 border-[#3d8f5c] bg-white p-5 flex flex-col relative shadow-[0_8px_30px_-12px_rgba(61,143,92,0.35)]">
-              <div className="absolute -top-2.5 right-4 rounded-full bg-[#3d8f5c] text-white text-[10px] font-semibold uppercase tracking-wide px-2.5 py-0.5">
+            <div className="rounded-3xl border-2 border-[#3d8f5c] bg-white p-6 flex flex-col relative shadow-[0_16px_40px_-18px_rgba(61,143,92,0.4)]">
+              <div className="absolute -top-2.5 right-5 rounded-full bg-[#3d8f5c] text-white text-[10px] font-semibold uppercase tracking-wide px-2.5 py-0.5">
                 Popular
               </div>
               <div className="text-[12px] font-semibold uppercase tracking-wide text-[#3d8f5c]">
                 Pro
               </div>
-              <div className="mt-1 flex flex-wrap items-baseline gap-x-2 gap-y-1">
+              <div className="mt-2 flex flex-wrap items-baseline gap-x-2 gap-y-1">
                 <span className="inline-flex items-baseline gap-1">
-                  <span className="text-[2rem] font-semibold tracking-tight">$3.99</span>
-                  <span className="text-[13px] text-[#1a1814]/45">/ month</span>
+                  <span className="text-[2.25rem] font-semibold tracking-tight">$3.99</span>
+                  <span className="text-[13px] text-[#1a1814]/40">/ month</span>
                 </span>
-                <span className="text-[13px] text-[#1a1814]/30">or</span>
+                <span className="text-[13px] text-[#1a1814]/25">or</span>
                 <span className="inline-flex items-baseline gap-1">
-                  <span className="text-[2rem] font-semibold tracking-tight">$35</span>
-                  <span className="text-[13px] text-[#1a1814]/45">/ year</span>
+                  <span className="text-[2.25rem] font-semibold tracking-tight">$35</span>
+                  <span className="text-[13px] text-[#1a1814]/40">/ year</span>
                 </span>
               </div>
-              <p className="text-[13px] text-[#1a1814]/55 mt-1.5 leading-snug">
-                Unlimited AI for daily Asian plates.
+              <p className="text-[13px] text-[#1a1814]/50 mt-2 leading-snug">
+                Unlimited AI for everyday Asian plates.
               </p>
               <p className="text-[12px] font-medium text-[#3d8f5c] mt-1">
                 Yearly saves $12.88 (27%) vs $3.99 × 12
               </p>
-              <ul className="mt-4 space-y-2 text-[13px] text-[#1a1814]/70 flex-1">
-                <li className="flex gap-2">
-                  <span className="text-[#3d8f5c] font-bold shrink-0">✓</span>
-                  Unlimited AI photo &amp; text analysis
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-[#3d8f5c] font-bold shrink-0">✓</span>
-                  Everything in Free
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-[#3d8f5c] font-bold shrink-0">✓</span>
-                  Priority dish suggestions to the library
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-[#3d8f5c] font-bold shrink-0">✓</span>
-                  Priority email support
-                </li>
+              <ul className="mt-5 space-y-2.5 text-[13px] text-[#1a1814]/70 flex-1">
+                {[
+                  "Unlimited AI photo & text analysis",
+                  "Everything in Free",
+                  "Priority dish suggestions to the library",
+                  "Priority email support",
+                ].map((x) => (
+                  <li key={x} className="flex gap-2">
+                    <span className="text-[#3d8f5c] font-bold shrink-0">✓</span>
+                    {x}
+                  </li>
+                ))}
               </ul>
               <Link
                 href="/pricing"
-                className="mt-5 inline-flex h-10 items-center justify-center rounded-full bg-[#1a1814] text-[#f6f3ee] text-[13px] font-semibold hover:bg-[#3d8f5c] transition-colors"
+                className="mt-6 inline-flex h-11 items-center justify-center rounded-full bg-[#1a1814] text-[#f7f2ea] text-[13px] font-semibold hover:bg-[#3d8f5c] transition-colors"
               >
                 Get Pro
               </Link>
             </div>
           </div>
-
-          <p className="text-center text-[12px] text-[#1a1814]/40 mt-4">
-            Estimates only, not medical advice.{" "}
-            <Link href="/pricing" className="text-[#3d8f5c] font-medium hover:underline">
-              Full plan comparison
-            </Link>
-          </p>
         </div>
       </section>
 
-      <footer className="px-4 py-7 border-t border-[#1a1814]/8 text-[12px] text-[#1a1814]/45">
-        <div className="mx-auto max-w-5xl flex flex-col gap-5">
-          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-5">
-            <div className="space-y-1 max-w-xs">
+      {/* Install */}
+      <section className="px-4 pb-14">
+        <div className="mx-auto max-w-5xl rounded-3xl border border-[#1a1814]/[0.06] bg-white/60 p-6 sm:p-8">
+          <div className="grid sm:grid-cols-2 gap-6 items-center">
+            <div>
+              <SectionLabel>On your phone</SectionLabel>
+              <h2 className="mt-2 text-[1.4rem] font-semibold tracking-tight">
+                Install as an app in a minute
+              </h2>
+              <p className="mt-2 text-[14px] text-[#1a1814]/55 leading-relaxed">
+                Works as a PWA — home-screen icon, full-screen feel, no store wait.
+              </p>
+            </div>
+            <div className="grid grid-cols-2 gap-3 text-[13px]">
+              <div className="rounded-2xl border border-[#1a1814]/[0.06] bg-[#f7f2ea]/80 px-3.5 py-3">
+                <div className="font-semibold text-[#1a1814]/80">iPhone</div>
+                <p className="mt-1 text-[#1a1814]/50 leading-snug">
+                  Safari → Share → Add to Home Screen
+                </p>
+              </div>
+              <div className="rounded-2xl border border-[#1a1814]/[0.06] bg-[#f7f2ea]/80 px-3.5 py-3">
+                <div className="font-semibold text-[#1a1814]/80">Android</div>
+                <p className="mt-1 text-[#1a1814]/50 leading-snug">
+                  Chrome → menu → Install app / Add to Home screen
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Final CTA */}
+      <section className="px-4 pb-16">
+        <div className="mx-auto max-w-5xl rounded-[2rem] bg-[#1a1814] text-[#f7f2ea] px-6 py-12 sm:py-14 text-center relative overflow-hidden">
+          <div
+            className="pointer-events-none absolute -top-16 right-0 h-48 w-48 rounded-full bg-[#3d8f5c]/25 blur-3xl"
+            aria-hidden
+          />
+          <h2 className="relative text-[1.75rem] sm:text-[2.1rem] font-semibold tracking-tight">
+            Ready when the next meal is.
+          </h2>
+          <p className="relative mt-3 text-[15px] text-[#f7f2ea]/55 max-w-md mx-auto">
+            Snap, type, or re-log. Built for how Asia eats.
+          </p>
+          <Link
+            href="/app"
+            className="relative mt-7 inline-flex h-12 px-8 items-center rounded-full bg-[#3d8f5c] text-white text-[14px] font-semibold hover:bg-[#4aa56c] transition-colors"
+          >
+            Open RiceTrack
+          </Link>
+        </div>
+      </section>
+
+      <footer className="px-4 py-8 border-t border-[#1a1814]/[0.06] text-[12px] text-[#1a1814]/45">
+        <div className="mx-auto max-w-5xl space-y-5">
+          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-6">
+            <div className="space-y-1.5 max-w-xs">
               <div className="flex items-center gap-1.5 text-[15px] font-semibold text-[#1a1814]/70">
                 <RiceLogo size={20} />
                 RiceTrack
@@ -419,9 +464,9 @@ export default function LandingPage() {
                 </a>
               </p>
             </div>
-            <div className="grid grid-cols-2 gap-6 text-[13px]">
+            <div className="grid grid-cols-2 gap-8 text-[13px]">
               <div className="space-y-1.5">
-                <div className="font-semibold text-[#1a1814]/50 uppercase tracking-wide text-[12px]">
+                <div className="font-semibold text-[#1a1814]/45 uppercase tracking-wide text-[11px]">
                   Product
                 </div>
                 <Link href="/app" className="block hover:text-[#1a1814]">
@@ -438,7 +483,7 @@ export default function LandingPage() {
                 </Link>
               </div>
               <div className="space-y-1.5">
-                <div className="font-semibold text-[#1a1814]/50 uppercase tracking-wide text-[12px]">
+                <div className="font-semibold text-[#1a1814]/45 uppercase tracking-wide text-[11px]">
                   Legal
                 </div>
                 <Link href="/terms" className="block hover:text-[#1a1814]">
@@ -453,9 +498,9 @@ export default function LandingPage() {
               </div>
             </div>
           </div>
-          <div className="flex flex-col sm:flex-row justify-between gap-1 pt-3 border-t border-[#1a1814]/8 text-[12px]">
+          <div className="flex flex-col sm:flex-row justify-between gap-1 pt-4 border-t border-[#1a1814]/[0.06] text-[12px]">
             <span>© {new Date().getFullYear()} RiceTrack</span>
-            <span className="text-[#1a1814]/35">Built for Asian plates first</span>
+            <span className="text-[#1a1814]/30">Built for Asian plates first</span>
           </div>
         </div>
       </footer>
