@@ -1,6 +1,15 @@
 import Link from "next/link";
 import { RiceLogo } from "@/components/RiceLogo";
 
+const HERO = [
+  { src: "/food/ramen.jpg", alt: "Ramen" },
+  { src: "/food/pho.jpg", alt: "Pho" },
+  { src: "/food/noodles2.jpg", alt: "Noodles" },
+  { src: "/food/indian-curry.jpg", alt: "Indian curry" },
+  { src: "/food/rice.jpg", alt: "Rice meal" },
+  { src: "/food/friedrice.jpg", alt: "Fried rice" },
+];
+
 const MARQUEE = [
   { src: "/food/thai.jpg", cuisine: "Thai" },
   { src: "/food/chinese2.jpg", cuisine: "Chinese" },
@@ -107,86 +116,115 @@ export default function LandingPage() {
         </div>
       </header>
 
-      {/* Hero */}
-      <section className="relative px-4 pt-12 pb-10 sm:pt-16 sm:pb-14">
-        <div className="mx-auto max-w-5xl">
-          <div className="max-w-2xl mx-auto text-center space-y-5">
-            <div className="inline-flex items-center gap-2 rounded-full border border-[#1a1814]/[0.08] bg-white/60 px-3 py-1 text-[12px] font-medium text-[#1a1814]/55 backdrop-blur-sm">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#3d8f5c] animate-pulse" />
-              Asia-first · 1000+ dishes · updated weekly
-            </div>
-
-            <h1 className="font-semibold tracking-[-0.04em] leading-[1.05] text-[clamp(2.4rem,6.5vw,3.75rem)]">
-              Snap the plate.
-              <br />
-              Get macros that
-              <br />
-              <span className="text-[#3d8f5c]">actually get Asia.</span>
-            </h1>
-
-            <p className="text-[16px] sm:text-[17px] leading-relaxed text-[#1a1814]/55 max-w-md mx-auto">
-              Rice bowls, hawker sets, curry, noodles, shared plates. Built for how Asia eats —
-              not Western food defaults.
+      {/* Hero — previous text + image collage */}
+      <section className="px-4 pt-7 pb-5 sm:pt-10 sm:pb-6">
+        <div className="mx-auto max-w-5xl grid lg:grid-cols-2 gap-5 lg:gap-8 items-center">
+          <div className="space-y-3 order-2 lg:order-1">
+            <p className="text-[12px] tracking-[0.16em] uppercase text-[#1a1814]/45 font-medium">
+              Asia-first · Photo AI · 1000+ dishes and counting, updated weekly
             </p>
-
-            <div className="flex flex-wrap items-center justify-center gap-3 pt-1">
+            <h1 className="font-semibold tracking-[-0.035em] leading-[1.02] text-[clamp(2.1rem,5.4vw,3.25rem)]">
+              Easy to use.
+              <br />
+              Hard to fool
+              <br />
+              <span className="text-[#3d8f5c]">on Asian food.</span>
+            </h1>
+            <p className="text-[15px] leading-snug text-[#1a1814]/55 max-w-sm">
+              Snap or type rice bowls, noodles, curry, hawker sets. Not Western defaults.
+            </p>
+            <div className="flex flex-wrap gap-2 pt-0.5">
               <Link
                 href="/app"
-                className="inline-flex h-12 px-7 items-center rounded-full bg-[#1a1814] text-[#f7f2ea] text-[14px] font-semibold hover:bg-[#3d8f5c] transition-colors shadow-[0_8px_24px_-8px_rgba(26,24,20,0.45)]"
+                className="inline-flex h-10 px-6 items-center rounded-full bg-[#1a1814] text-[#f7f2ea] text-[13px] font-semibold hover:bg-[#3d8f5c] transition-colors"
               >
                 Try free
               </Link>
-              <a
-                href="#how"
-                className="inline-flex h-12 px-7 items-center rounded-full border border-[#1a1814]/12 bg-white/50 text-[14px] font-medium hover:border-[#1a1814]/25 transition-colors"
+              <Link
+                href="/library"
+                className="inline-flex h-10 px-6 items-center rounded-full border border-[#1a1814]/12 text-[13px] font-medium hover:border-[#1a1814]/30 transition-colors"
               >
-                See how it works
-              </a>
+                Library
+              </Link>
             </div>
-
-            {/* Fun micro-dialogue */}
-            <div className="pt-6 max-w-sm mx-auto text-left space-y-2">
-              <div className="flex justify-end">
-                <div className="rounded-2xl rounded-br-md bg-white/80 border border-[#1a1814]/[0.06] px-3.5 py-2 text-[13px] text-[#1a1814]/70 shadow-sm">
-                  Is this… nasi lemak or just rice + stuff?
-                </div>
-              </div>
-              <div className="flex justify-start">
-                <div className="rounded-2xl rounded-bl-md bg-[#3d8f5c] text-white px-3.5 py-2 text-[13px] shadow-sm">
-                  Nasi lemak — coconut rice, sambal, egg, anchovies. Macros broken down.
-                </div>
-              </div>
-              <p className="text-center text-[11px] text-[#1a1814]/35 pt-1">
-                Cuisine-aware AI · editable in one tap
+            <div className="pt-1 max-w-md">
+              <p className="text-[12px] font-semibold text-[#1a1814]/40 uppercase tracking-wide mb-1.5">
+                Install on phone
               </p>
+              <div className="grid grid-cols-2 gap-1.5 text-[13px] leading-snug text-[#1a1814]/60">
+                <div className="rounded-lg border border-[#1a1814]/8 bg-white/50 px-2.5 py-2">
+                  <div className="font-semibold text-[#1a1814] text-[12px] mb-0.5">iPhone</div>
+                  <p>Safari → Share → Add to Home Screen</p>
+                </div>
+                <div className="rounded-lg border border-[#1a1814]/8 bg-white/50 px-2.5 py-2">
+                  <div className="font-semibold text-[#1a1814] text-[12px] mb-0.5">Android</div>
+                  <p>Chrome → Menu ⋮ → Install app</p>
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Hero collage */}
-          <div className="mt-10 sm:mt-12 grid grid-cols-3 sm:grid-cols-6 gap-2 sm:gap-2.5 max-w-3xl mx-auto">
-            {[
-              "/food/ramen.jpg",
-              "/food/pho.jpg",
-              "/food/indian-curry.jpg",
-              "/food/friedrice.jpg",
-              "/food/korean.jpg",
-              "/food/singapore.jpg",
-            ].map((src, i) => (
-              <div
-                key={src}
-                className={`relative aspect-[4/5] overflow-hidden rounded-2xl shadow-sm ring-1 ring-[#1a1814]/[0.04] ${
-                  i % 2 === 1 ? "translate-y-3 sm:translate-y-4" : ""
-                }`}
-              >
+          <div className="relative order-1 lg:order-2">
+            <div className="grid grid-cols-3 gap-1 sm:gap-1.5">
+              <div className="col-span-1 row-span-2 rounded-lg overflow-hidden shadow-sm">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={src}
-                  alt=""
-                  className="absolute inset-0 h-full w-full object-cover"
-                  loading={i < 3 ? "eager" : "lazy"}
+                  src={HERO[0].src}
+                  alt={HERO[0].alt}
+                  className="w-full h-full object-cover aspect-[3/5]"
+                  width={360}
+                  height={600}
                 />
               </div>
-            ))}
+              <div className="rounded-lg overflow-hidden shadow-sm">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={HERO[1].src}
+                  alt={HERO[1].alt}
+                  className="w-full object-cover aspect-square"
+                  width={280}
+                  height={280}
+                />
+              </div>
+              <div className="rounded-lg overflow-hidden shadow-sm">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={HERO[2].src}
+                  alt={HERO[2].alt}
+                  className="w-full object-cover aspect-square"
+                  width={280}
+                  height={280}
+                />
+              </div>
+              <div className="col-span-2 rounded-lg overflow-hidden shadow-sm">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={HERO[3].src}
+                  alt={HERO[3].alt}
+                  className="w-full object-cover aspect-[2/1]"
+                  width={560}
+                  height={280}
+                />
+              </div>
+            </div>
+            <div className="mt-1 grid grid-cols-2 gap-1 sm:gap-1.5">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={HERO[4].src}
+                alt={HERO[4].alt}
+                className="w-full object-cover aspect-[2/1] rounded-lg shadow-sm"
+                width={280}
+                height={140}
+              />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={HERO[5].src}
+                alt={HERO[5].alt}
+                className="w-full object-cover aspect-[2/1] rounded-lg shadow-sm"
+                width={280}
+                height={140}
+              />
+            </div>
           </div>
         </div>
       </section>
