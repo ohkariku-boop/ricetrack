@@ -65,7 +65,7 @@ function LoginContent() {
     );
   };
 
-  const pickAccount = (id: "guest" | "joe" | "mel") => {
+  const pickAccount = (id: "guest" | "joe" | "mel" | "vip1") => {
     // Prefer not mixing with a lingering cloud session
     supabase.auth.signOut().catch(() => {});
 
@@ -172,7 +172,7 @@ function LoginContent() {
             onClick={() => setShowDemo((v) => !v)}
             className="w-full text-center text-xs text-muted-foreground hover:text-foreground transition-colors"
           >
-            {showDemo ? "Hide demo accounts" : "Demo accounts (Joe / Mel)"}
+            {showDemo ? "Hide demo accounts" : "Demo accounts (Joe / Mel / VIP1)"}
           </button>
           {showDemo && (
             <div className="mt-3 space-y-2">

@@ -1,6 +1,6 @@
-/** Local session accounts — guest + demo paid users (Joe, Mel). No Supabase required. */
+/** Local session accounts — guest + demo paid users (Joe, Mel, VIP1). No Supabase required. */
 
-export type LocalAccountId = "guest" | "joe" | "mel";
+export type LocalAccountId = "guest" | "joe" | "mel" | "vip1";
 
 export type LocalAccount = {
   id: LocalAccountId;
@@ -13,6 +13,7 @@ export const LOCAL_ACCOUNTS: LocalAccount[] = [
   { id: "guest", name: "Guest", paid: false },
   { id: "joe", name: "Joe", paid: true, email: "joe@ricetrack.app" },
   { id: "mel", name: "Mel", paid: true, email: "mel@ricetrack.app" },
+  { id: "vip1", name: "VIP1", paid: true, email: "vip1@ricetrack.app" },
 ];
 
 const SESSION_KEY = "ricetrack_local_session";
@@ -101,6 +102,22 @@ const DEFAULT_PROFILES: Record<LocalAccountId, GuestProfile> = {
     goal: "lose",
     targets_manual: true,
     display_name: "Mel",
+    is_paid: true,
+    onboarding_complete: false,
+  },
+  vip1: {
+    daily_calorie_target: 2000,
+    daily_protein_target: 130,
+    daily_carbs_target: 200,
+    daily_fat_target: 65,
+    weight_kg: 70,
+    height_cm: 170,
+    age: 32,
+    sex: "other",
+    activity: "moderate",
+    goal: "maintain",
+    targets_manual: true,
+    display_name: "VIP1",
     is_paid: true,
     onboarding_complete: false,
   },
