@@ -283,6 +283,7 @@ create policy "Users manage own balance" on public.balance_events
 
 -- Profile: allow manual target flag
 alter table public.profiles add column if not exists targets_manual boolean default false;
+alter table public.profiles add column if not exists onboarding_complete boolean default false;
 
 -- ========== Library suggestions (user contributions; moderated) ==========
 create table if not exists public.library_suggestions (

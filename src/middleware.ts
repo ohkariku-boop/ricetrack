@@ -45,7 +45,7 @@ export async function middleware(request: NextRequest) {
   // Protect onboarding if needed — allow logged out to reach login
   if (request.nextUrl.pathname === "/login" && user) {
     const url = request.nextUrl.clone();
-    url.pathname = "/dashboard";
+    url.pathname = "/auth/welcome";
     return NextResponse.redirect(url);
   }
 

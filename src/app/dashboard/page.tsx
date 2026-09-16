@@ -33,6 +33,12 @@ import {
 import type { FoodItem } from "@/types";
 import { localDateKey, localDateKeyFromIso, startOfLocalDay } from "@/lib/dates";
 import { isPro } from "@/lib/entitlements";
+import {
+  ensureCloudProfile,
+  identityFromUser,
+  identityLabel,
+  signOutIdentity,
+} from "@/lib/identity";
 import { mealTypeLabel } from "@/lib/meal-type";
 import { BottomNav } from "@/components/BottomNav";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -181,7 +187,13 @@ export default function DashboardPage() {
       return;
     }
     setUser(user);
+    try {
+      await ensureCloudProfile(supabase, user);
+    } catch {
+      /* trigger may create profile */
+    }
 
+    const cloud = identityFromUser(user);
     const { data: prof } = await supabase
       .from("profiles")
       .select("*")
@@ -193,6 +205,10 @@ export default function DashboardPage() {
       return;
     }
     setProfile(prof);
+    const name =
+      (prof as { display_name?: string }).display_name ||
+      (cloud ? identityLabel(cloud) : "Account");
+    setAccountLabel(`${name}${isPro() ? " · Pro" : ""}`);
 
     const day = selectedDate || localDateKey();
     const dayStart = new Date(day + "T00:00:00");
@@ -390,9 +406,8 @@ export default function DashboardPage() {
   };
 
   const signOut = async () => {
-    disableGuest();
-    await supabase.auth.signOut();
-    router.push("/");
+    await signOutIdentity(supabase);
+    router.push("/login");
   };
 
   const balanceGently = async () => {
