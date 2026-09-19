@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { RiceLogo } from "@/components/RiceLogo";
 
 /**
@@ -203,7 +203,7 @@ function Screen({
   children,
 }: {
   visible: boolean;
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
     <div
