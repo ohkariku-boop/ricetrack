@@ -68,6 +68,124 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   );
 }
 
+
+function PhoneMockup() {
+  return (
+    <div className="relative mx-auto w-[min(100%,280px)] sm:w-[300px] lg:w-[280px] xl:w-[300px]">
+      {/* soft glow */}
+      <div
+        className="pointer-events-none absolute -inset-8 rounded-[3rem] bg-[#3d8f5c]/[0.12] blur-2xl"
+        aria-hidden
+      />
+      <div className="relative rounded-[2.35rem] bg-[#1a1814] p-[10px] shadow-[0_28px_60px_-20px_rgba(26,24,20,0.45)] ring-1 ring-black/20">
+        {/* side buttons hint */}
+        <div className="absolute -left-[2px] top-24 h-8 w-[3px] rounded-l bg-[#2a2723]" aria-hidden />
+        <div className="absolute -left-[2px] top-36 h-12 w-[3px] rounded-l bg-[#2a2723]" aria-hidden />
+        <div className="absolute -right-[2px] top-28 h-14 w-[3px] rounded-r bg-[#2a2723]" aria-hidden />
+        <div className="relative overflow-hidden rounded-[1.85rem] bg-[#f7f2ea] aspect-[9/19.5]">
+          {/* status bar */}
+          <div className="flex items-center justify-between px-5 pt-3 pb-1 text-[10px] font-semibold text-[#1a1814]/70">
+            <span>9:41</span>
+            <div className="absolute left-1/2 -translate-x-1/2 top-2 h-[22px] w-[88px] rounded-full bg-[#1a1814]" aria-hidden />
+            <span className="tracking-tight">●●●</span>
+          </div>
+          {/* app chrome */}
+          <div className="px-3.5 pt-3 pb-2 flex items-center justify-between">
+            <div className="flex items-center gap-1.5">
+              <RiceLogo size={18} />
+              <span className="text-[12px] font-semibold tracking-tight text-[#1a1814]">
+                RiceTrack
+              </span>
+            </div>
+            <span className="text-[10px] font-medium text-[#3d8f5c] bg-[#3d8f5c]/12 px-2 py-0.5 rounded-full">
+              Today
+            </span>
+          </div>
+          {/* calorie card */}
+          <div className="mx-3 rounded-2xl bg-white border border-[#1a1814]/[0.06] p-3 shadow-sm">
+            <div className="text-[10px] font-medium text-[#1a1814]/45 uppercase tracking-wide">
+              Daily energy
+            </div>
+            <div className="mt-1 flex items-end gap-1.5">
+              <span className="text-[28px] font-semibold tracking-tight leading-none text-[#1a1814]">
+                1,420
+              </span>
+              <span className="text-[11px] text-[#1a1814]/40 pb-0.5">/ 2,000 kcal</span>
+            </div>
+            <div className="mt-2.5 h-1.5 rounded-full bg-[#1a1814]/[0.06] overflow-hidden">
+              <div className="h-full w-[71%] rounded-full bg-[#3d8f5c]" />
+            </div>
+            <div className="mt-2.5 grid grid-cols-3 gap-1.5 text-center">
+              {[
+                ["P", "82g"],
+                ["C", "145g"],
+                ["F", "48g"],
+              ].map(([k, v]) => (
+                <div key={k} className="rounded-lg bg-[#f7f2ea] py-1.5">
+                  <div className="text-[9px] text-[#1a1814]/40 font-medium">{k}</div>
+                  <div className="text-[11px] font-semibold text-[#1a1814]">{v}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+          {/* meal row */}
+          <div className="mx-3 mt-2.5 rounded-2xl bg-white border border-[#1a1814]/[0.06] p-2.5 shadow-sm">
+            <div className="flex gap-2.5 items-center">
+              <div className="relative h-12 w-12 shrink-0 rounded-xl overflow-hidden bg-[#1a1814]/5">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/food/singapore.jpg"
+                  alt=""
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="text-[12px] font-semibold text-[#1a1814] truncate">
+                  Nasi lemak
+                </div>
+                <div className="text-[10px] text-[#1a1814]/45">Lunch · coconut rice, egg</div>
+              </div>
+              <div className="text-[11px] font-semibold tabular-nums text-[#1a1814]">
+                620
+              </div>
+            </div>
+          </div>
+          <div className="mx-3 mt-1.5 rounded-2xl bg-white/80 border border-[#1a1814]/[0.05] p-2.5">
+            <div className="flex gap-2.5 items-center opacity-80">
+              <div className="relative h-12 w-12 shrink-0 rounded-xl overflow-hidden">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/food/ramen.jpg"
+                  alt=""
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="text-[12px] font-semibold text-[#1a1814] truncate">
+                  Tonkotsu ramen
+                </div>
+                <div className="text-[10px] text-[#1a1814]/45">Dinner</div>
+              </div>
+              <div className="text-[11px] font-semibold tabular-nums text-[#1a1814]">
+                640
+              </div>
+            </div>
+          </div>
+          {/* snap CTA */}
+          <div className="absolute bottom-5 inset-x-0 flex justify-center">
+            <div className="flex flex-col items-center gap-1">
+              <div className="h-12 w-12 rounded-full bg-[#3d8f5c] text-white flex items-center justify-center shadow-lg text-[18px] font-light">
+                +
+              </div>
+              <span className="text-[9px] font-medium text-[#1a1814]/45">Log a meal</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-[#f7f2ea] text-[#1a1814] antialiased selection:bg-[#3d8f5c]/20">
@@ -116,7 +234,7 @@ export default function LandingPage() {
         </div>
       </header>
 
-      {/* Hero — previous text + image collage */}
+      {/* Hero — copy + phone mockup */}
       <section className="px-4 pt-7 pb-5 sm:pt-10 sm:pb-6">
         <div className="mx-auto max-w-5xl grid lg:grid-cols-2 gap-5 lg:gap-8 items-center">
           <div className="space-y-3 order-2 lg:order-1">
@@ -164,67 +282,8 @@ export default function LandingPage() {
             </div>
           </div>
 
-          <div className="relative order-1 lg:order-2">
-            <div className="grid grid-cols-3 gap-1 sm:gap-1.5">
-              <div className="col-span-1 row-span-2 rounded-lg overflow-hidden shadow-sm">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={HERO[0].src}
-                  alt={HERO[0].alt}
-                  className="w-full h-full object-cover aspect-[3/5]"
-                  width={360}
-                  height={600}
-                />
-              </div>
-              <div className="rounded-lg overflow-hidden shadow-sm">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={HERO[1].src}
-                  alt={HERO[1].alt}
-                  className="w-full object-cover aspect-square"
-                  width={280}
-                  height={280}
-                />
-              </div>
-              <div className="rounded-lg overflow-hidden shadow-sm">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={HERO[2].src}
-                  alt={HERO[2].alt}
-                  className="w-full object-cover aspect-square"
-                  width={280}
-                  height={280}
-                />
-              </div>
-              <div className="col-span-2 rounded-lg overflow-hidden shadow-sm">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={HERO[3].src}
-                  alt={HERO[3].alt}
-                  className="w-full object-cover aspect-[2/1]"
-                  width={560}
-                  height={280}
-                />
-              </div>
-            </div>
-            <div className="mt-1 grid grid-cols-2 gap-1 sm:gap-1.5">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={HERO[4].src}
-                alt={HERO[4].alt}
-                className="w-full object-cover aspect-[2/1] rounded-lg shadow-sm"
-                width={280}
-                height={140}
-              />
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={HERO[5].src}
-                alt={HERO[5].alt}
-                className="w-full object-cover aspect-[2/1] rounded-lg shadow-sm"
-                width={280}
-                height={140}
-              />
-            </div>
+          <div className="relative order-1 lg:order-2 flex justify-center lg:justify-end py-2">
+            <PhoneMockup />
           </div>
         </div>
       </section>
@@ -333,9 +392,27 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Pricing */}
-      <section id="pricing" className="px-4 py-14 sm:py-16 scroll-mt-16">
-        <div className="mx-auto max-w-5xl">
+      {/* Pricing — food collage soft background */}
+      <section id="pricing" className="relative px-4 py-14 sm:py-16 scroll-mt-16 overflow-hidden">
+        {/* Collage at ~70% opacity, washed so cards stay readable */}
+        <div className="pointer-events-none absolute inset-0" aria-hidden>
+          <div className="absolute inset-0 grid grid-cols-3 sm:grid-cols-6 opacity-70">
+            {HERO.map((item) => (
+              <div key={item.src} className="relative min-h-[140px] sm:min-h-full">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={item.src}
+                  alt=""
+                  className="absolute inset-0 h-full w-full object-cover"
+                  loading="lazy"
+                />
+              </div>
+            ))}
+          </div>
+          <div className="absolute inset-0 bg-[#f7f2ea]/82" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#f7f2ea] via-transparent to-[#f7f2ea]" />
+        </div>
+        <div className="relative mx-auto max-w-5xl">
           <div className="text-center max-w-lg mx-auto mb-8">
             <SectionLabel>Pricing</SectionLabel>
             <h2 className="mt-2 text-[1.65rem] sm:text-[1.9rem] font-semibold tracking-tight">
@@ -347,7 +424,7 @@ export default function LandingPage() {
           </div>
 
           <div className="grid sm:grid-cols-2 gap-4 max-w-3xl mx-auto">
-            <div className="rounded-3xl border border-[#1a1814]/[0.08] bg-white/60 p-6 flex flex-col">
+            <div className="rounded-3xl border border-[#1a1814]/[0.08] bg-white/95 backdrop-blur-sm p-6 flex flex-col shadow-sm">
               <div className="text-[12px] font-semibold uppercase tracking-wide text-[#1a1814]/40">
                 Free
               </div>
