@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { RiceLogo } from "@/components/RiceLogo";
+import { PhoneMockup } from "@/components/PhoneMockup";
 
 const HERO = [
   { src: "/food/ramen.jpg", alt: "Ramen" },
@@ -68,123 +69,6 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   );
 }
 
-
-function PhoneMockup() {
-  return (
-    <div className="relative mx-auto w-[min(100%,280px)] sm:w-[300px] lg:w-[280px] xl:w-[300px]">
-      {/* soft glow */}
-      <div
-        className="pointer-events-none absolute -inset-8 rounded-[3rem] bg-[#3d8f5c]/[0.12] blur-2xl"
-        aria-hidden
-      />
-      <div className="relative rounded-[2.35rem] bg-[#1a1814] p-[10px] shadow-[0_28px_60px_-20px_rgba(26,24,20,0.45)] ring-1 ring-black/20">
-        {/* side buttons hint */}
-        <div className="absolute -left-[2px] top-24 h-8 w-[3px] rounded-l bg-[#2a2723]" aria-hidden />
-        <div className="absolute -left-[2px] top-36 h-12 w-[3px] rounded-l bg-[#2a2723]" aria-hidden />
-        <div className="absolute -right-[2px] top-28 h-14 w-[3px] rounded-r bg-[#2a2723]" aria-hidden />
-        <div className="relative overflow-hidden rounded-[1.85rem] bg-[#f7f2ea] aspect-[9/19.5]">
-          {/* status bar */}
-          <div className="flex items-center justify-between px-5 pt-3 pb-1 text-[10px] font-semibold text-[#1a1814]/70">
-            <span>9:41</span>
-            <div className="absolute left-1/2 -translate-x-1/2 top-2 h-[22px] w-[88px] rounded-full bg-[#1a1814]" aria-hidden />
-            <span className="tracking-tight">●●●</span>
-          </div>
-          {/* app chrome */}
-          <div className="px-3.5 pt-3 pb-2 flex items-center justify-between">
-            <div className="flex items-center gap-1.5">
-              <RiceLogo size={18} />
-              <span className="text-[12px] font-semibold tracking-tight text-[#1a1814]">
-                RiceTrack
-              </span>
-            </div>
-            <span className="text-[10px] font-medium text-[#3d8f5c] bg-[#3d8f5c]/12 px-2 py-0.5 rounded-full">
-              Today
-            </span>
-          </div>
-          {/* calorie card */}
-          <div className="mx-3 rounded-2xl bg-white border border-[#1a1814]/[0.06] p-3 shadow-sm">
-            <div className="text-[10px] font-medium text-[#1a1814]/45 uppercase tracking-wide">
-              Daily energy
-            </div>
-            <div className="mt-1 flex items-end gap-1.5">
-              <span className="text-[28px] font-semibold tracking-tight leading-none text-[#1a1814]">
-                1,420
-              </span>
-              <span className="text-[11px] text-[#1a1814]/40 pb-0.5">/ 2,000 kcal</span>
-            </div>
-            <div className="mt-2.5 h-1.5 rounded-full bg-[#1a1814]/[0.06] overflow-hidden">
-              <div className="h-full w-[71%] rounded-full bg-[#3d8f5c]" />
-            </div>
-            <div className="mt-2.5 grid grid-cols-3 gap-1.5 text-center">
-              {[
-                ["P", "82g"],
-                ["C", "145g"],
-                ["F", "48g"],
-              ].map(([k, v]) => (
-                <div key={k} className="rounded-lg bg-[#f7f2ea] py-1.5">
-                  <div className="text-[9px] text-[#1a1814]/40 font-medium">{k}</div>
-                  <div className="text-[11px] font-semibold text-[#1a1814]">{v}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-          {/* meal row */}
-          <div className="mx-3 mt-2.5 rounded-2xl bg-white border border-[#1a1814]/[0.06] p-2.5 shadow-sm">
-            <div className="flex gap-2.5 items-center">
-              <div className="relative h-12 w-12 shrink-0 rounded-xl overflow-hidden bg-[#1a1814]/5">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/food/singapore.jpg"
-                  alt=""
-                  className="h-full w-full object-cover"
-                />
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="text-[12px] font-semibold text-[#1a1814] truncate">
-                  Nasi lemak
-                </div>
-                <div className="text-[10px] text-[#1a1814]/45">Lunch · coconut rice, egg</div>
-              </div>
-              <div className="text-[11px] font-semibold tabular-nums text-[#1a1814]">
-                620
-              </div>
-            </div>
-          </div>
-          <div className="mx-3 mt-1.5 rounded-2xl bg-white/80 border border-[#1a1814]/[0.05] p-2.5">
-            <div className="flex gap-2.5 items-center opacity-80">
-              <div className="relative h-12 w-12 shrink-0 rounded-xl overflow-hidden">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/food/ramen.jpg"
-                  alt=""
-                  className="h-full w-full object-cover"
-                />
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="text-[12px] font-semibold text-[#1a1814] truncate">
-                  Tonkotsu ramen
-                </div>
-                <div className="text-[10px] text-[#1a1814]/45">Dinner</div>
-              </div>
-              <div className="text-[11px] font-semibold tabular-nums text-[#1a1814]">
-                640
-              </div>
-            </div>
-          </div>
-          {/* snap CTA */}
-          <div className="absolute bottom-5 inset-x-0 flex justify-center">
-            <div className="flex flex-col items-center gap-1">
-              <div className="h-12 w-12 rounded-full bg-[#3d8f5c] text-white flex items-center justify-center shadow-lg text-[18px] font-light">
-                +
-              </div>
-              <span className="text-[9px] font-medium text-[#1a1814]/45">Log a meal</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 export default function LandingPage() {
   return (
