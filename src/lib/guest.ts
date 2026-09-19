@@ -30,6 +30,12 @@ export type GuestMeal = {
   meal_type?: string;
   notes?: string | null;
   logged_at: string;
+  /** Tiny JPEG data URL for list thumbnails (logged meals only, not library) */
+  photo_thumb?: string | null;
+  /** True if full image is in IndexedDB under this meal id */
+  photo_local?: boolean;
+  /** Cloud public URL when synced */
+  photo_url?: string | null;
 };
 
 export type GuestProfile = {

@@ -323,3 +323,12 @@ create policy "Users read own suggestions"
 -- alter table public.meals drop constraint if exists meals_meal_type_check;
 -- alter table public.meals add constraint meals_meal_type_check
 --   check (meal_type is null or meal_type in ('breakfast', 'lunch', 'tea', 'dinner', 'supper', 'snack'));
+
+
+-- Meal photos (logged meals only — not food library)
+-- Create bucket in Dashboard → Storage → New bucket: meal-photos (public read)
+-- Policy examples (run in SQL if needed):
+-- create policy "Users upload own meal photos" on storage.objects for insert
+--   with check (bucket_id = 'meal-photos' and auth.uid()::text = (storage.foldername(name))[1]);
+-- create policy "Public read meal photos" on storage.objects for select
+--   using (bucket_id = 'meal-photos');

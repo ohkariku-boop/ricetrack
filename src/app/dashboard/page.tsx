@@ -33,6 +33,7 @@ import {
 import type { FoodItem } from "@/types";
 import { localDateKey, localDateKeyFromIso, startOfLocalDay } from "@/lib/dates";
 import { isPro } from "@/lib/entitlements";
+import { deleteLocalMealPhoto } from "@/lib/meal-photos";
 import {
   ensureCloudProfile,
   identityFromUser,
@@ -75,6 +76,8 @@ type MealRow = {
   logged_at: string;
   meal_type?: string | null;
   notes?: string | null;
+  photo_thumb?: string | null;
+  photo_url?: string | null;
 };
 
 function normalizeItems(raw: unknown): FoodItem[] {
@@ -151,6 +154,8 @@ export default function DashboardPage() {
           logged_at: m.logged_at,
           meal_type: m.meal_type,
           notes: m.notes,
+          photo_thumb: m.photo_thumb,
+          photo_url: m.photo_url,
         }))
       );
       const days = new Set(all.map((m) => localDateKeyFromIso(m.logged_at)));
@@ -240,6 +245,8 @@ export default function DashboardPage() {
         logged_at: m.logged_at,
         meal_type: (m as any).meal_type,
         notes: m.notes,
+        photo_url: m.photo_url || null,
+        photo_thumb: m.photo_url || null,
       };
       })
     );
@@ -385,6 +392,7 @@ export default function DashboardPage() {
     try {
       if (!user && isLocalSession()) {
         deleteGuestMeal(id);
+      void deleteLocalMealPhoto(id);
       } else if (user) {
         const { error } = await supabase.from("meals").delete().eq("id", id).eq("user_id", user.id);
         if (error) throw error;
@@ -743,7 +751,16 @@ return (
                         openMeal(m);
                       }}
                     >
-                      <div className="min-w-0 flex-1 pointer-events-none">
+                      <div className="flex gap-3 min-w-0 flex-1 pointer-events-none items-center">
+                        {(m.photo_thumb || m.photo_url) && (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={m.photo_thumb || m.photo_url || ""}
+                            alt=""
+                            className="h-12 w-12 rounded-xl object-cover shrink-0 bg-muted"
+                          />
+                        )}
+                        <div className="min-w-0 flex-1">
                         <div className="font-medium truncate">
                           {m.meal_title ||
                             (m.items || []).map((i) => i.name).join(", ") ||
@@ -765,6 +782,7 @@ return (
                           {" · "}
                           P {formatMacro(m.total_protein)} · C {formatMacro(m.total_carbs)} · F{" "}
                           {formatMacro(m.total_fat)}
+                        </div>
                         </div>
                       </div>
                       <div className="flex items-center gap-2 shrink-0 pointer-events-none">
@@ -877,6 +895,16 @@ return (
             </div>
 
             <div className="p-4 space-y-4">
+              {(selected.photo_url || selected.photo_thumb) && (
+                <div className="rounded-2xl overflow-hidden border border-border/60">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={selected.photo_url || selected.photo_thumb || ""}
+                    alt=""
+                    className="w-full max-h-56 object-cover"
+                  />
+                </div>
+              )}
               <div className="card-elevated p-4">
                 <div className="text-xs text-muted-foreground uppercase">Total</div>
                 <div className="text-3xl font-bold tabular-nums mt-1">

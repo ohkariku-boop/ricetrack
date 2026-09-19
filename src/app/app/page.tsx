@@ -28,6 +28,12 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { BottomNav } from "@/components/BottomNav";
 import { scoreMeal, scoreColor } from "@/lib/health-score";
 import { isGuest, enableGuest, ensureLocalSession, saveGuestMeal, getGuestMeals, getSessionAccount, isLocalSession } from "@/lib/guest";
+import {
+  compressImage,
+  makeThumbDataUrl,
+  storeLocalMealPhoto,
+  uploadCloudMealPhoto,
+} from "@/lib/meal-photos";
 import { localDateKey, isoFromLocalDateKey } from "@/lib/dates";
 import { canUseAiScan, recordAiScan, getAiScansRemaining, isPro } from "@/lib/entitlements";
 import { MEAL_TYPES, defaultMealType, type MealTypeId } from "@/lib/meal-type";
@@ -331,18 +337,58 @@ export default function TrackerPage() {
       setSaving(true);
       setError(null);
       try {
-        saveGuestMeal({
-          meal_title: analysis.meal_title || analysis.items.map((i) => i.name).join(", "),
-          items: analysis.items,
-          total_calories: analysis.total_calories,
-          total_protein: analysis.total_protein,
-          total_carbs: analysis.total_carbs,
-          total_fat: analysis.total_fat,
-          cuisine_detected: analysis.cuisine_detected,
-          meal_type: mealType,
-          notes: analysis.notes || null,
-          logged_at: isoFromLocalDateKey(logDate),
-        });
+        let photo_thumb: string | null = null;
+        let photo_local = false;
+        if (imageBase64) {
+          try {
+            photo_thumb = await makeThumbDataUrl(imageBase64, mimeType);
+            const blob = await compressImage(imageBase64, mimeType, 800, 0.72);
+            const saved = saveGuestMeal({
+              meal_title: analysis.meal_title || analysis.items.map((i) => i.name).join(", "),
+              items: analysis.items,
+              total_calories: analysis.total_calories,
+              total_protein: analysis.total_protein,
+              total_carbs: analysis.total_carbs,
+              total_fat: analysis.total_fat,
+              cuisine_detected: analysis.cuisine_detected,
+              meal_type: mealType,
+              notes: analysis.notes || null,
+              logged_at: isoFromLocalDateKey(logDate),
+              photo_thumb,
+              photo_local: true,
+            });
+            await storeLocalMealPhoto(saved.id, blob);
+            photo_local = true;
+          } catch (photoErr) {
+            console.warn("meal photo local save skipped", photoErr);
+            saveGuestMeal({
+              meal_title: analysis.meal_title || analysis.items.map((i) => i.name).join(", "),
+              items: analysis.items,
+              total_calories: analysis.total_calories,
+              total_protein: analysis.total_protein,
+              total_carbs: analysis.total_carbs,
+              total_fat: analysis.total_fat,
+              cuisine_detected: analysis.cuisine_detected,
+              meal_type: mealType,
+              notes: analysis.notes || null,
+              logged_at: isoFromLocalDateKey(logDate),
+            });
+          }
+        } else {
+          saveGuestMeal({
+            meal_title: analysis.meal_title || analysis.items.map((i) => i.name).join(", "),
+            items: analysis.items,
+            total_calories: analysis.total_calories,
+            total_protein: analysis.total_protein,
+            total_carbs: analysis.total_carbs,
+            total_fat: analysis.total_fat,
+            cuisine_detected: analysis.cuisine_detected,
+            meal_type: mealType,
+            notes: analysis.notes || null,
+            logged_at: isoFromLocalDateKey(logDate),
+          });
+        }
+        void photo_local;
         const meals = getGuestMeals().slice(0, 10).map((m) => ({
           id: m.id,
           items: (m.items || []) as any,
@@ -376,7 +422,21 @@ export default function TrackerPage() {
     setSaving(true);
     setError(null);
     try {
+      let photo_url: string | null = null;
+      const mealId =
+        typeof crypto !== "undefined" && crypto.randomUUID
+          ? crypto.randomUUID()
+          : `m_${Date.now()}`;
+      if (imageBase64) {
+        try {
+          const blob = await compressImage(imageBase64, mimeType, 800, 0.72);
+          photo_url = await uploadCloudMealPhoto(supabase, user.id, mealId, blob);
+        } catch (photoErr) {
+          console.warn("meal photo cloud upload skipped", photoErr);
+        }
+      }
       const { error: insertError } = await supabase.from("meals").insert({
+        id: mealId,
         user_id: user.id,
         items: analysis.items,
         total_calories: analysis.total_calories,
@@ -389,6 +449,7 @@ export default function TrackerPage() {
           ? `[title] ${analysis.meal_title}${analysis.notes ? " · " + analysis.notes : ""}`
           : analysis.notes || null,
         logged_at: isoFromLocalDateKey(logDate),
+        photo_url,
       });
       if (insertError) throw insertError;
 
