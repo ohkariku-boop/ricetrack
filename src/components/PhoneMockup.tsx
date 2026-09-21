@@ -98,7 +98,7 @@ export function PhoneMockup() {
               <div className="mt-2">
                 <div className="text-[9px] font-medium text-[#1a1814]/40 mb-1">Cuisine hint</div>
                 <div className="rounded-lg border border-[#1a1814]/10 bg-white px-2.5 py-2 text-[10px]">
-                  Malay
+                  Singaporean
                 </div>
               </div>
               <div className="mt-3 h-10 rounded-full bg-[#3d8f5c] text-white text-[12px] font-semibold flex items-center justify-center shadow-sm">
@@ -119,7 +119,7 @@ export function PhoneMockup() {
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={PLATE}
-                  alt="Nasi lemak"
+                  alt="Seafood fried rice"
                   className="w-full aspect-[4/3] object-cover opacity-80"
                 />
                 <div className="absolute inset-0 bg-[#1a1814]/25 flex items-center justify-center">
