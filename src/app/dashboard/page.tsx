@@ -392,7 +392,7 @@ export default function DashboardPage() {
     try {
       if (!user && isLocalSession()) {
         deleteGuestMeal(id);
-      void deleteLocalMealPhoto(id);
+        void deleteLocalMealPhoto(id);
       } else if (user) {
         const { error } = await supabase.from("meals").delete().eq("id", id).eq("user_id", user.id);
         if (error) throw error;
@@ -752,14 +752,14 @@ return (
                       }}
                     >
                       <div className="flex gap-3 min-w-0 flex-1 pointer-events-none items-center">
-                        {(m.photo_thumb || m.photo_url) && (
+                        {(m.photo_thumb || m.photo_url) ? (
                           // eslint-disable-next-line @next/next/no-img-element
                           <img
-                            src={m.photo_thumb || m.photo_url || ""}
+                            src={(m.photo_thumb || m.photo_url) as string}
                             alt=""
                             className="h-12 w-12 rounded-xl object-cover shrink-0 bg-muted"
                           />
-                        )}
+                        ) : null}
                         <div className="min-w-0 flex-1">
                         <div className="font-medium truncate">
                           {m.meal_title ||

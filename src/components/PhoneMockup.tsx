@@ -128,7 +128,7 @@ export function PhoneMockup() {
               </div>
               <div className="mt-3 h-10 rounded-full bg-[#3d8f5c]/80 text-white text-[12px] font-semibold flex items-center justify-center gap-2">
                 <span className="h-3.5 w-3.5 rounded-full border-2 border-white/40 border-t-white animate-spin" />
-                Analyzing…
+                Analyzing...
               </div>
               <p className="mt-2 text-center text-[9px] text-[#1a1814]/40">
                 Reading Asian plate components

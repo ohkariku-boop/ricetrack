@@ -10,6 +10,9 @@ const STORE = "photos";
 const MAX_LOCAL_PHOTOS = 40;
 
 function openDb(): Promise<IDBDatabase> {
+  if (typeof window === "undefined" || typeof indexedDB === "undefined") {
+    return Promise.reject(new Error("IndexedDB unavailable"));
+  }
   return new Promise((resolve, reject) => {
     const req = indexedDB.open(DB_NAME, 1);
     req.onupgradeneeded = () => {
@@ -30,6 +33,9 @@ export async function compressImage(
   maxEdge = 800,
   quality = 0.72
 ): Promise<Blob> {
+  if (typeof window === "undefined" || typeof document === "undefined") {
+    throw new Error("compressImage is client-only");
+  }
   const src = input.startsWith("data:")
     ? input
     : `data:${mimeHint};base64,${input}`;
