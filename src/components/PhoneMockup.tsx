@@ -9,7 +9,7 @@ import { RiceLogo } from "@/components/RiceLogo";
  */
 const STEPS = 4;
 const STEP_MS = 2800;
-const NASI = "/food/singapore.jpg";
+const PLATE = "/food/singapore.jpg";
 
 export function PhoneMockup() {
   const [step, setStep] = useState(0);
@@ -84,17 +84,17 @@ export function PhoneMockup() {
               </div>
             </Screen>
 
-            {/* Step 1 — photo captured (nasi lemak) */}
+            {/* Step 1 — photo captured (seafood fried rice) */}
             <Screen visible={step === 1}>
               <div className="rounded-xl overflow-hidden border border-[#1a1814]/[0.08] bg-white shadow-sm">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={NASI}
-                  alt="Nasi lemak"
+                  src={PLATE}
+                  alt="Seafood fried rice"
                   className="w-full aspect-[4/3] object-cover"
                 />
               </div>
-              <div className="mt-2 text-[9px] text-[#1a1814]/40 truncate">nasi-lemak.jpg</div>
+              <div className="mt-2 text-[9px] text-[#1a1814]/40 truncate">seafood-fried-rice.jpg</div>
               <div className="mt-2">
                 <div className="text-[9px] font-medium text-[#1a1814]/40 mb-1">Cuisine hint</div>
                 <div className="rounded-lg border border-[#1a1814]/10 bg-white px-2.5 py-2 text-[10px]">
@@ -118,7 +118,7 @@ export function PhoneMockup() {
               <div className="rounded-xl overflow-hidden border border-[#1a1814]/[0.08] bg-white shadow-sm relative">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={NASI}
+                  src={PLATE}
                   alt="Nasi lemak"
                   className="w-full aspect-[4/3] object-cover opacity-80"
                 />
@@ -140,31 +140,31 @@ export function PhoneMockup() {
               <div className="flex gap-2 items-start">
                 <div className="h-11 w-11 rounded-lg overflow-hidden shrink-0 border border-[#1a1814]/[0.06]">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={NASI} alt="" className="h-full w-full object-cover" />
+                  <img src={PLATE} alt="" className="h-full w-full object-cover" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <div className="text-[12px] font-semibold leading-tight">Nasi lemak</div>
-                  <div className="text-[9px] text-[#1a1814]/45 mt-0.5">Malay · 1 plate</div>
+                  <div className="text-[12px] font-semibold leading-tight">Seafood fried rice</div>
+                  <div className="text-[9px] text-[#1a1814]/45 mt-0.5">Singaporean · 1 plate</div>
                 </div>
               </div>
               <div className="mt-2.5 rounded-xl bg-white border border-[#1a1814]/[0.06] p-2.5">
                 <div className="text-[9px] text-[#1a1814]/40 uppercase tracking-wide">Total</div>
                 <div className="text-[22px] font-semibold tabular-nums leading-none mt-0.5">
-                  620
+                  530
                   <span className="text-[10px] font-medium text-[#1a1814]/40 ml-1">kcal</span>
                 </div>
                 <div className="mt-1.5 flex gap-3 text-[10px] tabular-nums text-[#1a1814]/55">
-                  <span>P 18g</span>
-                  <span>C 68g</span>
-                  <span>F 28g</span>
+                  <span>P 22g</span>
+                  <span>C 58g</span>
+                  <span>F 20g</span>
                 </div>
               </div>
               <div className="mt-2 space-y-1.5">
                 {[
-                  ["Coconut rice", "280 kcal"],
-                  ["Sambal egg", "90 kcal"],
-                  ["Fried chicken", "180 kcal"],
-                  ["Anchovies & peanuts", "70 kcal"],
+                  ["Egg fried rice", "320 kcal"],
+                  ["Shrimp", "90 kcal"],
+                  ["Vegetables", "40 kcal"],
+                  ["Seasoning oil", "80 kcal"],
                 ].map(([name, cal]) => (
                   <div
                     key={name}
