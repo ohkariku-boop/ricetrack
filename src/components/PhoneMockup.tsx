@@ -94,7 +94,6 @@ export function PhoneMockup() {
                   className="w-full aspect-[4/3] object-cover"
                 />
               </div>
-              <div className="mt-2 text-[9px] text-[#1a1814]/40 truncate">seafood-fried-rice.jpg</div>
               <div className="mt-2">
                 <div className="text-[9px] font-medium text-[#1a1814]/40 mb-1">Cuisine hint</div>
                 <div className="rounded-lg border border-[#1a1814]/10 bg-white px-2.5 py-2 text-[10px]">
