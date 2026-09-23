@@ -30,8 +30,8 @@ function openDb(): Promise<IDBDatabase> {
 export async function compressImage(
   input: string,
   mimeHint = "image/jpeg",
-  maxEdge = 800,
-  quality = 0.72
+  maxEdge = 1400,
+  quality = 0.88
 ): Promise<Blob> {
   if (typeof window === "undefined" || typeof document === "undefined") {
     throw new Error("compressImage is client-only");
@@ -59,12 +59,12 @@ export async function compressImage(
   return blob;
 }
 
-/** Tiny JPEG data URL for list rows (~80px) */
+/** Tiny JPEG data URL for list rows (~200px) */
 export async function makeThumbDataUrl(
   input: string,
   mimeHint = "image/jpeg"
 ): Promise<string> {
-  const blob = await compressImage(input, mimeHint, 96, 0.55);
+  const blob = await compressImage(input, mimeHint, 200, 0.78);
   return blobToDataUrl(blob);
 }
 

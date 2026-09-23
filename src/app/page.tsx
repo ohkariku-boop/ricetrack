@@ -47,6 +47,9 @@ function MarqueeStrip() {
               alt={item.cuisine}
               className="absolute inset-0 w-full h-full object-cover scale-105"
               loading="lazy"
+              decoding="async"
+              width={168}
+              height={108}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#1a1814]/55 via-[#1a1814]/15 to-transparent" />
             <span className="absolute inset-x-0 bottom-2.5 text-center text-[12px] sm:text-[13px] font-semibold tracking-wide text-white drop-shadow">
@@ -289,6 +292,9 @@ export default function LandingPage() {
                   alt=""
                   className="absolute inset-0 h-full w-full object-cover"
                   loading="lazy"
+                  decoding="async"
+                  width={400}
+                  height={300}
                 />
               </div>
             ))}

@@ -342,7 +342,7 @@ export default function TrackerPage() {
         if (imageBase64) {
           try {
             photo_thumb = await makeThumbDataUrl(imageBase64, mimeType);
-            const blob = await compressMealPhoto(imageBase64, mimeType, 800, 0.72);
+            const blob = await compressMealPhoto(imageBase64, mimeType, 1400, 0.88);
             const saved = saveGuestMeal({
               meal_title: analysis.meal_title || analysis.items.map((i) => i.name).join(", "),
               items: analysis.items,
@@ -429,7 +429,7 @@ export default function TrackerPage() {
           : `m_${Date.now()}`;
       if (imageBase64) {
         try {
-          const blob = await compressMealPhoto(imageBase64, mimeType, 800, 0.72);
+          const blob = await compressMealPhoto(imageBase64, mimeType, 1400, 0.88);
           photo_url = await uploadCloudMealPhoto(supabase, user.id, mealId, blob);
         } catch (photoErr) {
           console.warn("meal photo cloud upload skipped", photoErr);

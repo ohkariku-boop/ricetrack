@@ -9,7 +9,7 @@ import { RiceLogo } from "@/components/RiceLogo";
  */
 const STEPS = 4;
 const STEP_MS = 2800;
-const PLATE = "/food/singapore.jpg";
+const PLATE = "/food/plate-mockup.jpg";
 
 export function PhoneMockup() {
   const [step, setStep] = useState(0);
@@ -92,6 +92,10 @@ export function PhoneMockup() {
                   src={PLATE}
                   alt="Seafood fried rice"
                   className="w-full aspect-[4/3] object-cover"
+                  width={600}
+                  height={450}
+                  decoding="async"
+                  fetchPriority="high"
                 />
               </div>
               <div className="mt-2">
@@ -120,6 +124,9 @@ export function PhoneMockup() {
                   src={PLATE}
                   alt="Seafood fried rice"
                   className="w-full aspect-[4/3] object-cover opacity-80"
+                  width={600}
+                  height={450}
+                  decoding="async"
                 />
                 <div className="absolute inset-0 bg-[#1a1814]/25 flex items-center justify-center">
                   <div className="h-9 w-9 rounded-full border-2 border-white/30 border-t-white animate-spin" />
@@ -139,7 +146,14 @@ export function PhoneMockup() {
               <div className="flex gap-2 items-start">
                 <div className="h-11 w-11 rounded-lg overflow-hidden shrink-0 border border-[#1a1814]/[0.06]">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={PLATE} alt="" className="h-full w-full object-cover" />
+                  <img
+                    src={PLATE}
+                    alt=""
+                    className="h-full w-full object-cover"
+                    width={96}
+                    height={96}
+                    decoding="async"
+                  />
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="text-[12px] font-semibold leading-tight">Seafood fried rice</div>
@@ -153,17 +167,17 @@ export function PhoneMockup() {
                   <span className="text-[10px] font-medium text-[#1a1814]/40 ml-1">kcal</span>
                 </div>
                 <div className="mt-1.5 flex gap-3 text-[10px] tabular-nums text-[#1a1814]/55">
-                  <span>P 22g</span>
-                  <span>C 58g</span>
-                  <span>F 20g</span>
+                  <span>P 18g</span>
+                  <span>C 62g</span>
+                  <span>F 18g</span>
                 </div>
               </div>
               <div className="mt-2 space-y-1.5">
                 {[
-                  ["Egg fried rice", "320 kcal"],
-                  ["Shrimp", "90 kcal"],
-                  ["Vegetables", "40 kcal"],
-                  ["Seasoning oil", "80 kcal"],
+                  ["Fried rice", "340 kcal"],
+                  ["Egg & chicken", "120 kcal"],
+                  ["Peas & corn", "30 kcal"],
+                  ["Seasoning oil", "40 kcal"],
                 ].map(([name, cal]) => (
                   <div
                     key={name}
