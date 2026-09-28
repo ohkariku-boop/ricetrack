@@ -5,10 +5,9 @@ import { createClient } from "@/lib/supabase/client";
 import {
   enableAccount,
   enableGuest,
-  LOCAL_ACCOUNTS,
   needsOnboarding,
 } from "@/lib/guest";
-import { Loader2, Crown, Mail } from "lucide-react";
+import { Loader2, Mail } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { RiceLogo } from "@/components/RiceLogo";
@@ -19,7 +18,6 @@ function LoginContent() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [showDemo, setShowDemo] = useState(false);
   const [checking, setChecking] = useState(true);
   const supabase = createClient();
   const router = useRouter();
@@ -165,37 +163,6 @@ function LoginContent() {
           On this device only. Sign in later to keep data if you switch phones.
         </p>
 
-        {/* Tertiary: demo accounts */}
-        <div className="pt-1">
-          <button
-            type="button"
-            onClick={() => setShowDemo((v) => !v)}
-            className="w-full text-center text-xs text-muted-foreground hover:text-foreground transition-colors"
-          >
-            {showDemo ? "Hide demo accounts" : "Demo accounts (Joe / Mel / VIP1)"}
-          </button>
-          {showDemo && (
-            <div className="mt-3 space-y-2">
-              {LOCAL_ACCOUNTS.filter((a) => a.paid).map((a) => (
-                <button
-                  key={a.id}
-                  type="button"
-                  onClick={() => pickAccount(a.id)}
-                  className="btn-secondary w-full h-12 text-[14px] justify-between px-4 flex items-center"
-                >
-                  <span className="flex items-center gap-2">
-                    <Crown className="w-4 h-4 text-primary" />
-                    {a.name}
-                  </span>
-                  <span className="text-xs text-muted-foreground">Pro demo · local</span>
-                </button>
-              ))}
-              <p className="text-[11px] text-muted-foreground text-center leading-relaxed">
-                Demo data stays on this browser only. Not a real subscription.
-              </p>
-            </div>
-          )}
-        </div>
 
         <p className="text-center text-[11px] text-muted-foreground pt-2">
           <Link href="/" className="hover:text-foreground">
