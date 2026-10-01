@@ -201,11 +201,16 @@ export default function TrackerPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
+        credentials: "same-origin",
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Analysis failed");
       recordAiScan();
-      setAiLeft(getAiScansRemaining());
+      if (data._quota && typeof data._quota.remaining === "number") {
+        setAiLeft(data._quota.remaining);
+      } else {
+        setAiLeft(getAiScansRemaining());
+      }
       setAnalysis(data);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Something went wrong";
@@ -245,6 +250,7 @@ export default function TrackerPage() {
       const res = await fetch("/api/analyze", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "same-origin",
         body: JSON.stringify({
           text,
           cuisineHint: cuisineHint || analysis.cuisine_detected || "",
@@ -253,7 +259,11 @@ export default function TrackerPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Re-analysis failed");
       recordAiScan();
-      setAiLeft(getAiScansRemaining());
+      if (data._quota && typeof data._quota.remaining === "number") {
+        setAiLeft(data._quota.remaining);
+      } else {
+        setAiLeft(getAiScansRemaining());
+      }
       setAnalysis(data);
       setCorrectionHint("");
       setEditingIdx(null);

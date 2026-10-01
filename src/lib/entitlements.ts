@@ -1,9 +1,10 @@
 /**
- * Free vs Pro entitlements.
- * Stripe wiring comes later; mock subscribe sets local Pro status.
+ * Free vs Pro entitlements (client UX).
+ * Real AI limits are enforced server-side in /api/analyze (see ai-quota-server.ts).
+ * Stripe not live — mock Pro does not unlock server scans.
  */
 
-import { getSessionAccount, isPaidUser, type LocalAccountId } from "@/lib/guest";
+import { isPaidUser } from "@/lib/guest";
 
 export const FREE_AI_SCANS_PER_WEEK = 5;
 
@@ -14,14 +15,12 @@ const USAGE_KEY = "ricetrack_ai_usage_v1";
 
 export type SubscriptionState = {
   plan: PlanId;
-  /** ISO when mock/real sub started */
   since?: string;
-  /** source: mock | stripe | demo_account */
+  /** mock is ignored for AI; stripe when billing is live */
   source?: "mock" | "stripe" | "demo_account";
 };
 
 function weekKey(d = new Date()): string {
-  // ISO week-ish: year + week number
   const start = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
   const day = start.getUTCDay() || 7;
   start.setUTCDate(start.getUTCDate() + 4 - day);
@@ -32,7 +31,6 @@ function weekKey(d = new Date()): string {
 
 export function getSubscription(): SubscriptionState {
   if (typeof window === "undefined") return { plan: "free" };
-  // Demo Joe/Mel are always Pro
   if (isPaidUser()) {
     return { plan: "pro", source: "demo_account", since: new Date().toISOString() };
   }
@@ -40,24 +38,22 @@ export function getSubscription(): SubscriptionState {
     const raw = localStorage.getItem(SUB_KEY);
     if (!raw) return { plan: "free" };
     const parsed = JSON.parse(raw) as SubscriptionState;
-    if (parsed.plan === "pro") return parsed;
+    // Ignore legacy mock Pro — billing not live; server quota still applies
+    if (parsed.plan === "pro" && parsed.source === "stripe") return parsed;
     return { plan: "free" };
   } catch {
     return { plan: "free" };
   }
 }
 
+/** Client UX only. Server never trusts this for OpenRouter calls. */
 export function isPro(): boolean {
   return getSubscription().plan === "pro";
 }
 
-/** Mock checkout — replace with Stripe later */
+/** @deprecated Stripe not live — no-op kept for import safety */
 export function activateMockPro(): SubscriptionState {
-  const state: SubscriptionState = {
-    plan: "pro",
-    since: new Date().toISOString(),
-    source: "mock",
-  };
+  const state: SubscriptionState = { plan: "free" };
   if (typeof window !== "undefined") {
     localStorage.setItem(SUB_KEY, JSON.stringify(state));
     window.dispatchEvent(new Event("rt-plan-changed"));

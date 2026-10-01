@@ -8,10 +8,7 @@ import {
   PLAN_FEATURES,
   PRO_PRICE_MONTHLY,
   PRO_PRICE_YEARLY,
-  activateMockPro,
-  cancelMockPro,
   getSubscription,
-  isPro,
   type SubscriptionState,
 } from "@/lib/entitlements";
 import { ensureLocalSession, getSessionAccount } from "@/lib/guest";
@@ -20,8 +17,7 @@ import { cn } from "@/lib/utils";
 export default function PricingPage() {
   const [sub, setSub] = useState<SubscriptionState>({ plan: "free" });
   const [billing, setBilling] = useState<"monthly" | "yearly">("yearly");
-  const [thanks, setThanks] = useState(false);
-  const [busy, setBusy] = useState(false);
+  const [waitlist, setWaitlist] = useState(false);
   const [accountName, setAccountName] = useState("Guest");
 
   const refresh = () => {
@@ -39,30 +35,25 @@ export default function PricingPage() {
 
   const pro = sub.plan === "pro";
 
-  const checkout = async () => {
-    setBusy(true);
-    // Stripe goes here later
-    await new Promise((r) => setTimeout(r, 600));
-    activateMockPro();
-    setSub(getSubscription());
-    setThanks(true);
-    setBusy(false);
-  };
-
-  if (thanks) {
+  if (waitlist) {
     return (
       <div className="min-h-screen bg-background flex flex-col items-center justify-center px-5 text-center">
         <div className="w-14 h-14 rounded-full bg-primary/15 flex items-center justify-center mb-4">
           <Check className="w-7 h-7 text-primary" />
         </div>
-        <h1 className="text-2xl font-semibold tracking-tight">Thank you for subscribing</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">You’re on the list</h1>
         <p className="text-muted-foreground mt-2 max-w-sm text-sm leading-relaxed">
-          Pro is active on this device for <span className="font-medium text-foreground">{accountName}</span>.
-          Stripe checkout will replace this step later — you were not charged.
+          Pro billing (Stripe) is not live yet. Free plan stays available with{" "}
+          <span className="font-medium text-foreground">5 AI scans per week</span>
+          {accountName ? ` · signed in as ${accountName}` : ""}. We’ll email when checkout opens — or write{" "}
+          <a className="text-primary underline" href="mailto:chiefsupportofficer@gmail.com">
+            chiefsupportofficer@gmail.com
+          </a>
+          .
         </p>
         <div className="flex flex-col sm:flex-row gap-2 mt-8 w-full max-w-xs">
           <Link href="/app" className="btn-primary h-12 flex items-center justify-center">
-            Start logging
+            Keep logging free
           </Link>
           <Link href="/dashboard" className="btn-secondary h-12 flex items-center justify-center">
             Home
@@ -180,26 +171,18 @@ export default function PricingPage() {
             {!pro ? (
               <button
                 type="button"
-                onClick={checkout}
-                disabled={busy}
-                className="btn-primary w-full h-12 mt-4 disabled:opacity-50"
+                onClick={() => setWaitlist(true)}
+                className="btn-primary w-full h-12 mt-4"
               >
-                {busy ? "Processing…" : "Checkout now"}
+                Join Pro waitlist
               </button>
-            ) : sub.source === "mock" ? (
-              <button
-                type="button"
-                onClick={() => {
-                  cancelMockPro();
-                  setSub(getSubscription());
-                }}
-                className="btn-secondary w-full h-11 mt-4 text-sm"
-              >
-                Cancel preview Pro
-              </button>
-            ) : null}
+            ) : (
+              <p className="text-sm text-center text-muted-foreground mt-4">
+                Pro is active on this account.
+              </p>
+            )}
             <p className="text-[11px] text-muted-foreground text-center mt-2">
-              Payment via Stripe comes later. Checkout activates Pro on this device only.
+              Stripe checkout is not live yet — no charges. Free plan: 5 AI scans / week (enforced on the server).
             </p>
           </div>
         </div>
