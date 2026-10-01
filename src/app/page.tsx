@@ -309,7 +309,7 @@ export default function LandingPage() {
               Start free. Go Pro when the plate gets daily.
             </h2>
             <p className="text-[15px] text-[#1a1814]/50 mt-2 leading-snug">
-              Full Asian library on every plan. Pro unlocks unlimited AI scans.
+              Full Asian library on every plan. Free includes 5 AI scans per week; Pro (billing soon) removes the cap.
             </p>
           </div>
 
